@@ -1015,19 +1015,57 @@
             setTimeout(() => btn.classList.remove('fa-spin'), 1000);
         }
 
-        // Helper to toggle expand view
+        // --- PERSISTENT DROPDOWN LOGIC (20 MINUTES) ---
+        const EXPAND_STORAGE_KEY = 'ea_league_expanded_items';
+        const EXPAND_DURATION = 20 * 60 * 1000; // 20 minutes in milliseconds
+
+        function loadExpandedState() {
+            const stored = localStorage.getItem(EXPAND_STORAGE_KEY);
+            if (!stored) return {};
+            try {
+                const data = JSON.parse(stored);
+                const now = Date.now();
+                // Filter out expired entries
+                const valid = {};
+                for (const [id, timestamp] of Object.entries(data)) {
+                    if (now - timestamp < EXPAND_DURATION) {
+                        valid[id] = timestamp;
+                    }
+                }
+                return valid;
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function saveExpandedState(state) {
+            localStorage.setItem(EXPAND_STORAGE_KEY, JSON.stringify(state));
+        }
+
+        // Override the toggle function to include persistence
         window.toggleExpand = function(id) {
             const el = document.getElementById(id);
             const icon = document.getElementById(id + '-icon');
+            const expandedState = loadExpandedState();
+            
             if (el.classList.contains('open')) {
+                // Close it
                 el.classList.remove('open');
-                icon.classList.remove('fa-chevron-up');
-                icon.classList.add('fa-chevron-down');
+                if(icon) {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+                delete expandedState[id]; // Remove from storage
             } else {
+                // Open it
                 el.classList.add('open');
-                icon.classList.remove('fa-chevron-down');
-                icon.classList.add('fa-chevron-up');
+                if(icon) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                }
+                expandedState[id] = Date.now(); // Add to storage with timestamp
             }
+            saveExpandedState(expandedState);
         }
 
         async function renderAdminData() {
@@ -1038,82 +1076,88 @@
             document.getElementById('stat-apps').innerText = apps.filter(a => a.status === 'Pending').length;
             document.getElementById('stat-tickets').innerText = tickets.filter(t => t.status === 'Open' || t.status === 'Pending Staff').length;
 
+            const expandedState = loadExpandedState();
+
             // Render Applications with Expandable Details
             const appContainer = document.getElementById('admin-apps-list');
             appContainer.innerHTML = apps.length === 0 ? 
                 '<div class="text-center text-gray-500 py-4">No applications yet</div>' :
-                apps.slice().reverse().map(app => `
-                <div class="bg-black/30 p-3 rounded border-l-2 ${app.status === 'Pending' ? 'border-yellow-500' : 'border-emerald-500'}">
-                    <div class="flex justify-between items-start cursor-pointer" onclick="toggleExpand('app-${app.id}')">
-                        <div>
-                            <div class="text-white font-bold text-sm flex items-center gap-2">
-                                ${app.discord}
-                                <i id="app-${app.id}-icon" class="fas fa-chevron-down text-gray-500 text-xs"></i>
+                apps.slice().reverse().map(app => {
+                    const isExpanded = !!expandedState[`app-${app.id}`];
+                    return `
+                    <div class="bg-black/30 p-3 rounded border-l-2 ${app.status === 'Pending' ? 'border-yellow-500' : 'border-emerald-500'}">
+                        <div class="flex justify-between items-start cursor-pointer" onclick="toggleExpand('app-${app.id}')">
+                            <div>
+                                <div class="text-white font-bold text-sm flex items-center gap-2">
+                                    ${app.discord}
+                                    <i id="app-${app.id}-icon" class="fas ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-gray-500 text-xs"></i>
+                                </div>
+                                <div class="text-gray-500 text-xs">${app.team} | ${app.rank} | ${app.date}</div>
                             </div>
-                            <div class="text-gray-500 text-xs">${app.team} | ${app.rank} | ${app.date}</div>
+                            <div class="flex gap-2" onclick="event.stopPropagation()">
+                                ${app.status === 'Pending' ? `
+                                    <button onclick="updateAppStatus(${app.id}, 'Approved')" class="text-emerald-400 hover:text-white text-xs bg-emerald-900/30 px-2 py-1 rounded"><i class="fas fa-check"></i></button>
+                                    <button onclick="updateAppStatus(${app.id}, 'Denied')" class="text-red-400 hover:text-white text-xs bg-red-900/30 px-2 py-1 rounded"><i class="fas fa-times"></i></button>
+                                ` : `<span class="text-xs text-gray-500 font-bold px-2 py-1 bg-gray-800 rounded">${app.status}</span>`}
+                            </div>
                         </div>
-                        <div class="flex gap-2" onclick="event.stopPropagation()">
-                            ${app.status === 'Pending' ? `
-                                <button onclick="updateAppStatus(${app.id}, 'Approved')" class="text-emerald-400 hover:text-white text-xs bg-emerald-900/30 px-2 py-1 rounded"><i class="fas fa-check"></i></button>
-                                <button onclick="updateAppStatus(${app.id}, 'Denied')" class="text-red-400 hover:text-white text-xs bg-red-900/30 px-2 py-1 rounded"><i class="fas fa-times"></i></button>
-                            ` : `<span class="text-xs text-gray-500 font-bold px-2 py-1 bg-gray-800 rounded">${app.status}</span>`}
+                        
+                        <!-- Expandable Details -->
+                        <div id="app-${app.id}" class="expand-content ${isExpanded ? 'open' : ''} mt-2 pt-2 border-t border-gray-700">
+                            <div class="grid grid-cols-2 gap-2 text-xs mb-2">
+                                <div><span class="text-gray-500">Uplay:</span> <span class="text-gray-300">${app.uplay}</span></div>
+                                <div><span class="text-gray-500">Date:</span> <span class="text-gray-300">${app.date}</span></div>
+                            </div>
+                            <div class="bg-gray-900/50 p-2 rounded text-xs">
+                                <span class="text-gray-500 block mb-1">Application Response:</span>
+                                <p class="text-gray-300 italic">"${app.reason}"</p>
+                            </div>
                         </div>
                     </div>
-                    
-                    <!-- Expandable Details -->
-                    <div id="app-${app.id}" class="expand-content mt-2 pt-2 border-t border-gray-700">
-                        <div class="grid grid-cols-2 gap-2 text-xs mb-2">
-                            <div><span class="text-gray-500">Uplay:</span> <span class="text-gray-300">${app.uplay}</span></div>
-                            <div><span class="text-gray-500">Date:</span> <span class="text-gray-300">${app.date}</span></div>
-                        </div>
-                        <div class="bg-gray-900/50 p-2 rounded text-xs">
-                            <span class="text-gray-500 block mb-1">Application Response:</span>
-                            <p class="text-gray-300 italic">"${app.reason}"</p>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+                `}).join('');
 
             // Render Tickets with Expandable Details
             const ticketContainer = document.getElementById('admin-tickets-list');
             ticketContainer.innerHTML = tickets.length === 0 ?
                 '<div class="text-center text-gray-500 py-4">No tickets yet</div>' :
-                tickets.slice().reverse().map(t => `
-                <div class="bg-black/30 p-3 rounded border-l-2 ${t.status === 'Open' ? 'border-red-500' : 'border-gray-600'}">
-                    <div class="flex justify-between items-start cursor-pointer" onclick="toggleExpand('ticket-${t.id}')">
-                        <div>
-                            <div class="text-white font-bold text-sm flex items-center gap-2">
-                                ${t.subject}
-                                <span class="text-[10px] text-gray-500 border border-gray-700 px-1 rounded">${t.id}</span>
-                                <i id="ticket-${t.id}-icon" class="fas fa-chevron-down text-gray-500 text-xs"></i>
-                            </div>
-                            <div class="text-gray-500 text-xs">By: ${t.discord} | Status: ${t.status}</div>
-                        </div>
-                        <button onclick="event.stopPropagation(); closeTicket('${t.id}')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded text-white">Close</button>
-                    </div>
-
-                    <!-- Expandable Details -->
-                    <div id="ticket-${t.id}" class="expand-content mt-2 pt-2 border-t border-gray-700">
-                        <div class="text-gray-400 text-xs mb-3 bg-black/20 p-2 rounded">
-                            ${t.description}
-                        </div>
-                        
-                        <div class="space-y-2 mb-3 max-h-32 overflow-y-auto pr-1">
-                            ${t.responses && t.responses.length > 0 ? t.responses.map(r => `
-                                <div class="text-xs ${r.sender === 'User' ? 'text-left' : 'text-right'}">
-                                    <span class="text-gray-600 block mb-0.5">${r.sender} • ${new Date(r.date).toLocaleTimeString()}</span>
-                                    <span class="inline-block px-2 py-1 rounded ${r.sender === 'User' ? 'bg-gray-800 text-gray-300' : 'bg-emerald-900/40 text-emerald-200'}">${r.text}</span>
+                tickets.slice().reverse().map(t => {
+                    const isExpanded = !!expandedState[`ticket-${t.id}`];
+                    return `
+                    <div class="bg-black/30 p-3 rounded border-l-2 ${t.status === 'Open' ? 'border-red-500' : 'border-gray-600'}">
+                        <div class="flex justify-between items-start cursor-pointer" onclick="toggleExpand('ticket-${t.id}')">
+                            <div>
+                                <div class="text-white font-bold text-sm flex items-center gap-2">
+                                    ${t.subject}
+                                    <span class="text-[10px] text-gray-500 border border-gray-700 px-1 rounded">${t.id}</span>
+                                    <i id="ticket-${t.id}-icon" class="fas ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-gray-500 text-xs"></i>
                                 </div>
-                            `).join('') : '<p class="text-gray-600 italic text-xs">No messages.</p>'}
+                                <div class="text-gray-500 text-xs">By: ${t.discord} | Status: ${t.status}</div>
+                            </div>
+                            <button onclick="event.stopPropagation(); closeTicket('${t.id}')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded text-white">Close</button>
                         </div>
 
-                        <div class="flex gap-2 mt-2">
-                            <input type="text" id="admin-reply-${t.id}" placeholder="Admin response..." class="flex-1 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-xs text-white">
-                            <button onclick="event.stopPropagation(); addAdminReply('${t.id}')" class="bg-emerald-700 hover:bg-emerald-600 text-white px-2 py-1 rounded text-xs">Reply</button>
+                        <!-- Expandable Details -->
+                        <div id="ticket-${t.id}" class="expand-content ${isExpanded ? 'open' : ''} mt-2 pt-2 border-t border-gray-700">
+                            <div class="text-gray-400 text-xs mb-3 bg-black/20 p-2 rounded">
+                                ${t.description}
+                            </div>
+                            
+                            <div class="space-y-2 mb-3 max-h-32 overflow-y-auto pr-1">
+                                ${t.responses && t.responses.length > 0 ? t.responses.map(r => `
+                                    <div class="text-xs ${r.sender === 'User' ? 'text-left' : 'text-right'}">
+                                        <span class="text-gray-600 block mb-0.5">${r.sender} • ${new Date(r.date).toLocaleTimeString()}</span>
+                                        <span class="inline-block px-2 py-1 rounded ${r.sender === 'User' ? 'bg-gray-800 text-gray-300' : 'bg-emerald-900/40 text-emerald-200'}">${r.text}</span>
+                                    </div>
+                                `).join('') : '<p class="text-gray-600 italic text-xs">No messages.</p>'}
+                            </div>
+
+                            <div class="flex gap-2 mt-2">
+                                <input type="text" id="admin-reply-${t.id}" placeholder="Admin response..." class="flex-1 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-xs text-white">
+                                <button onclick="event.stopPropagation(); addAdminReply('${t.id}')" class="bg-emerald-700 hover:bg-emerald-600 text-white px-2 py-1 rounded text-xs">Reply</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `}).join('');
         }
 
         async function updateAppStatus(id, status) {
