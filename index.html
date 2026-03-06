@@ -555,12 +555,12 @@
 
     <script>
         // ==========================================
-        // JSONBIN.IO CONFIGURATION - FIXED WITH ACCESS KEY [^11^][^12^]
+        // JSONBIN.IO CONFIGURATION - FIXED WITH FULL MASTER KEY
         // ==========================================
         
         const BIN_ID = '69aa217643b1c97be9b7f444';
-        // Using Access Key instead of Master Key for API authentication
-        const ACCESS_KEY = '69aa22f343b1c97be9b7fa49';
+        // Using complete Master Key with $2a$10$ prefix [^13^]
+        const MASTER_KEY = '$2a$10$GK8JfB9MpM7nksbKiYequemSxDWTeB.S/B0aVN3XtmLU9amuwpwgO';
         
         const READ_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
         const UPDATE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
@@ -613,7 +613,7 @@
         });
 
         // ==========================================
-        // CORE API FUNCTIONS - USING X-ACCESS-KEY [^12^]
+        // CORE API FUNCTIONS - USING X-Master-Key [^13^]
         // ==========================================
         
         async function getData() {
@@ -623,7 +623,7 @@
                 const response = await fetch(READ_URL, {
                     method: 'GET',
                     headers: {
-                        'X-Access-Key': ACCESS_KEY  // Changed from X-Master-Key to X-Access-Key [^12^]
+                        'X-Master-Key': MASTER_KEY  // Using full Master Key [^13^]
                     }
                 });
                 
@@ -659,7 +659,7 @@
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Access-Key': ACCESS_KEY  // Changed from X-Master-Key to X-Access-Key [^12^]
+                        'X-Master-Key': MASTER_KEY  // Using full Master Key [^13^]
                     },
                     body: JSON.stringify(data)
                 });
