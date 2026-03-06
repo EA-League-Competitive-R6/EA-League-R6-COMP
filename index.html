@@ -117,6 +117,12 @@
         }
         .status-online { background-color: #10b981; box-shadow: 0 0 8px #10b981; }
         .status-offline { background-color: #ef4444; }
+        
+        .error-banner {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #fca5a5;
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col relative">
@@ -131,6 +137,11 @@
     <!-- Connection Status -->
     <div id="connection-status" class="fixed top-20 right-4 z-50 glass-panel px-3 py-1 rounded-full text-xs font-bold hidden">
         <span class="status-indicator status-online"></span>Live Sync
+    </div>
+
+    <!-- Error Banner -->
+    <div id="error-banner" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 error-banner px-4 py-2 rounded-lg text-sm font-bold hidden max-w-md text-center">
+        <i class="fas fa-exclamation-triangle mr-2"></i><span id="error-message">Connection Error</span>
     </div>
 
     <!-- Navigation -->
@@ -550,13 +561,22 @@
         const BIN_ID = '69aa217643b1c97be9b7f444';
         const API_KEY = '$2a$10$QshjJCgpebIkrzj2w63yuuaYicTh.kQeJCPv7HpGtr/Yj7fkxHJHC';
         
+        // Use latest endpoint for reading [^11^]
+        const READ_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
+        const UPDATE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        
         // ==========================================
-        // API FUNCTIONS
+        // ERROR HANDLING & UI HELPERS
         // ==========================================
         
-        const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        function showError(message) {
+            const banner = document.getElementById('error-banner');
+            const msg = document.getElementById('error-message');
+            msg.textContent = message;
+            banner.classList.remove('hidden');
+            setTimeout(() => banner.classList.add('hidden'), 5000);
+        }
         
-        // Show connection status
         function showConnectionStatus(online) {
             const status = document.getElementById('connection-status');
             const indicator = status.querySelector('.status-indicator');
@@ -572,52 +592,6 @@
             }
         }
         
-        async function getData() {
-            try {
-                const response = await fetch(BASE_URL, {
-                    method: 'GET',
-                    headers: {
-                        'X-Master-Key': API_KEY,
-                        'X-Bin-Meta': 'false'
-                    }
-                });
-                
-                if (!response.ok) throw new Error('Failed to fetch data');
-                
-                const result = await response.json();
-                showConnectionStatus(true);
-                return result.record || { apps: [], tickets: [], announcements: [] };
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                showConnectionStatus(false);
-                alert('Error connecting to database. Please check your internet connection.');
-                return { apps: [], tickets: [], announcements: [] };
-            }
-        }
-        
-        async function saveData(data) {
-            try {
-                const response = await fetch(BASE_URL, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                if (!response.ok) throw new Error('Failed to save data');
-                showConnectionStatus(true);
-                return true;
-            } catch (error) {
-                console.error('Error saving data:', error);
-                showConnectionStatus(false);
-                alert('Error saving data. Please try again.');
-                return false;
-            }
-        }
-        
-        // Helper to show loading state on buttons
         function setLoading(buttonId, isLoading) {
             const btn = document.getElementById(buttonId);
             if (!btn) return;
@@ -631,15 +605,87 @@
             }
         }
         
-        // Initialize button text storage
         document.addEventListener('DOMContentLoaded', () => {
             ['submitBtn', 'ticketSubmitBtn', 'searchBtn', 'loginBtn', 'postAnnBtn'].forEach(id => {
                 const btn = document.getElementById(id);
-                if (btn) {
-                    btn.setAttribute('data-text', btn.innerText.trim());
-                }
+                if (btn) btn.setAttribute('data-text', btn.innerText.trim());
             });
         });
+
+        // ==========================================
+        // CORE API FUNCTIONS - FIXED FOR CORS [^11^][^12^]
+        // ==========================================
+        
+        async function getData() {
+            try {
+                console.log('Fetching from:', READ_URL);
+                
+                const response = await fetch(READ_URL, {
+                    method: 'GET',
+                    headers: {
+                        'X-Master-Key': API_KEY
+                        // Note: X-Bin-Meta removed - using /latest endpoint instead [^11^]
+                    }
+                });
+                
+                console.log('Response status:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Error response:', errorText);
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+                
+                const result = await response.json();
+                console.log('Data received:', result);
+                
+                showConnectionStatus(true);
+                
+                // JSONBin returns { record: { apps: [], tickets: [], announcements: [] } }
+                return result.record || { apps: [], tickets: [], announcements: [] };
+                
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                showConnectionStatus(false);
+                showError('Database connection failed. Check console for details.');
+                return { apps: [], tickets: [], announcements: [] };
+            }
+        }
+        
+        async function saveData(data) {
+            try {
+                console.log('Saving to:', UPDATE_URL);
+                
+                const response = await fetch(UPDATE_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                console.log('Save response status:', response.status);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Save error response:', errorText);
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+                
+                const result = await response.json();
+                console.log('Save successful:', result);
+                
+                showConnectionStatus(true);
+                return true;
+                
+            } catch (error) {
+                console.error('Error saving data:', error);
+                showConnectionStatus(false);
+                showError('Failed to save data. Please try again.');
+                return false;
+            }
+        }
 
         // ==========================================
         // STAFF AUTHENTICATION
@@ -663,7 +709,6 @@
             
             if (announcements.length > 0) {
                 const latest = announcements[announcements.length - 1];
-                // Only show if it's a new announcement we haven't seen
                 const annId = latest.title + latest.body + latest.date;
                 if (annId !== lastAnnouncementId && !sessionStorage.getItem('seen_' + annId)) {
                     currentAnnouncement = latest;
@@ -691,11 +736,8 @@
             modal.classList.add('opacity-0');
             content.classList.remove('scale-100');
             content.classList.add('scale-95');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-            }, 300);
+            setTimeout(() => modal.classList.add('hidden'), 300);
             
-            // Mark as seen so it doesn't show again this session
             if (currentAnnouncement) {
                 const annId = currentAnnouncement.title + currentAnnouncement.body + currentAnnouncement.date;
                 sessionStorage.setItem('seen_' + annId, 'true');
@@ -731,9 +773,8 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Only check announcements if not on staff page (to avoid annoying staff)
             if (!window.location.hash.includes('staff')) {
-                setTimeout(checkAnnouncements, 1000);
+                setTimeout(checkAnnouncements, 1500);
             }
         });
 
@@ -900,12 +941,11 @@
                 document.getElementById('staffNameDisplay').innerText = currentStaff.name;
                 await renderAdminData();
                 
-                // Start auto-refresh
                 autoRefreshInterval = setInterval(() => {
                     if (!document.getElementById('staff-dashboard-view').classList.contains('hidden')) {
                         renderAdminData();
                     }
-                }, 10000); // Refresh every 10 seconds
+                }, 10000);
             } else {
                 alert('Invalid Credentials');
             }
@@ -918,7 +958,6 @@
             document.getElementById('staffUser').value = '';
             document.getElementById('staffPass').value = '';
             
-            // Stop auto-refresh
             if (autoRefreshInterval) {
                 clearInterval(autoRefreshInterval);
                 autoRefreshInterval = null;
@@ -1029,13 +1068,6 @@
                 await renderAdminData();
             }
         }
-        
-        // Auto-refresh dashboard every 10 seconds when logged in
-        setInterval(() => {
-            if (currentStaff && !document.getElementById('staff-dashboard-view').classList.contains('hidden')) {
-                renderAdminData();
-            }
-        }, 10000);
     </script>
 </body>
 </html>
