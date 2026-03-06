@@ -94,6 +94,29 @@
                               linear-gradient(to bottom, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
             mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
         }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #10b981;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        .status-online { background-color: #10b981; box-shadow: 0 0 8px #10b981; }
+        .status-offline { background-color: #ef4444; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col relative">
@@ -103,6 +126,11 @@
     <div class="fixed top-0 left-0 w-full h-full z-[-2] overflow-hidden">
         <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-900/20 rounded-full blur-[120px]"></div>
         <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-emerald-800/20 rounded-full blur-[120px]"></div>
+    </div>
+
+    <!-- Connection Status -->
+    <div id="connection-status" class="fixed top-20 right-4 z-50 glass-panel px-3 py-1 rounded-full text-xs font-bold hidden">
+        <span class="status-indicator status-online"></span>Live Sync
     </div>
 
     <!-- Navigation -->
@@ -239,7 +267,7 @@
         </div>
     </section>
 
-    <!-- Teams Section - UPDATED -->
+    <!-- Teams Section -->
     <section id="teams" class="py-20 bg-black/30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
@@ -353,8 +381,8 @@
                         <textarea id="appReason" required rows="4" class="w-full input-field rounded-lg p-3" placeholder="Tell us about your experience..."></textarea>
                     </div>
 
-                    <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-lg transition-all shadow-lg shadow-emerald-900/50 transform hover:-translate-y-1">
-                        Submit Application
+                    <button type="submit" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-lg transition-all shadow-lg shadow-emerald-900/50 transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                        <span>Submit Application</span>
                     </button>
                 </form>
             </div>
@@ -385,8 +413,8 @@
                             <label class="block text-sm text-gray-400 mb-1">Description</label>
                             <textarea id="ticketDesc" required rows="4" class="w-full input-field rounded p-3"></textarea>
                         </div>
-                        <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded font-bold transition-colors">
-                            Submit Ticket
+                        <button type="submit" id="ticketSubmitBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded font-bold transition-colors flex items-center gap-2">
+                            <span>Submit Ticket</span>
                         </button>
                     </form>
                 </div>
@@ -394,7 +422,9 @@
                 <div id="panel-view" class="support-panel hidden">
                     <div class="mb-4 flex gap-2">
                         <input type="text" id="searchDiscord" placeholder="Enter Discord User#1234" class="flex-1 input-field rounded p-3">
-                        <button onclick="loadUserTickets()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded font-bold">Search</button>
+                        <button onclick="loadUserTickets()" id="searchBtn" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded font-bold flex items-center gap-2">
+                            <span>Search</span>
+                        </button>
                     </div>
                     <div id="ticketListContainer" class="space-y-4 max-h-[400px] overflow-y-auto pr-2">
                         <div class="text-center text-gray-500 py-8">Enter your Discord to view tickets</div>
@@ -425,8 +455,8 @@
                             <label class="text-xs text-gray-500 uppercase font-bold tracking-wider">Password</label>
                             <input type="password" id="staffPass" class="w-full input-field rounded p-3 mt-1" required>
                         </div>
-                        <button type="submit" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded transition-all mt-4">
-                            Access Dashboard
+                        <button type="submit" id="loginBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded transition-all mt-4 flex items-center justify-center gap-2">
+                            <span>Access Dashboard</span>
                         </button>
                     </form>
                 </div>
@@ -437,9 +467,14 @@
                             <h2 class="text-2xl font-display font-bold text-white">Admin Dashboard</h2>
                             <p class="text-emerald-400 text-sm">Welcome, <span id="staffNameDisplay">Admin</span></p>
                         </div>
-                        <button onclick="staffLogout()" class="text-red-400 hover:text-red-300 text-sm font-bold">
-                            <i class="fas fa-sign-out-alt mr-1"></i> Logout
-                        </button>
+                        <div class="flex gap-2">
+                            <button onclick="manualRefresh()" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm font-bold" title="Refresh Data">
+                                <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button onclick="staffLogout()" class="text-red-400 hover:text-red-300 text-sm font-bold">
+                                <i class="fas fa-sign-out-alt mr-1"></i> Logout
+                            </button>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -463,7 +498,9 @@
                             <input type="text" id="newAnnTitle" placeholder="Title" class="w-full input-field rounded p-3">
                             <textarea id="newAnnBody" placeholder="Message content..." rows="3" class="w-full input-field rounded p-3"></textarea>
                             <div class="flex gap-2">
-                                <button onclick="postNewAnnouncement()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded font-bold">Post Now</button>
+                                <button onclick="postNewAnnouncement()" id="postAnnBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded font-bold flex items-center gap-2">
+                                    <span>Post Now</span>
+                                </button>
                                 <button onclick="toggleAnnouncementForm()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded font-bold">Cancel</button>
                             </div>
                         </div>
@@ -472,12 +509,16 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
                             <h3 class="text-lg font-bold text-white mb-4 border-l-4 border-emerald-500 pl-3">Recent Applications</h3>
-                            <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2" id="admin-apps-list"></div>
+                            <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2" id="admin-apps-list">
+                                <div class="text-center text-gray-500 py-4">Loading...</div>
+                            </div>
                         </div>
 
                         <div>
                             <h3 class="text-lg font-bold text-white mb-4 border-l-4 border-blue-500 pl-3">Support Tickets</h3>
-                            <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2" id="admin-tickets-list"></div>
+                            <div class="space-y-3 max-h-[400px] overflow-y-auto pr-2" id="admin-tickets-list">
+                                <div class="text-center text-gray-500 py-4">Loading...</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -502,23 +543,133 @@
     </footer>
 
     <script>
+        // ==========================================
+        // JSONBIN.IO CONFIGURATION - SHARED DATABASE
+        // ==========================================
+        
+        const BIN_ID = '69aa217643b1c97be9b7f444';
+        const API_KEY = '$2a$10$QshjJCgpebIkrzj2w63yuuaYicTh.kQeJCPv7HpGtr/Yj7fkxHJHC';
+        
+        // ==========================================
+        // API FUNCTIONS
+        // ==========================================
+        
+        const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        
+        // Show connection status
+        function showConnectionStatus(online) {
+            const status = document.getElementById('connection-status');
+            const indicator = status.querySelector('.status-indicator');
+            status.classList.remove('hidden');
+            
+            if (online) {
+                indicator.className = 'status-indicator status-online';
+                status.innerHTML = '<span class="status-indicator status-online"></span>Live Sync';
+                setTimeout(() => status.classList.add('hidden'), 3000);
+            } else {
+                indicator.className = 'status-indicator status-offline';
+                status.innerHTML = '<span class="status-indicator status-offline"></span>Offline';
+            }
+        }
+        
+        async function getData() {
+            try {
+                const response = await fetch(BASE_URL, {
+                    method: 'GET',
+                    headers: {
+                        'X-Master-Key': API_KEY,
+                        'X-Bin-Meta': 'false'
+                    }
+                });
+                
+                if (!response.ok) throw new Error('Failed to fetch data');
+                
+                const result = await response.json();
+                showConnectionStatus(true);
+                return result.record || { apps: [], tickets: [], announcements: [] };
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                showConnectionStatus(false);
+                alert('Error connecting to database. Please check your internet connection.');
+                return { apps: [], tickets: [], announcements: [] };
+            }
+        }
+        
+        async function saveData(data) {
+            try {
+                const response = await fetch(BASE_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': API_KEY
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) throw new Error('Failed to save data');
+                showConnectionStatus(true);
+                return true;
+            } catch (error) {
+                console.error('Error saving data:', error);
+                showConnectionStatus(false);
+                alert('Error saving data. Please try again.');
+                return false;
+            }
+        }
+        
+        // Helper to show loading state on buttons
+        function setLoading(buttonId, isLoading) {
+            const btn = document.getElementById(buttonId);
+            if (!btn) return;
+            
+            if (isLoading) {
+                btn.disabled = true;
+                btn.innerHTML = '<div class="loading"></div>';
+            } else {
+                btn.disabled = false;
+                btn.innerHTML = '<span>' + btn.getAttribute('data-text') + '</span>';
+            }
+        }
+        
+        // Initialize button text storage
+        document.addEventListener('DOMContentLoaded', () => {
+            ['submitBtn', 'ticketSubmitBtn', 'searchBtn', 'loginBtn', 'postAnnBtn'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) {
+                    btn.setAttribute('data-text', btn.innerText.trim());
+                }
+            });
+        });
+
+        // ==========================================
+        // STAFF AUTHENTICATION
+        // ==========================================
+        
         const STAFF_USERS = {
             'admin': { password: 'admin123', name: 'EA JODECI', role: 'Owner' },
             'mod': { password: 'mod123', name: 'EA Support', role: 'Moderator' }
         };
 
-        function initStorage() {
-            if (!localStorage.getItem('ea_apps')) localStorage.setItem('ea_apps', JSON.stringify([]));
-            if (!localStorage.getItem('ea_tickets')) localStorage.setItem('ea_tickets', JSON.stringify([]));
-            if (!localStorage.getItem('ea_announcements')) localStorage.setItem('ea_announcements', JSON.stringify([]));
-        }
-        initStorage();
-
-        function checkAnnouncements() {
-            const announcements = JSON.parse(localStorage.getItem('ea_announcements'));
+        // ==========================================
+        // ANNOUNCEMENT FUNCTIONS
+        // ==========================================
+        
+        let currentAnnouncement = null;
+        let lastAnnouncementId = null;
+        
+        async function checkAnnouncements() {
+            const data = await getData();
+            const announcements = data.announcements || [];
+            
             if (announcements.length > 0) {
                 const latest = announcements[announcements.length - 1];
-                showAnnouncementModal(latest.title, latest.body);
+                // Only show if it's a new announcement we haven't seen
+                const annId = latest.title + latest.body + latest.date;
+                if (annId !== lastAnnouncementId && !sessionStorage.getItem('seen_' + annId)) {
+                    currentAnnouncement = latest;
+                    lastAnnouncementId = annId;
+                    showAnnouncementModal(latest.title, latest.body);
+                }
             }
         }
 
@@ -543,27 +694,59 @@
             setTimeout(() => {
                 modal.classList.add('hidden');
             }, 300);
+            
+            // Mark as seen so it doesn't show again this session
+            if (currentAnnouncement) {
+                const annId = currentAnnouncement.title + currentAnnouncement.body + currentAnnouncement.date;
+                sessionStorage.setItem('seen_' + annId, 'true');
+            }
         }
 
-        function postNewAnnouncement() {
+        async function postNewAnnouncement() {
             const title = document.getElementById('newAnnTitle').value;
             const body = document.getElementById('newAnnBody').value;
+            
             if (!title || !body) return alert('Please fill in all fields');
-            const announcements = JSON.parse(localStorage.getItem('ea_announcements'));
-            announcements.push({ title, body, date: new Date().toISOString() });
-            localStorage.setItem('ea_announcements', JSON.stringify(announcements));
-            alert('Announcement Posted! It will show to all users immediately.');
-            toggleAnnouncementForm();
-            document.getElementById('newAnnTitle').value = '';
-            document.getElementById('newAnnBody').value = '';
+            
+            setLoading('postAnnBtn', true);
+            
+            const data = await getData();
+            data.announcements.push({ 
+                title, 
+                body, 
+                date: new Date().toISOString(),
+                postedBy: currentStaff ? currentStaff.name : 'Unknown'
+            });
+            
+            const success = await saveData(data);
+            
+            setLoading('postAnnBtn', false);
+            
+            if (success) {
+                alert('Announcement Posted! It will show to all users immediately.');
+                toggleAnnouncementForm();
+                document.getElementById('newAnnTitle').value = '';
+                document.getElementById('newAnnBody').value = '';
+            }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            setTimeout(checkAnnouncements, 1000);
+            // Only check announcements if not on staff page (to avoid annoying staff)
+            if (!window.location.hash.includes('staff')) {
+                setTimeout(checkAnnouncements, 1000);
+            }
         });
 
-        function handleApplication(e) {
+        // ==========================================
+        // APPLICATION FUNCTIONS
+        // ==========================================
+        
+        async function handleApplication(e) {
             e.preventDefault();
+            setLoading('submitBtn', true);
+            
+            const data = await getData();
+            
             const newApp = {
                 id: Date.now(),
                 discord: document.getElementById('appDiscord').value,
@@ -574,13 +757,22 @@
                 date: new Date().toLocaleDateString(),
                 status: 'Pending'
             };
-            const apps = JSON.parse(localStorage.getItem('ea_apps'));
-            apps.push(newApp);
-            localStorage.setItem('ea_apps', JSON.stringify(apps));
-            alert('Application Submitted Successfully!');
-            e.target.reset();
+            
+            data.apps.push(newApp);
+            const success = await saveData(data);
+            
+            setLoading('submitBtn', false);
+            
+            if (success) {
+                alert('Application Submitted Successfully!');
+                e.target.reset();
+            }
         }
 
+        // ==========================================
+        // SUPPORT TICKET FUNCTIONS
+        // ==========================================
+        
         function switchSupportTab(tab) {
             document.querySelectorAll('.support-panel').forEach(el => el.classList.add('hidden'));
             document.getElementById(`panel-${tab}`).classList.remove('hidden');
@@ -595,10 +787,16 @@
             }
         }
 
-        function handleTicketCreate(e) {
+        async function handleTicketCreate(e) {
             e.preventDefault();
+            
             const discord = prompt("Please confirm your Discord User#1234 to link this ticket:");
             if (!discord) return;
+            
+            setLoading('ticketSubmitBtn', true);
+            
+            const data = await getData();
+            
             const newTicket = {
                 id: 'TKT-' + Math.floor(Math.random() * 10000),
                 discord: discord,
@@ -608,25 +806,43 @@
                 date: new Date().toLocaleString(),
                 responses: []
             };
-            const tickets = JSON.parse(localStorage.getItem('ea_tickets'));
-            tickets.push(newTicket);
-            localStorage.setItem('ea_tickets', JSON.stringify(tickets));
-            alert(`Ticket Created: ${newTicket.id}`);
-            e.target.reset();
-            switchSupportTab('view');
-            document.getElementById('searchDiscord').value = discord;
-            loadUserTickets();
+            
+            data.tickets.push(newTicket);
+            const success = await saveData(data);
+            
+            setLoading('ticketSubmitBtn', false);
+            
+            if (success) {
+                alert(`Ticket Created: ${newTicket.id}`);
+                e.target.reset();
+                switchSupportTab('view');
+                document.getElementById('searchDiscord').value = discord;
+                loadUserTickets();
+            }
         }
 
-        function loadUserTickets() {
+        async function loadUserTickets() {
             const discord = document.getElementById('searchDiscord').value.trim();
             const container = document.getElementById('ticketListContainer');
-            const tickets = JSON.parse(localStorage.getItem('ea_tickets'));
+            
+            if (!discord) {
+                container.innerHTML = '<div class="text-center text-gray-500 py-4">Please enter your Discord username</div>';
+                return;
+            }
+            
+            setLoading('searchBtn', true);
+            
+            const data = await getData();
+            const tickets = data.tickets || [];
             const userTickets = tickets.filter(t => t.discord.toLowerCase() === discord.toLowerCase());
+            
+            setLoading('searchBtn', false);
+            
             if (userTickets.length === 0) {
                 container.innerHTML = `<div class="text-center text-gray-500 py-4">No tickets found for ${discord}</div>`;
                 return;
             }
+            
             container.innerHTML = userTickets.map(t => `
                 <div class="bg-black/40 p-4 rounded border border-gray-700">
                     <div class="flex justify-between mb-2">
@@ -637,7 +853,7 @@
                     <p class="text-gray-400 text-sm mb-3">${t.description}</p>
                     <div class="bg-gray-900/50 p-3 rounded mb-3 text-sm">
                         <p class="text-gray-500 text-xs mb-1">Staff Response:</p>
-                        <p class="text-gray-300 italic">${t.responses.length > 0 ? t.responses[t.responses.length-1].text : 'No response yet.'}</p>
+                        <p class="text-gray-300 italic">${t.responses && t.responses.length > 0 ? t.responses[t.responses.length-1].text : 'No response yet.'}</p>
                     </div>
                     <div class="flex gap-2">
                         <input type="text" id="reply-${t.id}" placeholder="Reply..." class="flex-1 bg-black border border-gray-700 rounded px-2 py-1 text-sm text-white">
@@ -647,29 +863,49 @@
             `).join('');
         }
 
-        function addUserReply(ticketId) {
+        async function addUserReply(ticketId) {
             const input = document.getElementById(`reply-${ticketId}`);
             const text = input.value;
             if (!text) return;
-            const tickets = JSON.parse(localStorage.getItem('ea_tickets'));
-            const ticket = tickets.find(t => t.id === ticketId);
-            ticket.responses.push({ text, sender: 'User', date: new Date() });
-            localStorage.setItem('ea_tickets', JSON.stringify(tickets));
-            loadUserTickets();
+            
+            const data = await getData();
+            const ticket = data.tickets.find(t => t.id === ticketId);
+            
+            if (ticket) {
+                if (!ticket.responses) ticket.responses = [];
+                ticket.responses.push({ text, sender: 'User', date: new Date() });
+                ticket.status = 'Pending Staff';
+                await saveData(data);
+                loadUserTickets();
+            }
         }
 
+        // ==========================================
+        // STAFF DASHBOARD FUNCTIONS
+        // ==========================================
+        
         let currentStaff = null;
+        let autoRefreshInterval = null;
 
-        function handleStaffLogin(e) {
+        async function handleStaffLogin(e) {
             e.preventDefault();
+            
             const u = document.getElementById('staffUser').value;
             const p = document.getElementById('staffPass').value;
+            
             if (STAFF_USERS[u] && STAFF_USERS[u].password === p) {
                 currentStaff = STAFF_USERS[u];
                 document.getElementById('staff-login-view').classList.add('hidden');
                 document.getElementById('staff-dashboard-view').classList.remove('hidden');
                 document.getElementById('staffNameDisplay').innerText = currentStaff.name;
-                renderAdminData();
+                await renderAdminData();
+                
+                // Start auto-refresh
+                autoRefreshInterval = setInterval(() => {
+                    if (!document.getElementById('staff-dashboard-view').classList.contains('hidden')) {
+                        renderAdminData();
+                    }
+                }, 10000); // Refresh every 10 seconds
             } else {
                 alert('Invalid Credentials');
             }
@@ -681,6 +917,12 @@
             document.getElementById('staff-login-view').classList.remove('hidden');
             document.getElementById('staffUser').value = '';
             document.getElementById('staffPass').value = '';
+            
+            // Stop auto-refresh
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
         }
 
         function toggleAnnouncementForm() {
@@ -688,14 +930,25 @@
             form.classList.toggle('hidden');
         }
 
-        function renderAdminData() {
-            const apps = JSON.parse(localStorage.getItem('ea_apps'));
-            const tickets = JSON.parse(localStorage.getItem('ea_tickets'));
+        async function manualRefresh() {
+            const btn = document.querySelector('button[onclick="manualRefresh()"] i');
+            btn.classList.add('fa-spin');
+            await renderAdminData();
+            setTimeout(() => btn.classList.remove('fa-spin'), 1000);
+        }
+
+        async function renderAdminData() {
+            const data = await getData();
+            const apps = data.apps || [];
+            const tickets = data.tickets || [];
+            
             document.getElementById('stat-apps').innerText = apps.filter(a => a.status === 'Pending').length;
-            document.getElementById('stat-tickets').innerText = tickets.filter(t => t.status === 'Open').length;
+            document.getElementById('stat-tickets').innerText = tickets.filter(t => t.status === 'Open' || t.status === 'Pending Staff').length;
 
             const appContainer = document.getElementById('admin-apps-list');
-            appContainer.innerHTML = apps.map(app => `
+            appContainer.innerHTML = apps.length === 0 ? 
+                '<div class="text-center text-gray-500 py-4">No applications yet</div>' :
+                apps.slice().reverse().map(app => `
                 <div class="bg-black/30 p-3 rounded border-l-2 ${app.status === 'Pending' ? 'border-yellow-500' : 'border-emerald-500'} flex justify-between items-center">
                     <div>
                         <div class="text-white font-bold text-sm">${app.discord}</div>
@@ -703,20 +956,22 @@
                     </div>
                     <div class="flex gap-2">
                         ${app.status === 'Pending' ? `
-                            <button onclick="updateAppStatus(${app.id}, 'Approved')" class="text-emerald-400 hover:text-white text-xs"><i class="fas fa-check"></i></button>
-                            <button onclick="updateAppStatus(${app.id}, 'Denied')" class="text-red-400 hover:text-white text-xs"><i class="fas fa-times"></i></button>
+                            <button onclick="updateAppStatus(${app.id}, 'Approved')" class="text-emerald-400 hover:text-white text-xs bg-emerald-900/30 px-2 py-1 rounded"><i class="fas fa-check"></i></button>
+                            <button onclick="updateAppStatus(${app.id}, 'Denied')" class="text-red-400 hover:text-white text-xs bg-red-900/30 px-2 py-1 rounded"><i class="fas fa-times"></i></button>
                         ` : `<span class="text-xs text-gray-500">${app.status}</span>`}
                     </div>
                 </div>
             `).join('');
 
             const ticketContainer = document.getElementById('admin-tickets-list');
-            ticketContainer.innerHTML = tickets.map(t => `
+            ticketContainer.innerHTML = tickets.length === 0 ?
+                '<div class="text-center text-gray-500 py-4">No tickets yet</div>' :
+                tickets.slice().reverse().map(t => `
                 <div class="bg-black/30 p-3 rounded border-l-2 ${t.status === 'Open' ? 'border-red-500' : 'border-gray-600'}">
                     <div class="flex justify-between items-start mb-2">
                         <div>
                             <div class="text-white font-bold text-sm">${t.subject}</div>
-                            <div class="text-gray-500 text-xs">By: ${t.discord}</div>
+                            <div class="text-gray-500 text-xs">By: ${t.discord} | ${t.id}</div>
                         </div>
                         <button onclick="closeTicket('${t.id}')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded text-white">Close</button>
                     </div>
@@ -725,43 +980,62 @@
                         <input type="text" id="admin-reply-${t.id}" placeholder="Admin response..." class="flex-1 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-xs text-white">
                         <button onclick="addAdminReply('${t.id}')" class="bg-emerald-700 hover:bg-emerald-600 text-white px-2 py-1 rounded text-xs">Reply</button>
                     </div>
+                    ${t.responses && t.responses.length > 0 ? `
+                        <div class="mt-2 bg-gray-900/30 p-2 rounded text-xs">
+                            <p class="text-gray-500">Last response: ${t.responses[t.responses.length-1].text}</p>
+                        </div>
+                    ` : ''}
                 </div>
             `).join('');
         }
 
-        function updateAppStatus(id, status) {
-            const apps = JSON.parse(localStorage.getItem('ea_apps'));
-            const app = apps.find(a => a.id === id);
+        async function updateAppStatus(id, status) {
+            const data = await getData();
+            const app = data.apps.find(a => a.id === id);
             if (app) {
                 app.status = status;
-                localStorage.setItem('ea_apps', JSON.stringify(apps));
-                renderAdminData();
+                app.reviewedBy = currentStaff ? currentStaff.name : 'Unknown';
+                app.reviewedAt = new Date().toLocaleString();
+                await saveData(data);
+                await renderAdminData();
             }
         }
 
-        function addAdminReply(ticketId) {
+        async function addAdminReply(ticketId) {
             const input = document.getElementById(`admin-reply-${ticketId}`);
             const text = input.value;
             if (!text) return;
-            const tickets = JSON.parse(localStorage.getItem('ea_tickets'));
-            const ticket = tickets.find(t => t.id === ticketId);
+            
+            const data = await getData();
+            const ticket = data.tickets.find(t => t.id === ticketId);
+            
             if (ticket) {
-                ticket.responses.push({ text, sender: currentStaff.name, date: new Date() });
+                if (!ticket.responses) ticket.responses = [];
+                ticket.responses.push({ text, sender: currentStaff ? currentStaff.name : 'Staff', date: new Date() });
                 ticket.status = 'Pending User';
-                localStorage.setItem('ea_tickets', JSON.stringify(tickets));
-                renderAdminData();
+                await saveData(data);
+                await renderAdminData();
             }
         }
 
-        function closeTicket(ticketId) {
-            const tickets = JSON.parse(localStorage.getItem('ea_tickets'));
-            const ticket = tickets.find(t => t.id === ticketId);
+        async function closeTicket(ticketId) {
+            const data = await getData();
+            const ticket = data.tickets.find(t => t.id === ticketId);
             if(ticket) {
                 ticket.status = 'Closed';
-                localStorage.setItem('ea_tickets', JSON.stringify(tickets));
-                renderAdminData();
+                ticket.closedBy = currentStaff ? currentStaff.name : 'Unknown';
+                ticket.closedAt = new Date().toLocaleString();
+                await saveData(data);
+                await renderAdminData();
             }
         }
+        
+        // Auto-refresh dashboard every 10 seconds when logged in
+        setInterval(() => {
+            if (currentStaff && !document.getElementById('staff-dashboard-view').classList.contains('hidden')) {
+                renderAdminData();
+            }
+        }, 10000);
     </script>
 </body>
 </html>
