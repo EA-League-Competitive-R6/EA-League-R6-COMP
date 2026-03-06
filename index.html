@@ -555,13 +555,13 @@
 
     <script>
         // ==========================================
-        // JSONBIN.IO CONFIGURATION - SHARED DATABASE
+        // JSONBIN.IO CONFIGURATION - FIXED WITH ACCESS KEY [^11^][^12^]
         // ==========================================
         
         const BIN_ID = '69aa217643b1c97be9b7f444';
-        const API_KEY = '$2a$10$QshjJCgpebIkrzj2w63yuuaYicTh.kQeJCPv7HpGtr/Yj7fkxHJHC';
+        // Using Access Key instead of Master Key for API authentication
+        const ACCESS_KEY = '69aa22f343b1c97be9b7fa49';
         
-        // Use latest endpoint for reading [^11^]
         const READ_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
         const UPDATE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
         
@@ -613,7 +613,7 @@
         });
 
         // ==========================================
-        // CORE API FUNCTIONS - FIXED FOR CORS [^11^][^12^]
+        // CORE API FUNCTIONS - USING X-ACCESS-KEY [^12^]
         // ==========================================
         
         async function getData() {
@@ -623,8 +623,7 @@
                 const response = await fetch(READ_URL, {
                     method: 'GET',
                     headers: {
-                        'X-Master-Key': API_KEY
-                        // Note: X-Bin-Meta removed - using /latest endpoint instead [^11^]
+                        'X-Access-Key': ACCESS_KEY  // Changed from X-Master-Key to X-Access-Key [^12^]
                     }
                 });
                 
@@ -647,7 +646,7 @@
             } catch (error) {
                 console.error('Error fetching data:', error);
                 showConnectionStatus(false);
-                showError('Database connection failed. Check console for details.');
+                showError('Database connection failed: ' + error.message);
                 return { apps: [], tickets: [], announcements: [] };
             }
         }
@@ -660,7 +659,7 @@
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Master-Key': API_KEY
+                        'X-Access-Key': ACCESS_KEY  // Changed from X-Master-Key to X-Access-Key [^12^]
                     },
                     body: JSON.stringify(data)
                 });
@@ -682,7 +681,7 @@
             } catch (error) {
                 console.error('Error saving data:', error);
                 showConnectionStatus(false);
-                showError('Failed to save data. Please try again.');
+                showError('Failed to save: ' + error.message);
                 return false;
             }
         }
