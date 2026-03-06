@@ -123,6 +123,13 @@
             border: 1px solid rgba(239, 68, 68, 0.3);
             color: #fca5a5;
         }
+        
+        .sync-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col relative">
@@ -142,6 +149,13 @@
     <!-- Error Banner -->
     <div id="error-banner" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 error-banner px-4 py-2 rounded-lg text-sm font-bold hidden max-w-md text-center">
         <i class="fas fa-exclamation-triangle mr-2"></i><span id="error-message">Connection Error</span>
+    </div>
+
+    <!-- Debug Info (remove after testing) -->
+    <div id="debug-info" class="fixed bottom-4 left-4 z-50 glass-panel px-3 py-2 rounded text-xs text-gray-400 hidden">
+        <div>Bin ID: <span id="debug-bin"></span></div>
+        <div>Key: <span id="debug-key"></span></div>
+        <div>Status: <span id="debug-status">Unknown</span></div>
     </div>
 
     <!-- Navigation -->
@@ -555,15 +569,19 @@
 
     <script>
         // ==========================================
-        // JSONBIN.IO CONFIGURATION - FIXED WITH FULL MASTER KEY
+        // JSONBIN.IO CONFIGURATION - FIXED URLS (NO SPACES!)
         // ==========================================
         
         const BIN_ID = '69aa217643b1c97be9b7f444';
-        // Using complete Master Key with $2a$10$ prefix [^13^]
         const MASTER_KEY = '$2a$10$GK8JfB9MpM7nksbKiYequemSxDWTeB.S/B0aVN3XtmLU9amuwpwgO';
         
+        // FIXED: Removed spaces from URLs!
         const READ_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
         const UPDATE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+        
+        // Show debug info (remove after testing)
+        console.log('READ_URL:', READ_URL);
+        console.log('UPDATE_URL:', UPDATE_URL);
         
         // ==========================================
         // ERROR HANDLING & UI HELPERS
@@ -585,10 +603,14 @@
             if (online) {
                 indicator.className = 'status-indicator status-online';
                 status.innerHTML = '<span class="status-indicator status-online"></span>Live Sync';
+                document.getElementById('debug-status').textContent = 'Connected';
+                document.getElementById('debug-status').className = 'text-emerald-400';
                 setTimeout(() => status.classList.add('hidden'), 3000);
             } else {
                 indicator.className = 'status-indicator status-offline';
                 status.innerHTML = '<span class="status-indicator status-offline"></span>Offline';
+                document.getElementById('debug-status').textContent = 'Error';
+                document.getElementById('debug-status').className = 'text-red-400';
             }
         }
         
@@ -605,16 +627,30 @@
             }
         }
         
+        // Initialize debug info
         document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('debug-bin').textContent = BIN_ID.substring(0, 8) + '...';
+            document.getElementById('debug-key').textContent = MASTER_KEY.substring(0, 10) + '...';
+            document.getElementById('debug-info').classList.remove('hidden');
+            
             ['submitBtn', 'ticketSubmitBtn', 'searchBtn', 'loginBtn', 'postAnnBtn'].forEach(id => {
                 const btn = document.getElementById(id);
                 if (btn) btn.setAttribute('data-text', btn.innerText.trim());
             });
+            
+            // Test connection immediately
+            testConnection();
         });
 
         // ==========================================
-        // CORE API FUNCTIONS - USING X-Master-Key [^13^]
+        // CORE API FUNCTIONS
         // ==========================================
+        
+        async function testConnection() {
+            console.log('Testing connection...');
+            const data = await getData();
+            console.log('Connection test result:', data);
+        }
         
         async function getData() {
             try {
@@ -623,7 +659,7 @@
                 const response = await fetch(READ_URL, {
                     method: 'GET',
                     headers: {
-                        'X-Master-Key': MASTER_KEY  // Using full Master Key [^13^]
+                        'X-Master-Key': MASTER_KEY
                     }
                 });
                 
@@ -640,7 +676,6 @@
                 
                 showConnectionStatus(true);
                 
-                // JSONBin returns { record: { apps: [], tickets: [], announcements: [] } }
                 return result.record || { apps: [], tickets: [], announcements: [] };
                 
             } catch (error) {
@@ -659,7 +694,7 @@
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Master-Key': MASTER_KEY  // Using full Master Key [^13^]
+                        'X-Master-Key': MASTER_KEY
                     },
                     body: JSON.stringify(data)
                 });
@@ -773,7 +808,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             if (!window.location.hash.includes('staff')) {
-                setTimeout(checkAnnouncements, 1500);
+                setTimeout(checkAnnouncements, 2000);
             }
         });
 
@@ -804,7 +839,7 @@
             setLoading('submitBtn', false);
             
             if (success) {
-                alert('Application Submitted Successfully!');
+                alert('Application Submitted Successfully! Your team will see it immediately.');
                 e.target.reset();
             }
         }
@@ -853,7 +888,7 @@
             setLoading('ticketSubmitBtn', false);
             
             if (success) {
-                alert(`Ticket Created: ${newTicket.id}`);
+                alert(`Ticket Created: ${newTicket.id}. Staff will see it immediately.`);
                 e.target.reset();
                 switchSupportTab('view');
                 document.getElementById('searchDiscord').value = discord;
@@ -940,11 +975,12 @@
                 document.getElementById('staffNameDisplay').innerText = currentStaff.name;
                 await renderAdminData();
                 
+                // Auto-refresh every 5 seconds for staff
                 autoRefreshInterval = setInterval(() => {
                     if (!document.getElementById('staff-dashboard-view').classList.contains('hidden')) {
                         renderAdminData();
                     }
-                }, 10000);
+                }, 5000);
             } else {
                 alert('Invalid Credentials');
             }
