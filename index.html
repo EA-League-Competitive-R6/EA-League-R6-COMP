@@ -453,7 +453,7 @@
                     <p class="text-gray-400 mt-2">Fill out the form below to apply for a team. Our staff will review and place you in the appropriate tier.</p>
                 </div>
 
-                <form id="applicationForm" class="space-y-6" onsubmit="handleApplication(event)">
+                <div class="space-y-6">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-400 mb-2">Discord Username</label>
@@ -493,10 +493,10 @@
                         <textarea id="appReason" required rows="4" class="w-full input-field rounded-lg p-3" placeholder="Tell us about your experience..."></textarea>
                     </div>
 
-                    <button type="submit" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-lg transition-all shadow-lg shadow-emerald-900/50 transform hover:-translate-y-1 flex items-center justify-center gap-2">
+                    <button onclick="submitApplication()" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-lg transition-all shadow-lg shadow-emerald-900/50 transform hover:-translate-y-1 flex items-center justify-center gap-2">
                         <span>Submit Application</span>
                     </button>
-                </form>
+                </div>
             </div>
         </div>
     </section>
@@ -516,7 +516,7 @@
                 </div>
 
                 <div id="panel-create" class="support-panel">
-                    <form onsubmit="handleTicketCreate(event)" class="space-y-4">
+                    <div class="space-y-4">
                         <div>
                             <label class="block text-sm text-gray-400 mb-1">Subject</label>
                             <input type="text" id="ticketSubject" required class="w-full input-field rounded p-3">
@@ -525,10 +525,10 @@
                             <label class="block text-sm text-gray-400 mb-1">Description</label>
                             <textarea id="ticketDesc" required rows="4" class="w-full input-field rounded p-3"></textarea>
                         </div>
-                        <button type="submit" id="ticketSubmitBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded font-bold transition-colors flex items-center gap-2">
+                        <button onclick="submitTicket()" id="ticketSubmitBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded font-bold transition-colors flex items-center gap-2">
                             <span>Submit Ticket</span>
                         </button>
-                    </form>
+                    </div>
                 </div>
 
                 <div id="panel-view" class="support-panel hidden">
@@ -562,7 +562,7 @@
                             <p class="text-gray-400 mt-2">Complete the screening process to verify admin eligibility.</p>
                         </div>
 
-                        <form id="adminScreeningForm" onsubmit="handleAdminScreening(event)" class="space-y-4">
+                        <div class="space-y-4">
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Full Name</label>
@@ -617,10 +617,10 @@
                                 </label>
                             </div>
 
-                            <button type="submit" id="screeningBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded transition-all flex items-center justify-center gap-2">
+                            <button onclick="submitAdminScreening()" id="screeningBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded transition-all flex items-center justify-center gap-2">
                                 <span>Submit for Review</span>
                             </button>
-                        </form>
+                        </div>
                     </div>
                 </div>
 
@@ -631,23 +631,23 @@
                     <h2 class="text-2xl font-display font-bold text-white mb-2">Staff Portal</h2>
                     <p class="text-gray-400 mb-8">Authorized personnel only.</p>
                     
-                    <form onsubmit="handleStaffLogin(event)" class="space-y-4 text-left">
+                    <div class="space-y-4 text-left">
                         <div>
                             <label class="text-xs text-gray-500 uppercase font-bold tracking-wider">Username</label>
                             <input type="text" id="staffUser" class="w-full input-field rounded p-3 mt-1" required autocomplete="username">
                         </div>
                         <div>
                             <label class="text-xs text-gray-500 uppercase font-bold tracking-wider">Password</label>
-                            <input type="password" id="staffPass" class="w-full input-field rounded p-3 mt-1" required autocomplete="current-password">
+                            <input type="password" id="staffPass" class="w-full input-field rounded p-3 mt-1" required autocomplete="current-password" onkeypress="if(event.key==='Enter'){event.preventDefault();doStaffLogin();}">
                         </div>
                         <div id="login-error" class="text-red-400 text-sm hidden">
                             <i class="fas fa-exclamation-circle mr-1"></i> Invalid credentials. Please try again.
                         </div>
                         <div id="login-error-details" class="text-red-400/70 text-xs hidden mt-1"></div>
-                        <button type="submit" id="loginBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded transition-all mt-4 flex items-center justify-center gap-2">
+                        <button onclick="doStaffLogin()" id="loginBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded transition-all mt-4 flex items-center justify-center gap-2">
                             <span>Access Dashboard</span>
                         </button>
-                    </form>
+                    </div>
 
                     <div class="mt-6 pt-6 border-t border-gray-800">
                         <p class="text-xs text-gray-500 mb-3">Need Admin Access?</p>
@@ -821,28 +821,24 @@
                 container.appendChild(div);
                 container.scrollTop = container.scrollHeight;
             }
-            
-            // Also log to browser console
             console.log(`[${type.toUpperCase()}] ${message}`);
         }
 
         // ==========================================
-        // JSONBIN.IO CONFIGURATION - FIXED URLS
+        // JSONBIN.IO CONFIGURATION
         // ==========================================
         
         const BIN_ID = '69aa217643b1c97be9b7f444';
         const MASTER_KEY = '$2a$10$GK8JfB9MpM7nksbKiYequemSxDWTeB.S/B0aVN3XtmLU9amuwpwgO';
         
-        // FIXED: Removed spaces from URLs
         const READ_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
         const UPDATE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
         
         logDebug(`Bin ID: ${BIN_ID}`);
         logDebug(`Read URL: ${READ_URL}`);
-        logDebug(`Update URL: ${UPDATE_URL}`);
 
         // ==========================================
-        // ENHANCED AUTHENTICATION SYSTEM
+        // AUTHENTICATION SYSTEM
         // ==========================================
         
         function simpleHash(str) {
@@ -959,7 +955,7 @@
         }
 
         // ==========================================
-        // CORE API FUNCTIONS - FIXED HEADERS
+        // CORE API FUNCTIONS
         // ==========================================
         
         async function getData() {
@@ -970,7 +966,7 @@
                     method: 'GET',
                     headers: { 
                         'X-Master-Key': MASTER_KEY,
-                        'X-Bin-Meta': 'false' // Don't need metadata
+                        'X-Bin-Meta': 'false'
                     }
                 });
                 
@@ -986,7 +982,6 @@
                 
                 showConnectionStatus(true);
                 
-                // Handle both response formats
                 const record = result.record || result;
                 return {
                     apps: record.apps || [],
@@ -1002,7 +997,6 @@
                 showConnectionStatus(false, 'Connection Failed');
                 showError('Database connection failed.', error.message);
                 
-                // Return empty structure on error
                 return { apps: [], tickets: [], announcements: [], players: [], adminApplications: [] };
             }
         }
@@ -1014,7 +1008,7 @@
                 const response = await fetch(UPDATE_URL, {
                     method: 'PUT',
                     headers: {
-                        'Content-Type': 'application/json', // CRITICAL: Required header
+                        'Content-Type': 'application/json',
                         'X-Master-Key': MASTER_KEY,
                         'X-Bin-Meta': 'false'
                     },
@@ -1096,12 +1090,29 @@
             document.getElementById('admin-screening-modal').classList.remove('hidden');
         }
 
-        async function handleAdminScreening(e) {
-            e.preventDefault();
-            
+        function closeAdminScreening() {
+            document.getElementById('admin-screening-modal').classList.add('hidden');
+        }
+
+        async function submitAdminScreening() {
             const age = parseInt(document.getElementById('screenAge').value);
             if (age < 16) {
                 alert('You must be at least 16 years old to apply for admin position.');
+                return;
+            }
+
+            // Validate all fields
+            const name = document.getElementById('screenName').value;
+            const discord = document.getElementById('screenDiscord').value;
+            const q1 = document.getElementById('q1').value;
+            const q2 = document.getElementById('q2').value;
+            const q3 = document.getElementById('q3').value;
+            const q4 = document.getElementById('q4').value;
+            const q5 = document.getElementById('q5').value;
+            const oath = document.getElementById('adminOath').checked;
+
+            if (!name || !discord || !q1 || !q2 || !q3 || !q4 || !q5 || !oath) {
+                alert('Please fill in all fields and check the oath box.');
                 return;
             }
 
@@ -1109,14 +1120,14 @@
             
             const screeningData = {
                 id: Date.now(),
-                name: document.getElementById('screenName').value,
+                name: name,
                 age: age,
-                discord: document.getElementById('screenDiscord').value,
-                q1: document.getElementById('q1').value,
-                q2: document.getElementById('q2').value,
-                q3: document.getElementById('q3').value,
-                q4: document.getElementById('q4').value,
-                q5: document.getElementById('q5').value,
+                discord: discord,
+                q1: q1,
+                q2: q2,
+                q3: q3,
+                q4: q4,
+                q5: q5,
                 status: 'Pending Review',
                 date: new Date().toISOString()
             };
@@ -1130,8 +1141,17 @@
             
             if (success) {
                 alert('Admin application submitted for review. JODECI will review your application and contact you via Discord.');
-                document.getElementById('admin-screening-modal').classList.add('hidden');
-                e.target.reset();
+                closeAdminScreening();
+                // Clear form
+                document.getElementById('screenName').value = '';
+                document.getElementById('screenAge').value = '';
+                document.getElementById('screenDiscord').value = '';
+                document.getElementById('q1').value = '';
+                document.getElementById('q2').value = '';
+                document.getElementById('q3').value = '';
+                document.getElementById('q4').value = '';
+                document.getElementById('q5').value = '';
+                document.getElementById('adminOath').checked = false;
             }
         }
 
@@ -1215,19 +1235,29 @@
         // APPLICATION FUNCTIONS
         // ==========================================
         
-        async function handleApplication(e) {
-            e.preventDefault();
+        async function submitApplication() {
+            const discord = document.getElementById('appDiscord').value;
+            const uplay = document.getElementById('appUplay').value;
+            const rank = document.getElementById('appRank').value;
+            const team = document.getElementById('appTeam').value;
+            const reason = document.getElementById('appReason').value;
+
+            if (!discord || !uplay || !rank || !team || !reason) {
+                alert('Please fill in all fields');
+                return;
+            }
+
             setLoading('submitBtn', true);
             
             const data = await getData();
             
             const newApp = {
                 id: Date.now(),
-                discord: document.getElementById('appDiscord').value,
-                uplay: document.getElementById('appUplay').value,
-                rank: document.getElementById('appRank').value,
-                team: document.getElementById('appTeam').value,
-                reason: document.getElementById('appReason').value,
+                discord: discord,
+                uplay: uplay,
+                rank: rank,
+                team: team,
+                reason: reason,
                 date: new Date().toLocaleDateString(),
                 status: 'Pending'
             };
@@ -1239,7 +1269,12 @@
             
             if (success) {
                 alert('Application Submitted Successfully! Staff will review and place you in the appropriate team.');
-                e.target.reset();
+                // Clear form
+                document.getElementById('appDiscord').value = '';
+                document.getElementById('appUplay').value = '';
+                document.getElementById('appRank').value = '';
+                document.getElementById('appTeam').innerHTML = '<option value="" disabled selected>Select Team</option>';
+                document.getElementById('appReason').value = '';
             }
         }
 
@@ -1261,9 +1296,15 @@
             }
         }
 
-        async function handleTicketCreate(e) {
-            e.preventDefault();
+        async function submitTicket() {
+            const subject = document.getElementById('ticketSubject').value;
+            const description = document.getElementById('ticketDesc').value;
             
+            if (!subject || !description) {
+                alert('Please fill in all fields');
+                return;
+            }
+
             const discord = prompt("Please confirm your Discord User#1234 to link this ticket:");
             if (!discord) return;
             
@@ -1274,8 +1315,8 @@
             const newTicket = {
                 id: 'TKT-' + Math.floor(Math.random() * 10000),
                 discord: discord,
-                subject: document.getElementById('ticketSubject').value,
-                description: document.getElementById('ticketDesc').value,
+                subject: subject,
+                description: description,
                 status: 'Open',
                 date: new Date().toLocaleString(),
                 responses: [
@@ -1294,7 +1335,9 @@
             
             if (success) {
                 alert(`Ticket Created: ${newTicket.id}.`);
-                e.target.reset();
+                // Clear form
+                document.getElementById('ticketSubject').value = '';
+                document.getElementById('ticketDesc').value = '';
                 switchSupportTab('view');
                 document.getElementById('searchDiscord').value = discord;
                 loadUserTickets();
@@ -1367,11 +1410,10 @@
         }
 
         // ==========================================
-        // STAFF DASHBOARD FUNCTIONS - FIXED LOGIN
+        // STAFF DASHBOARD FUNCTIONS
         // ==========================================
         
-        async function handleStaffLogin(e) {
-            e.preventDefault();
+        async function doStaffLogin() {
             logDebug('Login attempt started...', 'info');
             
             const username = document.getElementById('staffUser').value.trim().toLowerCase();
@@ -1401,13 +1443,11 @@
             }
             
             logDebug(`Found user: ${user.name}, Role: ${user.role}`, 'success');
-            logDebug(`Expected hash: ${user.passwordHash}`, 'info');
-            logDebug(`Input hash: ${inputHash}`, 'info');
             
             if (user.passwordHash !== inputHash) {
                 logDebug('Password hash mismatch', 'error');
                 errorDiv.classList.remove('hidden');
-                errorDetails.textContent = 'Invalid password hash comparison';
+                errorDetails.textContent = 'Invalid password';
                 errorDetails.classList.remove('hidden');
                 document.getElementById('staffPass').value = '';
                 document.getElementById('staffPass').focus();
@@ -1608,6 +1648,15 @@
             loadTeamRoster();
             document.getElementById('playerDiscordInput').value = '';
             alert('Player removed from team');
+        }
+
+        async function removePlayer(discord) {
+            const data = await getData();
+            if (!data.players) return;
+            
+            data.players = data.players.filter(p => p.discord.toLowerCase() !== discord.toLowerCase());
+            await saveData(data);
+            loadTeamRoster();
         }
 
         // ==========================================
