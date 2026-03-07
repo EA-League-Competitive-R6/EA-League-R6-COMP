@@ -131,7 +131,6 @@
             z-index: 100;
         }
 
-        /* Expandable Content Transitions */
         .expand-content {
             max-height: 0;
             overflow: hidden;
@@ -139,8 +138,21 @@
             opacity: 0;
         }
         .expand-content.open {
-            max-height: 500px; /* Arbitrary large height */
+            max-height: 500px;
             opacity: 1;
+        }
+
+        .team-card {
+            transition: all 0.3s ease;
+        }
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        }
+
+        .vs-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
         }
     </style>
 </head>
@@ -302,57 +314,129 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4">Our Roster</h2>
-                <div class="w-24 h-1 bg-emerald-500 mx-auto rounded-full"></div>
+                <div class="w-24 h-1 bg-emerald-500 mx-auto rounded-full mb-4"></div>
+                <p class="text-gray-400 max-w-2xl mx-auto">Stratified competitive teams with structured matchmaking. Each tier competes within their bracket to ensure balanced, competitive gameplay.</p>
+            </div>
+
+            <!-- Matchmaking Structure Visual -->
+            <div class="mb-12 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass-panel p-4 rounded-lg border border-red-500/30 text-center">
+                    <div class="text-red-400 font-bold text-sm mb-2">SERVER LEVEL</div>
+                    <div class="text-white font-bold">Team 0 vs Other Servers</div>
+                    <div class="text-gray-500 text-xs mt-1">Champion Only • External Scrims</div>
+                </div>
+                <div class="glass-panel p-4 rounded-lg border border-yellow-500/30 text-center">
+                    <div class="text-yellow-400 font-bold text-sm mb-2">ELITE BRACKET</div>
+                    <div class="text-white font-bold">Team 1 vs Team 2</div>
+                    <div class="text-gray-500 text-xs mt-1">Emerald-Champion • Internal Elite</div>
+                </div>
+                <div class="glass-panel p-4 rounded-lg border border-emerald-500/30 text-center">
+                    <div class="text-emerald-400 font-bold text-sm mb-2">DEVELOPMENT BRACKET</div>
+                    <div class="text-white font-bold">Teams 3, 4, 5 Rotation</div>
+                    <div class="text-gray-500 text-xs mt-1">Copper-Emerald • Rotating Matches</div>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Team 0 - NEW ELITE TEAM (Red Border, Invite Only) -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-red-600 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 bg-red-600/20 px-4 py-1 rounded-bl-lg text-red-400 text-xs font-bold tracking-widest">TIER 0 - ELITE</div>
+                <!-- Team 0 - ELITE SERVER TEAM (Red Border, Invite Only, Champion Only) -->
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-red-600 relative overflow-hidden group team-card">
+                    <div class="absolute top-0 right-0 bg-red-600/20 px-4 py-1 rounded-bl-lg text-red-400 text-xs font-bold tracking-widest">TIER 0 - SERVER TEAM</div>
+                    <div class="absolute top-4 right-4 text-red-500/20 text-6xl font-black font-display">0</div>
                     <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 0</h3>
-                    <p class="text-gray-400 mb-6">The Absolute Elite. Our premier competitive roster. Hand-picked champions only.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-bold">
-                        <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span> Invite Only
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="px-2 py-1 rounded bg-red-500/20 text-red-400 text-xs font-bold border border-red-500/30">CHAMPION ONLY</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">The Absolute Elite. Hand-picked champions only. Represents EA League in external server competitions and high-level scrimmages.</p>
+                    <div class="flex items-center justify-between">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-bold">
+                            <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span> Invite Only
+                        </div>
+                        <div class="text-xs text-gray-500">vs Other Servers</div>
                     </div>
                 </div>
 
-                <!-- Team 1 - Changed to Tryout Only (Yellow Border) -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-yellow-500 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 bg-yellow-500/10 px-4 py-1 rounded-bl-lg text-yellow-400 text-xs font-bold tracking-widest">TIER 1</div>
+                <!-- Team 1 - Elite Bracket (Yellow Border, Emerald-Champ) -->
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-yellow-500 relative overflow-hidden group team-card">
+                    <div class="absolute top-0 right-0 bg-yellow-500/10 px-4 py-1 rounded-bl-lg text-yellow-400 text-xs font-bold tracking-widest">TIER 1 - ELITE</div>
+                    <div class="absolute top-4 right-4 text-yellow-500/20 text-6xl font-black font-display">1</div>
                     <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 1</h3>
-                    <p class="text-gray-400 mb-6">Elite Squad. Best of the Best. Entry point for elite competition through tryouts.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-sm font-bold">
-                        <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span> Tryout Only
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="px-2 py-1 rounded bg-yellow-500/20 text-yellow-400 text-xs font-bold border border-yellow-500/30">EMERALD-CHAMPION</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">Elite Squad. Best of the Best. Competes exclusively against Team 2 in high-level internal matches to maintain competitive edge.</p>
+                    <div class="flex items-center justify-between">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-sm font-bold">
+                            <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span> Tryout Only
+                        </div>
+                        <div class="vs-badge px-3 py-1 rounded-full text-white text-xs font-bold">VS TEAM 2</div>
                     </div>
                 </div>
 
-                <!-- Team 2 - Advanced Backup -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-yellow-600 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 bg-yellow-600/10 px-4 py-1 rounded-bl-lg text-yellow-500 text-xs font-bold tracking-widest">TIER 2</div>
+                <!-- Team 2 - Elite Bracket (Yellow Border, Emerald-Champ) -->
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-yellow-600 relative overflow-hidden group team-card">
+                    <div class="absolute top-0 right-0 bg-yellow-600/10 px-4 py-1 rounded-bl-lg text-yellow-500 text-xs font-bold tracking-widest">TIER 2 - ELITE</div>
+                    <div class="absolute top-4 right-4 text-yellow-600/20 text-6xl font-black font-display">2</div>
                     <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 2</h3>
-                    <p class="text-gray-400 mb-6">Advanced Backup. Trained directly by Team 0 & Team 1 coaches.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-yellow-600/10 border border-yellow-600/30 text-yellow-500 text-sm font-bold">
-                        <span class="w-2 h-2 bg-yellow-600 rounded-full mr-2 animate-pulse"></span> Recruiting - Tryouts
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="px-2 py-1 rounded bg-yellow-600/20 text-yellow-500 text-xs font-bold border border-yellow-600/30">EMERALD-CHAMPION</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">Advanced Elite. Trained directly by Team 0 coaches. Competes exclusively against Team 1 in structured elite bracket matches.</p>
+                    <div class="flex items-center justify-between">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-yellow-600/10 border border-yellow-600/30 text-yellow-500 text-sm font-bold">
+                            <span class="w-2 h-2 bg-yellow-600 rounded-full mr-2 animate-pulse"></span> Recruiting - Tryouts
+                        </div>
+                        <div class="vs-badge px-3 py-1 rounded-full text-white text-xs font-bold">VS TEAM 1</div>
                     </div>
                 </div>
 
-                <!-- Team 3 - Intermediate -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-emerald-500 relative overflow-hidden group">
+                <!-- Team 3 - Development Bracket (Emerald Border, Copper-Emerald) -->
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-emerald-500 relative overflow-hidden group team-card">
                     <div class="absolute top-0 right-0 bg-emerald-500/10 px-4 py-1 rounded-bl-lg text-emerald-400 text-xs font-bold tracking-widest">TIER 3</div>
+                    <div class="absolute top-4 right-4 text-emerald-500/20 text-6xl font-black font-display">3</div>
                     <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 3</h3>
-                    <p class="text-gray-400 mb-6">Intermediate Squad. Perfect for players looking to break into competitive play.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-bold">
-                        <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse"></span> Open - Apply Below
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/30">COPPER-EMERALD</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">Intermediate Squad. Perfect for players looking to break into competitive play. Rotates matches against Teams 4 and 5.</p>
+                    <div class="flex items-center justify-between">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-bold">
+                            <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse"></span> Open - Apply Below
+                        </div>
+                        <div class="text-xs text-emerald-400 font-bold">vs 4 & 5</div>
                     </div>
                 </div>
 
-                <!-- Team 4 - Development -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-blue-500 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 bg-blue-500/10 px-4 py-1 rounded-bl-lg text-blue-400 text-xs font-bold tracking-widest">DEV</div>
+                <!-- Team 4 - Development Bracket (Blue Border, Copper-Emerald) -->
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-blue-500 relative overflow-hidden group team-card">
+                    <div class="absolute top-0 right-0 bg-blue-500/10 px-4 py-1 rounded-bl-lg text-blue-400 text-xs font-bold tracking-widest">TIER 4</div>
+                    <div class="absolute top-4 right-4 text-blue-500/20 text-6xl font-black font-display">4</div>
                     <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 4</h3>
-                    <p class="text-gray-400 mb-6">Rookies & Development. The starting point for your competitive journey.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-sm font-bold">
-                        <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span> Open - Join Anytime
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold border border-blue-500/30">COPPER-EMERALD</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">Intermediate Squad. Perfect for players looking to break into competitive play. Rotates matches against Teams 3 and 5.</p>
+                    <div class="flex items-center justify-between">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-sm font-bold">
+                            <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span> Open - Join Anytime
+                        </div>
+                        <div class="text-xs text-blue-400 font-bold">vs 3 & 5</div>
+                    </div>
+                </div>
+
+                <!-- Team 5 - Development Bracket (Purple Border, Copper-Emerald) -->
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-purple-500 relative overflow-hidden group team-card">
+                    <div class="absolute top-0 right-0 bg-purple-500/10 px-4 py-1 rounded-bl-lg text-purple-400 text-xs font-bold tracking-widest">TIER 5</div>
+                    <div class="absolute top-4 right-4 text-purple-500/20 text-6xl font-black font-display">5</div>
+                    <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 5</h3>
+                    <div class="flex items-center gap-2 mb-4">
+                        <span class="px-2 py-1 rounded bg-purple-500/20 text-purple-400 text-xs font-bold border border-purple-500/30">COPPER-EMERALD</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">Intermediate Squad. Perfect for players looking to break into competitive play. Rotates matches against Teams 3 and 4.</p>
+                    <div class="flex items-center justify-between">
+                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-sm font-bold">
+                            <span class="w-2 h-2 bg-purple-500 rounded-full mr-2 animate-pulse"></span> Open - Join Anytime
+                        </div>
+                        <div class="text-xs text-purple-400 font-bold">vs 3 & 4</div>
                     </div>
                 </div>
             </div>
@@ -365,7 +449,7 @@
             <div class="glass-panel rounded-2xl p-8 md:p-12 border border-emerald-500/20 shadow-2xl">
                 <div class="text-center mb-10">
                     <h2 class="text-3xl font-display font-bold text-white">Join The League</h2>
-                    <p class="text-gray-400 mt-2">Fill out the form below to apply for a team.</p>
+                    <p class="text-gray-400 mt-2">Fill out the form below to apply for a team. Our staff will review and place you in the appropriate tier.</p>
                 </div>
 
                 <form id="applicationForm" class="space-y-6" onsubmit="handleApplication(event)">
@@ -383,7 +467,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-400 mb-2">Current Rank</label>
-                            <select id="appRank" required class="w-full input-field rounded-lg p-3">
+                            <select id="appRank" required class="w-full input-field rounded-lg p-3" onchange="updateTeamOptions()">
                                 <option value="" disabled selected>Select Rank</option>
                                 <option value="Champion">Champion</option>
                                 <option value="Diamond">Diamond</option>
@@ -392,16 +476,13 @@
                                 <option value="Gold">Gold</option>
                                 <option value="Silver">Silver</option>
                                 <option value="Bronze">Bronze</option>
+                                <option value="Copper">Copper</option>
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Target Team</label>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Target Team (Auto-filtered by rank)</label>
                             <select id="appTeam" required class="w-full input-field rounded-lg p-3">
                                 <option value="" disabled selected>Select Team</option>
-                                <option value="Team 1">Team 1 (Champion/Diamond - Tryout)</option>
-                                <option value="Team 2">Team 2 (Emerald/Plat)</option>
-                                <option value="Team 3">Team 3 (Gold/Silver)</option>
-                                <option value="Team 4">Team 4 (Bronze/Copper)</option>
                             </select>
                         </div>
                     </div>
@@ -466,9 +547,82 @@
 
     <!-- Staff Section -->
     <section id="staff" class="py-20 relative">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="glass-panel rounded-2xl p-8 border border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
                 
+                <!-- Admin Screening Modal -->
+                <div id="admin-screening-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm hidden">
+                    <div class="glass-panel bg-[#0f1115] p-8 rounded-2xl max-w-2xl w-full mx-4 border border-red-500/50 shadow-[0_0_50px_rgba(239,68,68,0.2)]">
+                        <div class="text-center mb-6">
+                            <div class="w-16 h-16 bg-red-900/50 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-500/50">
+                                <i class="fas fa-user-shield text-2xl text-red-400"></i>
+                            </div>
+                            <h2 class="text-2xl font-display font-bold text-white">Admin Authorization Required</h2>
+                            <p class="text-gray-400 mt-2">Complete the screening process to verify admin eligibility.</p>
+                        </div>
+
+                        <form id="adminScreeningForm" onsubmit="handleAdminScreening(event)" class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Full Name</label>
+                                    <input type="text" id="screenName" required class="w-full input-field rounded p-3">
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Age</label>
+                                    <input type="number" id="screenAge" required min="16" class="w-full input-field rounded p-3">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs text-gray-500 uppercase font-bold mb-1">Discord Username</label>
+                                <input type="text" id="screenDiscord" required class="w-full input-field rounded p-3">
+                            </div>
+
+                            <div class="bg-red-900/20 border border-red-500/30 p-4 rounded-lg space-y-3">
+                                <h4 class="text-red-400 font-bold text-sm mb-2">Screening Questions</h4>
+                                
+                                <div>
+                                    <label class="block text-xs text-gray-400 mb-1">1. How long have you been part of EA League?</label>
+                                    <input type="text" id="q1" required class="w-full input-field rounded p-2 text-sm">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-xs text-gray-400 mb-1">2. What is your current rank in Rainbow Six Siege?</label>
+                                    <input type="text" id="q2" required class="w-full input-field rounded p-2 text-sm">
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-xs text-gray-400 mb-1">3. Why do you want admin privileges?</label>
+                                    <textarea id="q3" required rows="2" class="w-full input-field rounded p-2 text-sm"></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-xs text-gray-400 mb-1">4. How would you handle a player dispute between teams?</label>
+                                    <textarea id="q4" required rows="2" class="w-full input-field rounded p-2 text-sm"></textarea>
+                                </div>
+                                
+                                <div>
+                                    <label class="block text-xs text-gray-400 mb-1">5. What is your availability for managing teams?</label>
+                                    <input type="text" id="q5" required class="w-full input-field rounded p-2 text-sm">
+                                </div>
+                            </div>
+
+                            <div class="flex items-start gap-2">
+                                <input type="checkbox" id="adminOath" required class="mt-1">
+                                <label for="adminOath" class="text-xs text-gray-400">
+                                    I understand that admin privileges are a responsibility. I swear to manage teams fairly, 
+                                    not abuse power, and understand that any malicious activity will result in immediate removal 
+                                    and potential ban. I am at least 16 years of age.
+                                </label>
+                            </div>
+
+                            <button type="submit" id="screeningBtn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3 rounded transition-all flex items-center justify-center gap-2">
+                                <span>Submit for Review</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
                 <div id="staff-login-view" class="max-w-md mx-auto text-center py-10">
                     <div class="w-16 h-16 bg-emerald-900/50 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/50">
                         <i class="fas fa-shield-alt text-2xl text-emerald-400"></i>
@@ -489,16 +643,22 @@
                             <span>Access Dashboard</span>
                         </button>
                     </form>
+
+                    <div class="mt-6 pt-6 border-t border-gray-800">
+                        <p class="text-xs text-gray-500 mb-3">Need Admin Access?</p>
+                        <button onclick="openAdminScreening()" class="text-red-400 hover:text-red-300 text-sm font-bold border border-red-500/30 px-4 py-2 rounded hover:bg-red-500/10 transition-all">
+                            <i class="fas fa-user-shield mr-2"></i>Request Admin Role
+                        </button>
+                    </div>
                 </div>
 
                 <div id="staff-dashboard-view" class="hidden">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-gray-700 pb-4 gap-4">
                         <div>
                             <h2 class="text-2xl font-display font-bold text-white">Admin Dashboard</h2>
-                            <p class="text-emerald-400 text-sm">Welcome, <span id="staffNameDisplay">Admin</span></p>
+                            <p class="text-emerald-400 text-sm">Welcome, <span id="staffNameDisplay">Admin</span> <span id="staffRoleDisplay" class="text-xs bg-emerald-900/50 px-2 py-0.5 rounded ml-2"></span></p>
                         </div>
                         <div class="flex flex-wrap items-center gap-3">
-                            <!-- NEW: Online Staff Counter -->
                             <div class="bg-black/40 px-3 py-1 rounded border border-emerald-500/30 flex items-center gap-2">
                                 <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
                                 <span class="text-xs text-gray-300 font-bold"><span id="online-staff-count">0</span> Staff Online</span>
@@ -512,7 +672,13 @@
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Role-based permissions notice -->
+                    <div id="permissions-notice" class="mb-6 bg-blue-900/20 border border-blue-500/30 p-3 rounded-lg text-sm text-blue-300 hidden">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        <span id="permissions-text"></span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                         <div class="bg-black/40 p-4 rounded-lg border border-gray-700">
                             <div class="text-gray-400 text-xs uppercase font-bold">Pending Apps</div>
                             <div class="text-2xl font-bold text-white mt-1" id="stat-apps">0</div>
@@ -521,9 +687,53 @@
                             <div class="text-gray-400 text-xs uppercase font-bold">Open Tickets</div>
                             <div class="text-2xl font-bold text-white mt-1" id="stat-tickets">0</div>
                         </div>
+                        <div class="bg-black/40 p-4 rounded-lg border border-gray-700">
+                            <div class="text-gray-400 text-xs uppercase font-bold">Total Players</div>
+                            <div class="text-2xl font-bold text-white mt-1" id="stat-players">0</div>
+                        </div>
                         <div class="bg-black/40 p-4 rounded-lg border border-emerald-500/30 cursor-pointer hover:bg-emerald-900/20 transition-colors" onclick="toggleAnnouncementForm()">
                             <div class="text-emerald-400 text-xs uppercase font-bold"><i class="fas fa-plus mr-1"></i> New Action</div>
                             <div class="text-lg font-bold text-white mt-1">Post Announcement</div>
+                        </div>
+                    </div>
+
+                    <!-- Team Management Section (Owner/Admin only) -->
+                    <div id="team-management-section" class="mb-8 hidden">
+                        <h3 class="text-lg font-bold text-white mb-4 border-l-4 border-purple-500 pl-3">Team Management</h3>
+                        <div class="glass-panel p-4 rounded-lg border border-purple-500/30 mb-4">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                                <div>
+                                    <label class="text-xs text-gray-400">Select Team</label>
+                                    <select id="manageTeamSelect" class="w-full input-field rounded p-2 mt-1" onchange="loadTeamRoster()">
+                                        <option value="">Select Team...</option>
+                                        <option value="Team 0">Team 0 (Champion Only)</option>
+                                        <option value="Team 1">Team 1 (Elite)</option>
+                                        <option value="Team 2">Team 2 (Elite)</option>
+                                        <option value="Team 3">Team 3 (Development)</option>
+                                        <option value="Team 4">Team 4 (Development)</option>
+                                        <option value="Team 5">Team 5 (Development)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-xs text-gray-400">Player Discord</label>
+                                    <input type="text" id="playerDiscordInput" placeholder="User#1234" class="w-full input-field rounded p-2 mt-1">
+                                </div>
+                                <div class="flex items-end gap-2">
+                                    <button onclick="addPlayerToTeam()" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2 rounded font-bold text-sm flex-1">Add Player</button>
+                                    <button onclick="removePlayerFromTeam()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded font-bold text-sm flex-1">Remove</button>
+                                </div>
+                            </div>
+                            <div id="teamRosterDisplay" class="bg-black/40 p-3 rounded max-h-40 overflow-y-auto">
+                                <p class="text-gray-500 text-sm text-center">Select a team to view roster</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Admin Applications Review (Owner only) -->
+                    <div id="admin-applications-section" class="mb-8 hidden">
+                        <h3 class="text-lg font-bold text-white mb-4 border-l-4 border-red-500 pl-3">Pending Admin Applications</h3>
+                        <div id="admin-apps-list" class="space-y-3 max-h-[300px] overflow-y-auto pr-2">
+                            <p class="text-gray-500 text-sm text-center py-4">No pending admin applications</p>
                         </div>
                     </div>
 
@@ -544,14 +754,14 @@
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div>
                             <h3 class="text-lg font-bold text-white mb-4 border-l-4 border-emerald-500 pl-3">Recent Applications</h3>
-                            <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2" id="admin-apps-list">
+                            <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2" id="staff-apps-list">
                                 <div class="text-center text-gray-500 py-4">Loading...</div>
                             </div>
                         </div>
 
                         <div>
                             <h3 class="text-lg font-bold text-white mb-4 border-l-4 border-blue-500 pl-3">Support Tickets</h3>
-                            <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2" id="admin-tickets-list">
+                            <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2" id="staff-tickets-list">
                                 <div class="text-center text-gray-500 py-4">Loading...</div>
                             </div>
                         </div>
@@ -579,13 +789,12 @@
 
     <script>
         // ==========================================
-        // JSONBIN.IO CONFIGURATION - FIXED URLS (NO SPACES!)
+        // JSONBIN.IO CONFIGURATION
         // ==========================================
         
         const BIN_ID = '69aa217643b1c97be9b7f444';
         const MASTER_KEY = '$2a$10$GK8JfB9MpM7nksbKiYequemSxDWTeB.S/B0aVN3XtmLU9amuwpwgO';
         
-        // FIXED: Removed spaces from URLs!
         const READ_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
         const UPDATE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
         
@@ -644,13 +853,13 @@
                 
                 const result = await response.json();
                 showConnectionStatus(true);
-                return result.record || { apps: [], tickets: [], announcements: [] };
+                return result.record || { apps: [], tickets: [], announcements: [], players: [], adminApplications: [] };
                 
             } catch (error) {
                 console.error('Error fetching data:', error);
                 showConnectionStatus(false);
                 showError('Database connection failed.');
-                return { apps: [], tickets: [], announcements: [] };
+                return { apps: [], tickets: [], announcements: [], players: [], adminApplications: [] };
             }
         }
         
@@ -679,41 +888,113 @@
         }
 
         // ==========================================
-        // STAFF AUTHENTICATION & ONLINE TRACKING
+        // TEAM FILTERING LOGIC
+        // ==========================================
+        
+        const TEAM_REQUIREMENTS = {
+            'Team 0': ['Champion'],
+            'Team 1': ['Champion', 'Diamond', 'Emerald'],
+            'Team 2': ['Champion', 'Diamond', 'Emerald', 'Platinum'],
+            'Team 3': ['Emerald', 'Platinum', 'Gold', 'Silver', 'Bronze', 'Copper'],
+            'Team 4': ['Platinum', 'Gold', 'Silver', 'Bronze', 'Copper'],
+            'Team 5': ['Gold', 'Silver', 'Bronze', 'Copper']
+        };
+
+        function updateTeamOptions() {
+            const rank = document.getElementById('appRank').value;
+            const teamSelect = document.getElementById('appTeam');
+            
+            teamSelect.innerHTML = '<option value="" disabled selected>Select Team</option>';
+            
+            for (const [team, ranks] of Object.entries(TEAM_REQUIREMENTS)) {
+                if (ranks.includes(rank)) {
+                    let badge = '';
+                    if (team === 'Team 0') badge = ' [CHAMPION ONLY]';
+                    else if (team === 'Team 1' || team === 'Team 2') badge = ' [EMERALD-CHAMPION]';
+                    else badge = ' [COPPER-EMERALD]';
+                    
+                    const option = document.createElement('option');
+                    option.value = team;
+                    option.textContent = team + badge;
+                    teamSelect.appendChild(option);
+                }
+            }
+        }
+
+        // ==========================================
+        // STAFF AUTHENTICATION & ROLES
         // ==========================================
         
         const STAFF_USERS = {
-            'admin': { password: 'admin123', name: 'EA JODECI', role: 'Owner' },
+            'jodeci': { password: 'jodeci2026', name: 'EA JODECI', role: 'Owner' },
+            'admin': { password: 'admin123', name: 'EA Admin', role: 'Admin' },
             'mod': { password: 'mod123', name: 'EA Support', role: 'Moderator' }
         };
 
-        // Simple Online Counter Logic using localStorage
+        const ROLE_PERMISSIONS = {
+            'Owner': ['view_all', 'manage_teams', 'manage_admins', 'post_announcements', 'manage_tickets', 'manage_apps'],
+            'Admin': ['view_all', 'manage_teams', 'post_announcements', 'manage_tickets', 'manage_apps'],
+            'Moderator': ['view_all', 'manage_tickets', 'manage_apps']
+        };
+
+        let currentStaff = null;
+        let autoRefreshInterval = null;
+
         function updateOnlineStaff() {
             if (!currentStaff) return;
-            
-            // Register this session
-            const now = Date.now();
-            const sessionId = currentStaff.name + '_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('staff_session_id', sessionId);
-            localStorage.setItem('staff_last_ping', now);
-
-            // Count active sessions
-            let count = 0;
-            // We can't easily read other tabs' localStorage in real-time without broadcasting,
-            // so we simulate "Online" based on the assumption this tab is 1, 
-            // and we could use BroadcastChannel for multi-tab, but for this single-file demo:
-            // We will just show 1 (You) + random variance or just 1 to be safe, 
-            // OR better: Use a ping system.
-            
-            // Let's just show "1" for the current user for this demo to be safe, 
-            // or we can try to count keys if we were using a server.
-            // For visual effect, let's say "1 Online (You)".
             document.getElementById('online-staff-count').innerText = "1+"; 
         }
 
         setInterval(() => {
             if(currentStaff) updateOnlineStaff();
         }, 5000);
+
+        // ==========================================
+        // ADMIN SCREENING SYSTEM
+        // ==========================================
+        
+        function openAdminScreening() {
+            document.getElementById('admin-screening-modal').classList.remove('hidden');
+        }
+
+        async function handleAdminScreening(e) {
+            e.preventDefault();
+            
+            const age = parseInt(document.getElementById('screenAge').value);
+            if (age < 16) {
+                alert('You must be at least 16 years old to apply for admin position.');
+                return;
+            }
+
+            setLoading('screeningBtn', true);
+            
+            const screeningData = {
+                id: Date.now(),
+                name: document.getElementById('screenName').value,
+                age: age,
+                discord: document.getElementById('screenDiscord').value,
+                q1: document.getElementById('q1').value,
+                q2: document.getElementById('q2').value,
+                q3: document.getElementById('q3').value,
+                q4: document.getElementById('q4').value,
+                q5: document.getElementById('q5').value,
+                status: 'Pending Review',
+                date: new Date().toISOString()
+            };
+
+            const data = await getData();
+            if (!data.adminApplications) data.adminApplications = [];
+            data.adminApplications.push(screeningData);
+            
+            const success = await saveData(data);
+            setLoading('screeningBtn', false);
+            
+            if (success) {
+                alert('Admin application submitted for review. JODECI will review your application and contact you via Discord.');
+                document.getElementById('admin-screening-modal').classList.add('hidden');
+                e.target.reset();
+            }
+        }
 
         // ==========================================
         // ANNOUNCEMENT FUNCTIONS
@@ -792,7 +1073,7 @@
         }
 
         window.addEventListener('DOMContentLoaded', () => {
-            ['submitBtn', 'ticketSubmitBtn', 'searchBtn', 'loginBtn', 'postAnnBtn'].forEach(id => {
+            ['submitBtn', 'ticketSubmitBtn', 'searchBtn', 'loginBtn', 'postAnnBtn', 'screeningBtn'].forEach(id => {
                 const btn = document.getElementById(id);
                 if (btn) btn.setAttribute('data-text', btn.innerText.trim());
             });
@@ -829,7 +1110,7 @@
             setLoading('submitBtn', false);
             
             if (success) {
-                alert('Application Submitted Successfully!');
+                alert('Application Submitted Successfully! Staff will review and place you in the appropriate team.');
                 e.target.reset();
             }
         }
@@ -923,7 +1204,6 @@
                     <h4 class="text-white font-bold mb-1">${t.subject}</h4>
                     <p class="text-gray-400 text-sm mb-3 line-clamp-2">${t.description}</p>
                     
-                    <!-- Conversation History -->
                     <div class="bg-gray-900/50 p-3 rounded mb-3 text-sm space-y-2 max-h-32 overflow-y-auto">
                         ${t.responses && t.responses.length > 0 ? t.responses.map(r => `
                             <div class="${r.sender === 'User' ? 'text-right' : 'text-left'}">
@@ -962,9 +1242,6 @@
         // STAFF DASHBOARD FUNCTIONS
         // ==========================================
         
-        let currentStaff = null;
-        let autoRefreshInterval = null;
-
         async function handleStaffLogin(e) {
             e.preventDefault();
             
@@ -976,8 +1253,31 @@
                 document.getElementById('staff-login-view').classList.add('hidden');
                 document.getElementById('staff-dashboard-view').classList.remove('hidden');
                 document.getElementById('staffNameDisplay').innerText = currentStaff.name;
+                document.getElementById('staffRoleDisplay').innerText = currentStaff.role;
                 
-                updateOnlineStaff(); // Trigger online status
+                // Set permissions notice
+                const permissions = ROLE_PERMISSIONS[currentStaff.role];
+                const notice = document.getElementById('permissions-notice');
+                const noticeText = document.getElementById('permissions-text');
+                
+                if (currentStaff.role === 'Admin') {
+                    notice.classList.remove('hidden');
+                    noticeText.innerText = 'Admin Access: You can manage teams, review applications, and handle tickets. Owner approval required for critical changes.';
+                } else if (currentStaff.role === 'Moderator') {
+                    notice.classList.remove('hidden');
+                    noticeText.innerText = 'Moderator Access: You can review applications and handle support tickets. Team management requires Admin or Owner privileges.';
+                }
+                
+                // Show/hide sections based on role
+                if (currentStaff.role === 'Owner' || currentStaff.role === 'Admin') {
+                    document.getElementById('team-management-section').classList.remove('hidden');
+                }
+                
+                if (currentStaff.role === 'Owner') {
+                    document.getElementById('admin-applications-section').classList.remove('hidden');
+                }
+                
+                updateOnlineStaff();
                 await renderAdminData();
                 
                 autoRefreshInterval = setInterval(() => {
@@ -996,6 +1296,9 @@
             document.getElementById('staff-login-view').classList.remove('hidden');
             document.getElementById('staffUser').value = '';
             document.getElementById('staffPass').value = '';
+            document.getElementById('team-management-section').classList.add('hidden');
+            document.getElementById('admin-applications-section').classList.add('hidden');
+            document.getElementById('permissions-notice').classList.add('hidden');
             
             if (autoRefreshInterval) {
                 clearInterval(autoRefreshInterval);
@@ -1015,9 +1318,102 @@
             setTimeout(() => btn.classList.remove('fa-spin'), 1000);
         }
 
-        // --- PERSISTENT DROPDOWN LOGIC (20 MINUTES) ---
+        // ==========================================
+        // TEAM MANAGEMENT FUNCTIONS
+        // ==========================================
+        
+        async function loadTeamRoster() {
+            const team = document.getElementById('manageTeamSelect').value;
+            const display = document.getElementById('teamRosterDisplay');
+            
+            if (!team) {
+                display.innerHTML = '<p class="text-gray-500 text-sm text-center">Select a team to view roster</p>';
+                return;
+            }
+            
+            const data = await getData();
+            const players = data.players || [];
+            const teamPlayers = players.filter(p => p.team === team);
+            
+            if (teamPlayers.length === 0) {
+                display.innerHTML = `<p class="text-gray-500 text-sm text-center">No players in ${team} yet</p>`;
+            } else {
+                display.innerHTML = teamPlayers.map(p => `
+                    <div class="flex justify-between items-center bg-black/40 p-2 rounded mb-2">
+                        <div>
+                            <div class="text-white text-sm font-bold">${p.discord}</div>
+                            <div class="text-gray-500 text-xs">${p.rank} • ${p.uplay}</div>
+                        </div>
+                        <button onclick="removePlayer('${p.discord}')" class="text-red-400 hover:text-red-300 text-xs">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function addPlayerToTeam() {
+            const team = document.getElementById('manageTeamSelect').value;
+            const discord = document.getElementById('playerDiscordInput').value;
+            
+            if (!team || !discord) return alert('Please select a team and enter player Discord');
+            
+            // Validate rank requirements
+            const data = await getData();
+            const apps = data.apps || [];
+            const playerApp = apps.find(a => a.discord.toLowerCase() === discord.toLowerCase() && a.status === 'Approved');
+            
+            if (!playerApp) {
+                alert('Player must have an approved application first');
+                return;
+            }
+            
+            const requiredRanks = TEAM_REQUIREMENTS[team];
+            if (!requiredRanks.includes(playerApp.rank)) {
+                alert(`Player rank ${playerApp.rank} does not meet requirements for ${team}. Required: ${requiredRanks.join(', ')}`);
+                return;
+            }
+            
+            if (!data.players) data.players = [];
+            
+            // Remove from other teams if exists
+            data.players = data.players.filter(p => p.discord.toLowerCase() !== discord.toLowerCase());
+            
+            // Add to new team
+            data.players.push({
+                discord: playerApp.discord,
+                uplay: playerApp.uplay,
+                rank: playerApp.rank,
+                team: team,
+                addedBy: currentStaff.name,
+                addedAt: new Date().toISOString()
+            });
+            
+            await saveData(data);
+            loadTeamRoster();
+            document.getElementById('playerDiscordInput').value = '';
+            alert(`Player added to ${team}`);
+        }
+
+        async function removePlayerFromTeam() {
+            const discord = document.getElementById('playerDiscordInput').value;
+            if (!discord) return alert('Enter player Discord to remove');
+            
+            const data = await getData();
+            if (!data.players) return;
+            
+            data.players = data.players.filter(p => p.discord.toLowerCase() !== discord.toLowerCase());
+            await saveData(data);
+            loadTeamRoster();
+            document.getElementById('playerDiscordInput').value = '';
+            alert('Player removed from team');
+        }
+
+        // ==========================================
+        // PERSISTENT DROPDOWN LOGIC
+        // ==========================================
         const EXPAND_STORAGE_KEY = 'ea_league_expanded_items';
-        const EXPAND_DURATION = 20 * 60 * 1000; // 20 minutes in milliseconds
+        const EXPAND_DURATION = 20 * 60 * 1000;
 
         function loadExpandedState() {
             const stored = localStorage.getItem(EXPAND_STORAGE_KEY);
@@ -1025,7 +1421,6 @@
             try {
                 const data = JSON.parse(stored);
                 const now = Date.now();
-                // Filter out expired entries
                 const valid = {};
                 for (const [id, timestamp] of Object.entries(data)) {
                     if (now - timestamp < EXPAND_DURATION) {
@@ -1042,28 +1437,25 @@
             localStorage.setItem(EXPAND_STORAGE_KEY, JSON.stringify(state));
         }
 
-        // Override the toggle function to include persistence
         window.toggleExpand = function(id) {
             const el = document.getElementById(id);
             const icon = document.getElementById(id + '-icon');
             const expandedState = loadExpandedState();
             
             if (el.classList.contains('open')) {
-                // Close it
                 el.classList.remove('open');
                 if(icon) {
                     icon.classList.remove('fa-chevron-up');
                     icon.classList.add('fa-chevron-down');
                 }
-                delete expandedState[id]; // Remove from storage
+                delete expandedState[id];
             } else {
-                // Open it
                 el.classList.add('open');
                 if(icon) {
                     icon.classList.remove('fa-chevron-down');
                     icon.classList.add('fa-chevron-up');
                 }
-                expandedState[id] = Date.now(); // Add to storage with timestamp
+                expandedState[id] = Date.now();
             }
             saveExpandedState(expandedState);
         }
@@ -1072,18 +1464,53 @@
             const data = await getData();
             const apps = data.apps || [];
             const tickets = data.tickets || [];
+            const players = data.players || [];
+            const adminApps = data.adminApplications || [];
             
             document.getElementById('stat-apps').innerText = apps.filter(a => a.status === 'Pending').length;
             document.getElementById('stat-tickets').innerText = tickets.filter(t => t.status === 'Open' || t.status === 'Pending Staff').length;
+            document.getElementById('stat-players').innerText = players.length;
 
             const expandedState = loadExpandedState();
 
-            // Render Applications with Expandable Details
-            const appContainer = document.getElementById('admin-apps-list');
+            // Render Admin Applications (Owner only)
+            if (currentStaff && currentStaff.role === 'Owner') {
+                const adminAppContainer = document.getElementById('admin-apps-list');
+                const pendingAdminApps = adminApps.filter(a => a.status === 'Pending Review');
+                
+                if (pendingAdminApps.length === 0) {
+                    adminAppContainer.innerHTML = '<p class="text-gray-500 text-sm text-center py-4">No pending admin applications</p>';
+                } else {
+                    adminAppContainer.innerHTML = pendingAdminApps.map(app => `
+                        <div class="bg-red-900/20 border border-red-500/30 p-4 rounded-lg">
+                            <div class="flex justify-between items-start mb-2">
+                                <div>
+                                    <div class="text-white font-bold">${app.name} (${app.age} years)</div>
+                                    <div class="text-gray-400 text-xs">${app.discord} • Applied ${new Date(app.date).toLocaleDateString()}</div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button onclick="approveAdmin(${app.id})" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1 rounded text-xs">Approve</button>
+                                    <button onclick="denyAdmin(${app.id})" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-xs">Deny</button>
+                                </div>
+                            </div>
+                            <div class="text-xs text-gray-400 space-y-1 mt-2 bg-black/40 p-2 rounded">
+                                <p><span class="text-red-400">Q1:</span> ${app.q1}</p>
+                                <p><span class="text-red-400">Q2:</span> ${app.q2}</p>
+                                <p><span class="text-red-400">Q3:</span> ${app.q3}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+
+            // Render Regular Applications
+            const appContainer = document.getElementById('staff-apps-list');
             appContainer.innerHTML = apps.length === 0 ? 
                 '<div class="text-center text-gray-500 py-4">No applications yet</div>' :
                 apps.slice().reverse().map(app => {
                     const isExpanded = !!expandedState[`app-${app.id}`];
+                    const canManage = currentStaff && (currentStaff.role === 'Owner' || currentStaff.role === 'Admin');
+                    
                     return `
                     <div class="bg-black/30 p-3 rounded border-l-2 ${app.status === 'Pending' ? 'border-yellow-500' : 'border-emerald-500'}">
                         <div class="flex justify-between items-start cursor-pointer" onclick="toggleExpand('app-${app.id}')">
@@ -1095,14 +1522,13 @@
                                 <div class="text-gray-500 text-xs">${app.team} | ${app.rank} | ${app.date}</div>
                             </div>
                             <div class="flex gap-2" onclick="event.stopPropagation()">
-                                ${app.status === 'Pending' ? `
+                                ${app.status === 'Pending' && canManage ? `
                                     <button onclick="updateAppStatus(${app.id}, 'Approved')" class="text-emerald-400 hover:text-white text-xs bg-emerald-900/30 px-2 py-1 rounded"><i class="fas fa-check"></i></button>
                                     <button onclick="updateAppStatus(${app.id}, 'Denied')" class="text-red-400 hover:text-white text-xs bg-red-900/30 px-2 py-1 rounded"><i class="fas fa-times"></i></button>
                                 ` : `<span class="text-xs text-gray-500 font-bold px-2 py-1 bg-gray-800 rounded">${app.status}</span>`}
                             </div>
                         </div>
                         
-                        <!-- Expandable Details -->
                         <div id="app-${app.id}" class="expand-content ${isExpanded ? 'open' : ''} mt-2 pt-2 border-t border-gray-700">
                             <div class="grid grid-cols-2 gap-2 text-xs mb-2">
                                 <div><span class="text-gray-500">Uplay:</span> <span class="text-gray-300">${app.uplay}</span></div>
@@ -1112,12 +1538,26 @@
                                 <span class="text-gray-500 block mb-1">Application Response:</span>
                                 <p class="text-gray-300 italic">"${app.reason}"</p>
                             </div>
+                            ${app.status === 'Approved' && canManage ? `
+                                <div class="mt-2 flex gap-2">
+                                    <select id="assign-team-${app.id}" class="bg-black border border-gray-700 rounded text-xs text-white px-2 py-1">
+                                        <option value="">Assign to Team...</option>
+                                        <option value="Team 0">Team 0</option>
+                                        <option value="Team 1">Team 1</option>
+                                        <option value="Team 2">Team 2</option>
+                                        <option value="Team 3">Team 3</option>
+                                        <option value="Team 4">Team 4</option>
+                                        <option value="Team 5">Team 5</option>
+                                    </select>
+                                    <button onclick="assignToTeam(${app.id})" class="bg-purple-600 hover:bg-purple-500 text-white px-2 py-1 rounded text-xs">Assign</button>
+                                </div>
+                            ` : ''}
                         </div>
                     </div>
-                `}).join('');
+                `).join('');
 
-            // Render Tickets with Expandable Details
-            const ticketContainer = document.getElementById('admin-tickets-list');
+            // Render Tickets
+            const ticketContainer = document.getElementById('staff-tickets-list');
             ticketContainer.innerHTML = tickets.length === 0 ?
                 '<div class="text-center text-gray-500 py-4">No tickets yet</div>' :
                 tickets.slice().reverse().map(t => {
@@ -1136,7 +1576,6 @@
                             <button onclick="event.stopPropagation(); closeTicket('${t.id}')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded text-white">Close</button>
                         </div>
 
-                        <!-- Expandable Details -->
                         <div id="ticket-${t.id}" class="expand-content ${isExpanded ? 'open' : ''} mt-2 pt-2 border-t border-gray-700">
                             <div class="text-gray-400 text-xs mb-3 bg-black/20 p-2 rounded">
                                 ${t.description}
@@ -1157,7 +1596,7 @@
                             </div>
                         </div>
                     </div>
-                `}).join('');
+                `).join('');
         }
 
         async function updateAppStatus(id, status) {
@@ -1170,6 +1609,38 @@
                 await saveData(data);
                 await renderAdminData();
             }
+        }
+
+        async function assignToTeam(appId) {
+            const teamSelect = document.getElementById(`assign-team-${appId}`);
+            const team = teamSelect.value;
+            if (!team) return alert('Select a team');
+            
+            const data = await getData();
+            const app = data.apps.find(a => a.id === appId);
+            
+            if (!data.players) data.players = [];
+            
+            // Check if already in team
+            const existing = data.players.find(p => p.discord.toLowerCase() === app.discord.toLowerCase());
+            if (existing) {
+                existing.team = team;
+                existing.updatedBy = currentStaff.name;
+                existing.updatedAt = new Date().toISOString();
+            } else {
+                data.players.push({
+                    discord: app.discord,
+                    uplay: app.uplay,
+                    rank: app.rank,
+                    team: team,
+                    addedBy: currentStaff.name,
+                    addedAt: new Date().toISOString()
+                });
+            }
+            
+            await saveData(data);
+            alert(`Player assigned to ${team}`);
+            renderAdminData();
         }
 
         async function addAdminReply(ticketId) {
@@ -1198,6 +1669,40 @@
                 ticket.closedAt = new Date().toLocaleString();
                 await saveData(data);
                 await renderAdminData();
+            }
+        }
+
+        async function approveAdmin(appId) {
+            const data = await getData();
+            const app = data.adminApplications.find(a => a.id === appId);
+            if (app) {
+                app.status = 'Approved';
+                app.approvedBy = currentStaff.name;
+                app.approvedAt = new Date().toISOString();
+                
+                // Generate credentials (in real scenario, send via DM)
+                const username = app.discord.split('#')[0].toLowerCase().replace(/\s/g, '');
+                const password = Math.random().toString(36).slice(-8);
+                
+                app.credentials = { username, password };
+                
+                // Add to staff users (temporary - in production this would be more secure)
+                alert(`Admin Approved!\nUsername: ${username}\nPassword: ${password}\n\nShare these credentials securely with the user.`);
+                
+                await saveData(data);
+                renderAdminData();
+            }
+        }
+
+        async function denyAdmin(appId) {
+            const data = await getData();
+            const app = data.adminApplications.find(a => a.id === appId);
+            if (app) {
+                app.status = 'Denied';
+                app.deniedBy = currentStaff.name;
+                app.deniedAt = new Date().toISOString();
+                await saveData(data);
+                renderAdminData();
             }
         }
     </script>
