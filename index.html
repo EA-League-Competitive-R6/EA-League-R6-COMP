@@ -117,6 +117,7 @@
         }
         .status-online { background-color: #10b981; box-shadow: 0 0 8px #10b981; }
         .status-offline { background-color: #ef4444; }
+        .status-warning { background-color: #f59e0b; box-shadow: 0 0 8px #f59e0b; }
         
         .error-banner {
             background: rgba(239, 68, 68, 0.1);
@@ -154,9 +155,48 @@
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
         }
+
+        /* Debug Console */
+        .debug-console {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 400px;
+            max-height: 300px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #10b981;
+            border-radius: 8px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 11px;
+            color: #10b981;
+            overflow-y: auto;
+            z-index: 99;
+            display: none;
+        }
+        .debug-console.active {
+            display: block;
+        }
+        .debug-entry {
+            margin-bottom: 4px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 2px;
+        }
+        .debug-error { color: #ef4444; }
+        .debug-success { color: #10b981; }
+        .debug-info { color: #3b82f6; }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col relative">
+
+    <!-- Debug Console -->
+    <div id="debug-console" class="debug-console">
+        <div class="flex justify-between items-center mb-2 border-b border-emerald-500/30 pb-1">
+            <span class="font-bold">Debug Console</span>
+            <button onclick="toggleDebug()" class="text-xs text-red-400 hover:text-red-300">Close</button>
+        </div>
+        <div id="debug-logs"></div>
+    </div>
 
     <!-- Background Effects -->
     <div class="fixed inset-0 z-[-1] bg-grid pointer-events-none"></div>
@@ -166,8 +206,8 @@
     </div>
 
     <!-- Connection Status -->
-    <div id="connection-status" class="fixed top-20 right-4 z-50 glass-panel px-3 py-1 rounded-full text-xs font-bold hidden">
-        <span class="status-indicator status-online"></span>Live Sync
+    <div id="connection-status" class="fixed top-20 right-4 z-50 glass-panel px-3 py-1 rounded-full text-xs font-bold hidden cursor-pointer" onclick="toggleDebug()">
+        <span class="status-indicator status-online"></span><span id="conn-text">Live Sync</span>
     </div>
 
     <!-- Error Banner -->
@@ -257,7 +297,7 @@
         </div>
     </section>
 
-    <!-- About Section (REMOVED Competitive Structures) -->
+    <!-- About Section -->
     <section id="about" class="py-20 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
@@ -299,7 +339,7 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Team 0 - ELITE SERVER TEAM (Red Border, Invite Only, Champion Only) -->
+                <!-- Team 0 -->
                 <div class="glass-panel p-8 rounded-2xl border-l-4 border-red-600 relative overflow-hidden group team-card">
                     <div class="absolute top-0 right-0 bg-red-600/20 px-4 py-1 rounded-bl-lg text-red-400 text-xs font-bold tracking-widest">TIER 0 - SERVER TEAM</div>
                     <div class="absolute top-4 right-4 text-red-500/20 text-6xl font-black font-display">0</div>
@@ -316,7 +356,7 @@
                     </div>
                 </div>
 
-                <!-- Team 1 - Elite Bracket (Yellow Border, Emerald-Champ) - UPDATED DESCRIPTION -->
+                <!-- Team 1 -->
                 <div class="glass-panel p-8 rounded-2xl border-l-4 border-yellow-500 relative overflow-hidden group team-card">
                     <div class="absolute top-0 right-0 bg-yellow-500/10 px-4 py-1 rounded-bl-lg text-yellow-400 text-xs font-bold tracking-widest">TIER 1 - ELITE PRIMARY</div>
                     <div class="absolute top-4 right-4 text-yellow-500/20 text-6xl font-black font-display">1</div>
@@ -333,7 +373,7 @@
                     </div>
                 </div>
 
-                <!-- Team 2 - Elite Bracket (Yellow Border, Emerald-Champ) - UPDATED DESCRIPTION -->
+                <!-- Team 2 -->
                 <div class="glass-panel p-8 rounded-2xl border-l-4 border-yellow-600 relative overflow-hidden group team-card">
                     <div class="absolute top-0 right-0 bg-yellow-600/10 px-4 py-1 rounded-bl-lg text-yellow-500 text-xs font-bold tracking-widest">TIER 2 - ELITE RESERVE</div>
                     <div class="absolute top-4 right-4 text-yellow-600/20 text-6xl font-black font-display">2</div>
@@ -350,7 +390,7 @@
                     </div>
                 </div>
 
-                <!-- Team 3 - Development Bracket (Emerald Border, Copper-Emerald) -->
+                <!-- Team 3 -->
                 <div class="glass-panel p-8 rounded-2xl border-l-4 border-emerald-500 relative overflow-hidden group team-card">
                     <div class="absolute top-0 right-0 bg-emerald-500/10 px-4 py-1 rounded-bl-lg text-emerald-400 text-xs font-bold tracking-widest">TIER 3</div>
                     <div class="absolute top-4 right-4 text-emerald-500/20 text-6xl font-black font-display">3</div>
@@ -367,7 +407,7 @@
                     </div>
                 </div>
 
-                <!-- Team 4 - Development Bracket (Blue Border, Copper-Emerald) -->
+                <!-- Team 4 -->
                 <div class="glass-panel p-8 rounded-2xl border-l-4 border-blue-500 relative overflow-hidden group team-card">
                     <div class="absolute top-0 right-0 bg-blue-500/10 px-4 py-1 rounded-bl-lg text-blue-400 text-xs font-bold tracking-widest">TIER 4</div>
                     <div class="absolute top-4 right-4 text-blue-500/20 text-6xl font-black font-display">4</div>
@@ -384,7 +424,7 @@
                     </div>
                 </div>
 
-                <!-- Team 5 - Development Bracket (Purple Border, Copper-Emerald) -->
+                <!-- Team 5 -->
                 <div class="glass-panel p-8 rounded-2xl border-l-4 border-purple-500 relative overflow-hidden group team-card">
                     <div class="absolute top-0 right-0 bg-purple-500/10 px-4 py-1 rounded-bl-lg text-purple-400 text-xs font-bold tracking-widest">TIER 5</div>
                     <div class="absolute top-4 right-4 text-purple-500/20 text-6xl font-black font-display">5</div>
@@ -603,6 +643,7 @@
                         <div id="login-error" class="text-red-400 text-sm hidden">
                             <i class="fas fa-exclamation-circle mr-1"></i> Invalid credentials. Please try again.
                         </div>
+                        <div id="login-error-details" class="text-red-400/70 text-xs hidden mt-1"></div>
                         <button type="submit" id="loginBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded transition-all mt-4 flex items-center justify-center gap-2">
                             <span>Access Dashboard</span>
                         </button>
@@ -629,6 +670,9 @@
                             </div>
                             <button onclick="manualRefresh()" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm font-bold" title="Refresh Data">
                                 <i class="fas fa-sync-alt"></i>
+                            </button>
+                            <button onclick="toggleDebug()" class="bg-gray-800 hover:bg-gray-700 text-emerald-400 px-3 py-1 rounded text-sm font-bold" title="Toggle Debug">
+                                <i class="fas fa-bug"></i> Debug
                             </button>
                             <button onclick="staffLogout()" class="text-red-400 hover:text-red-300 text-sm font-bold">
                                 <i class="fas fa-sign-out-alt mr-1"></i> Logout
@@ -753,20 +797,54 @@
 
     <script>
         // ==========================================
-        // JSONBIN.IO CONFIGURATION
+        // DEBUG SYSTEM
+        // ==========================================
+        let debugMode = false;
+        const debugLogs = [];
+        
+        function toggleDebug() {
+            debugMode = !debugMode;
+            const console = document.getElementById('debug-console');
+            console.classList.toggle('active', debugMode);
+        }
+        
+        function logDebug(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = { timestamp, message, type };
+            debugLogs.push(entry);
+            
+            const container = document.getElementById('debug-logs');
+            if (container) {
+                const div = document.createElement('div');
+                div.className = `debug-entry debug-${type}`;
+                div.textContent = `[${timestamp}] ${message}`;
+                container.appendChild(div);
+                container.scrollTop = container.scrollHeight;
+            }
+            
+            // Also log to browser console
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        // ==========================================
+        // JSONBIN.IO CONFIGURATION - FIXED URLS
         // ==========================================
         
         const BIN_ID = '69aa217643b1c97be9b7f444';
         const MASTER_KEY = '$2a$10$GK8JfB9MpM7nksbKiYequemSxDWTeB.S/B0aVN3XtmLU9amuwpwgO';
         
+        // FIXED: Removed spaces from URLs
         const READ_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
         const UPDATE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
         
+        logDebug(`Bin ID: ${BIN_ID}`);
+        logDebug(`Read URL: ${READ_URL}`);
+        logDebug(`Update URL: ${UPDATE_URL}`);
+
         // ==========================================
         // ENHANCED AUTHENTICATION SYSTEM
         // ==========================================
         
-        // Simple hash function for basic password security (NOT for production - use bcrypt/argon2 in production)
         function simpleHash(str) {
             let hash = 0;
             for (let i = 0; i < str.length; i++) {
@@ -777,29 +855,27 @@
             return Math.abs(hash).toString(16);
         }
         
-        // Staff credentials with hashed passwords
         const STAFF_USERS = {
             'jodeci': { 
-                passwordHash: '3c8e2f4a', // jodeci2026
+                passwordHash: simpleHash('jodeci2026'),
                 name: 'EA JODECI', 
                 role: 'Owner',
                 permissions: ['view_all', 'manage_teams', 'manage_admins', 'post_announcements', 'manage_tickets', 'manage_apps']
             },
             'admin': { 
-                passwordHash: '2a7b9c1d', // admin123
+                passwordHash: simpleHash('admin123'),
                 name: 'EA Admin', 
                 role: 'Admin',
                 permissions: ['view_all', 'manage_teams', 'post_announcements', 'manage_tickets', 'manage_apps']
             },
             'mod': { 
-                passwordHash: '5e8f1a2b', // mod123
+                passwordHash: simpleHash('mod123'),
                 name: 'EA Support', 
                 role: 'Moderator',
                 permissions: ['view_all', 'manage_tickets', 'manage_apps']
             }
         };
 
-        // Session management using sessionStorage (clears when browser closes - more secure than localStorage for auth)
         const SESSION_KEY = 'ea_league_staff_session';
         
         function createSession(userData) {
@@ -809,9 +885,10 @@
                 role: userData.role,
                 permissions: userData.permissions,
                 loginTime: new Date().toISOString(),
-                expiresAt: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString() // 8 hour session
+                expiresAt: new Date(Date.now() + 8 * 60 * 60 * 1000).toISOString()
             };
             sessionStorage.setItem(SESSION_KEY, JSON.stringify(session));
+            logDebug(`Session created for ${userData.username}`, 'success');
             return session;
         }
         
@@ -821,9 +898,9 @@
             
             try {
                 const session = JSON.parse(sessionData);
-                // Check if session expired
                 if (new Date() > new Date(session.expiresAt)) {
                     sessionStorage.removeItem(SESSION_KEY);
+                    logDebug('Session expired', 'info');
                     return null;
                 }
                 return session;
@@ -834,13 +911,15 @@
         
         function clearSession() {
             sessionStorage.removeItem(SESSION_KEY);
+            logDebug('Session cleared', 'info');
         }
 
         // ==========================================
         // ERROR HANDLING & UI HELPERS
         // ==========================================
         
-        function showError(message) {
+        function showError(message, details = '') {
+            logDebug(`Error: ${message} ${details}`, 'error');
             const banner = document.getElementById('error-banner');
             const msg = document.getElementById('error-message');
             msg.textContent = message;
@@ -848,18 +927,20 @@
             setTimeout(() => banner.classList.add('hidden'), 5000);
         }
         
-        function showConnectionStatus(online) {
+        function showConnectionStatus(online, message = '') {
             const status = document.getElementById('connection-status');
             const indicator = status.querySelector('.status-indicator');
+            const text = document.getElementById('conn-text');
+            
             status.classList.remove('hidden');
             
             if (online) {
                 indicator.className = 'status-indicator status-online';
-                status.innerHTML = '<span class="status-indicator status-online"></span>Live Sync';
+                text.textContent = message || 'Live Sync';
                 setTimeout(() => status.classList.add('hidden'), 3000);
             } else {
                 indicator.className = 'status-indicator status-offline';
-                status.innerHTML = '<span class="status-indicator status-offline"></span>Offline';
+                text.textContent = message || 'Offline';
             }
         }
         
@@ -869,59 +950,94 @@
             
             if (isLoading) {
                 btn.disabled = true;
+                btn.dataset.originalText = btn.innerHTML;
                 btn.innerHTML = '<div class="loading"></div>';
             } else {
                 btn.disabled = false;
-                const originalText = btn.getAttribute('data-text') || btn.getAttribute('data-original-text') || 'Submit';
-                btn.innerHTML = '<span>' + originalText + '</span>';
+                btn.innerHTML = btn.dataset.originalText || '<span>Submit</span>';
             }
         }
 
         // ==========================================
-        // CORE API FUNCTIONS
+        // CORE API FUNCTIONS - FIXED HEADERS
         // ==========================================
         
         async function getData() {
+            logDebug('Fetching data from JSONBin...', 'info');
+            
             try {
                 const response = await fetch(READ_URL, {
                     method: 'GET',
-                    headers: { 'X-Master-Key': MASTER_KEY }
+                    headers: { 
+                        'X-Master-Key': MASTER_KEY,
+                        'X-Bin-Meta': 'false' // Don't need metadata
+                    }
                 });
                 
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                logDebug(`Response status: ${response.status}`, response.ok ? 'success' : 'error');
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
                 
                 const result = await response.json();
+                logDebug('Data fetched successfully', 'success');
+                
                 showConnectionStatus(true);
-                return result.record || { apps: [], tickets: [], announcements: [], players: [], adminApplications: [] };
+                
+                // Handle both response formats
+                const record = result.record || result;
+                return {
+                    apps: record.apps || [],
+                    tickets: record.tickets || [],
+                    announcements: record.announcements || [],
+                    players: record.players || [],
+                    adminApplications: record.adminApplications || []
+                };
                 
             } catch (error) {
+                logDebug(`Fetch error: ${error.message}`, 'error');
                 console.error('Error fetching data:', error);
-                showConnectionStatus(false);
-                showError('Database connection failed.');
+                showConnectionStatus(false, 'Connection Failed');
+                showError('Database connection failed.', error.message);
+                
+                // Return empty structure on error
                 return { apps: [], tickets: [], announcements: [], players: [], adminApplications: [] };
             }
         }
         
         async function saveData(data) {
+            logDebug('Saving data to JSONBin...', 'info');
+            
             try {
                 const response = await fetch(UPDATE_URL, {
                     method: 'PUT',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': MASTER_KEY
+                        'Content-Type': 'application/json', // CRITICAL: Required header
+                        'X-Master-Key': MASTER_KEY,
+                        'X-Bin-Meta': 'false'
                     },
                     body: JSON.stringify(data)
                 });
                 
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                logDebug(`Save response status: ${response.status}`, response.ok ? 'success' : 'error');
                 
-                showConnectionStatus(true);
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`HTTP ${response.status}: ${errorText}`);
+                }
+                
+                const result = await response.json();
+                logDebug('Data saved successfully', 'success');
+                showConnectionStatus(true, 'Saved');
                 return true;
                 
             } catch (error) {
+                logDebug(`Save error: ${error.message}`, 'error');
                 console.error('Error saving data:', error);
-                showConnectionStatus(false);
-                showError('Failed to save data.');
+                showConnectionStatus(false, 'Save Failed');
+                showError('Failed to save data.', error.message);
                 return false;
             }
         }
@@ -971,10 +1087,6 @@
             if (!currentStaff) return;
             document.getElementById('online-staff-count').innerText = "1+"; 
         }
-
-        setInterval(() => {
-            if(currentStaff) updateOnlineStaff();
-        }, 5000);
 
         // ==========================================
         // ADMIN SCREENING SYSTEM
@@ -1098,47 +1210,6 @@
                 document.getElementById('newAnnBody').value = '';
             }
         }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            // Store original button texts
-            ['submitBtn', 'ticketSubmitBtn', 'searchBtn', 'loginBtn', 'postAnnBtn', 'screeningBtn'].forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) btn.setAttribute('data-text', btn.innerText.trim());
-            });
-            
-            // Check for existing session on page load
-            const existingSession = getSession();
-            if (existingSession) {
-                // Restore session
-                currentStaff = {
-                    username: existingSession.username,
-                    name: existingSession.name,
-                    role: existingSession.role,
-                    permissions: existingSession.permissions
-                };
-                
-                // Show dashboard
-                document.getElementById('staff-login-view').classList.add('hidden');
-                document.getElementById('staff-dashboard-view').classList.remove('hidden');
-                document.getElementById('staffNameDisplay').innerText = currentStaff.name;
-                document.getElementById('staffRoleDisplay').innerText = currentStaff.role;
-                
-                // Setup UI based on role
-                setupStaffUI();
-                renderAdminData();
-                
-                // Start auto refresh
-                autoRefreshInterval = setInterval(() => {
-                    if (!document.getElementById('staff-dashboard-view').classList.contains('hidden')) {
-                        renderAdminData();
-                    }
-                }, 5000);
-            }
-            
-            if (!window.location.hash.includes('staff')) {
-                setTimeout(checkAnnouncements, 2000);
-            }
-        });
 
         // ==========================================
         // APPLICATION FUNCTIONS
@@ -1296,60 +1367,85 @@
         }
 
         // ==========================================
-        // STAFF DASHBOARD FUNCTIONS
+        // STAFF DASHBOARD FUNCTIONS - FIXED LOGIN
         // ==========================================
         
         async function handleStaffLogin(e) {
             e.preventDefault();
+            logDebug('Login attempt started...', 'info');
             
             const username = document.getElementById('staffUser').value.trim().toLowerCase();
             const password = document.getElementById('staffPass').value;
             const errorDiv = document.getElementById('login-error');
+            const errorDetails = document.getElementById('login-error-details');
+            
+            logDebug(`Username entered: ${username}`, 'info');
+            
+            // Clear previous errors
+            errorDiv.classList.add('hidden');
+            errorDetails.classList.add('hidden');
             
             // Hash the input password for comparison
             const inputHash = simpleHash(password);
+            logDebug(`Password hash: ${inputHash}`, 'info');
             
             // Validate credentials
             const user = STAFF_USERS[username];
-            if (user && user.passwordHash === inputHash) {
-                // Clear error
-                errorDiv.classList.add('hidden');
-                
-                // Create session
-                currentStaff = {
-                    username: username,
-                    name: user.name,
-                    role: user.role,
-                    permissions: user.permissions
-                };
-                
-                createSession(currentStaff);
-                
-                // Show dashboard
-                document.getElementById('staff-login-view').classList.add('hidden');
-                document.getElementById('staff-dashboard-view').classList.remove('hidden');
-                document.getElementById('staffNameDisplay').innerText = currentStaff.name;
-                document.getElementById('staffRoleDisplay').innerText = currentStaff.role;
-                
-                // Setup UI based on role
-                setupStaffUI();
-                
-                updateOnlineStaff();
-                await renderAdminData();
-                
-                // Start auto refresh
-                if (autoRefreshInterval) clearInterval(autoRefreshInterval);
-                autoRefreshInterval = setInterval(() => {
-                    if (!document.getElementById('staff-dashboard-view').classList.contains('hidden')) {
-                        renderAdminData();
-                    }
-                }, 5000);
-            } else {
-                // Show error
+            
+            if (!user) {
+                logDebug(`User not found: ${username}`, 'error');
                 errorDiv.classList.remove('hidden');
+                errorDetails.textContent = 'User not found in system';
+                errorDetails.classList.remove('hidden');
+                return;
+            }
+            
+            logDebug(`Found user: ${user.name}, Role: ${user.role}`, 'success');
+            logDebug(`Expected hash: ${user.passwordHash}`, 'info');
+            logDebug(`Input hash: ${inputHash}`, 'info');
+            
+            if (user.passwordHash !== inputHash) {
+                logDebug('Password hash mismatch', 'error');
+                errorDiv.classList.remove('hidden');
+                errorDetails.textContent = 'Invalid password hash comparison';
+                errorDetails.classList.remove('hidden');
                 document.getElementById('staffPass').value = '';
                 document.getElementById('staffPass').focus();
+                return;
             }
+            
+            // Success - proceed to dashboard
+            logDebug('Login successful!', 'success');
+            
+            // Create session
+            currentStaff = {
+                username: username,
+                name: user.name,
+                role: user.role,
+                permissions: user.permissions
+            };
+            
+            createSession(currentStaff);
+            
+            // Show dashboard
+            document.getElementById('staff-login-view').classList.add('hidden');
+            document.getElementById('staff-dashboard-view').classList.remove('hidden');
+            document.getElementById('staffNameDisplay').innerText = currentStaff.name;
+            document.getElementById('staffRoleDisplay').innerText = currentStaff.role;
+            
+            // Setup UI based on role
+            setupStaffUI();
+            
+            updateOnlineStaff();
+            await renderAdminData();
+            
+            // Start auto refresh
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
+            autoRefreshInterval = setInterval(() => {
+                if (!document.getElementById('staff-dashboard-view').classList.contains('hidden')) {
+                    renderAdminData();
+                }
+            }, 5000);
         }
         
         function setupStaffUI() {
@@ -1396,6 +1492,7 @@
             document.getElementById('staffUser').value = '';
             document.getElementById('staffPass').value = '';
             document.getElementById('login-error').classList.add('hidden');
+            document.getElementById('login-error-details').classList.add('hidden');
             
             document.getElementById('team-management-section').classList.add('hidden');
             document.getElementById('admin-applications-section').classList.add('hidden');
@@ -1405,6 +1502,8 @@
                 clearInterval(autoRefreshInterval);
                 autoRefreshInterval = null;
             }
+            
+            logDebug('Logged out', 'info');
         }
 
         function toggleAnnouncementForm() {
@@ -1415,6 +1514,7 @@
         async function manualRefresh() {
             const btn = document.querySelector('button[onclick="manualRefresh()"] i');
             btn.classList.add('fa-spin');
+            logDebug('Manual refresh triggered', 'info');
             await renderAdminData();
             setTimeout(() => btn.classList.remove('fa-spin'), 1000);
         }
@@ -1562,6 +1662,7 @@
         }
 
         async function renderAdminData() {
+            logDebug('Rendering admin data...', 'info');
             const data = await getData();
             const apps = data.apps || [];
             const tickets = data.tickets || [];
@@ -1781,13 +1882,12 @@
                 app.approvedBy = currentStaff.name;
                 app.approvedAt = new Date().toISOString();
                 
-                // Generate credentials (in real scenario, send via DM)
+                // Generate credentials
                 const username = app.discord.split('#')[0].toLowerCase().replace(/\s/g, '');
                 const password = Math.random().toString(36).slice(-8);
                 
                 app.credentials = { username, password };
                 
-                // Add to staff users (temporary - in production this would be more secure)
                 alert(`Admin Approved!\nUsername: ${username}\nPassword: ${password}\n\nShare these credentials securely with the user.`);
                 
                 await saveData(data);
@@ -1806,6 +1906,45 @@
                 renderAdminData();
             }
         }
+
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            logDebug('Page loaded, initializing...', 'info');
+            
+            // Check for existing session
+            const existingSession = getSession();
+            if (existingSession) {
+                logDebug(`Restoring session for ${existingSession.username}`, 'success');
+                
+                currentStaff = {
+                    username: existingSession.username,
+                    name: existingSession.name,
+                    role: existingSession.role,
+                    permissions: existingSession.permissions
+                };
+                
+                document.getElementById('staff-login-view').classList.add('hidden');
+                document.getElementById('staff-dashboard-view').classList.remove('hidden');
+                document.getElementById('staffNameDisplay').innerText = currentStaff.name;
+                document.getElementById('staffRoleDisplay').innerText = currentStaff.role;
+                
+                setupStaffUI();
+                renderAdminData();
+                
+                autoRefreshInterval = setInterval(() => {
+                    if (!document.getElementById('staff-dashboard-view').classList.contains('hidden')) {
+                        renderAdminData();
+                    }
+                }, 5000);
+            }
+            
+            if (!window.location.hash.includes('staff')) {
+                setTimeout(checkAnnouncements, 2000);
+            }
+        });
     </script>
 </body>
 </html>
