@@ -139,7 +139,7 @@
             opacity: 0;
         }
         .expand-content.open {
-            max-height: 500px; /* Arbitrary large height */
+            max-height: 500px;
             opacity: 1;
         }
 
@@ -233,9 +233,6 @@
                         <a href="#downloads" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Downloads</a>
                         <a href="#apply" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Apply</a>
                         <a href="#support" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Support</a>
-                        <a href="#staff" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-md text-lg font-bold transition-all shadow-[0_0_15px_rgba(16,185,129,0.4)]">
-                            <i class="fas fa-lock mr-2"></i>Staff
-                        </a>
                     </div>
                 </div>
                 <div class="-mr-2 flex md:hidden">
@@ -254,7 +251,6 @@
                 <a href="#downloads" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Downloads</a>
                 <a href="#apply" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Apply</a>
                 <a href="#support" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Support</a>
-                <a href="#staff" class="text-emerald-400 block px-3 py-2 rounded-md text-base font-bold">Staff Login</a>
             </div>
         </div>
     </nav>
@@ -625,9 +621,8 @@
         </div>
     </section>
 
-    <!-- NEW: Downloads Section -->
+    <!-- Downloads Section -->
     <section id="downloads" class="py-20 bg-black/30 relative overflow-hidden">
-        <!-- Background decoration -->
         <div class="absolute top-0 right-0 w-96 h-96 bg-emerald-900/10 rounded-full blur-3xl -z-10"></div>
         <div class="absolute bottom-0 left-0 w-96 h-96 bg-cyan-900/10 rounded-full blur-3xl -z-10"></div>
         
@@ -890,107 +885,8 @@
         </div>
     </section>
 
-    <!-- Staff Portal Section -->
-    <section id="staff" class="py-20 relative">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="glass-panel rounded-2xl p-8 border border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
-                
-                <div id="staff-login-view" class="max-w-md mx-auto text-center py-10">
-                    <div class="w-16 h-16 bg-emerald-900/50 rounded-full flex items-center justify-center mx-auto mb-6 border border-emerald-500/50">
-                        <i class="fas fa-shield-alt text-2xl text-emerald-400"></i>
-                    </div>
-                    <h2 class="text-2xl font-display font-bold text-white mb-2">Staff Portal</h2>
-                    <p class="text-gray-400 mb-8">Authorized personnel only.</p>
-                    
-                    <form onsubmit="handleStaffLogin(event)" class="space-y-4 text-left">
-                        <div>
-                            <label class="text-xs text-gray-500 uppercase font-bold tracking-wider">Username</label>
-                            <input type="text" id="staffUser" class="w-full input-field rounded p-3 mt-1" required>
-                        </div>
-                        <div>
-                            <label class="text-xs text-gray-500 uppercase font-bold tracking-wider">Password</label>
-                            <input type="password" id="staffPass" class="w-full input-field rounded p-3 mt-1" required>
-                        </div>
-                        <button type="submit" id="loginBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded transition-all mt-4 flex items-center justify-center gap-2">
-                            <span>Access Dashboard</span>
-                        </button>
-                    </form>
-                </div>
-
-                <div id="staff-dashboard-view" class="hidden">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-gray-700 pb-4 gap-4">
-                        <div>
-                            <h2 class="text-2xl font-display font-bold text-white">Admin Dashboard</h2>
-                            <p class="text-emerald-400 text-sm">Welcome, <span id="staffNameDisplay">Admin</span></p>
-                        </div>
-                        <div class="flex flex-wrap items-center gap-3">
-                            <!-- NEW: Online Staff Counter -->
-                            <div class="bg-black/40 px-3 py-1 rounded border border-emerald-500/30 flex items-center gap-2">
-                                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                                <span class="text-xs text-gray-300 font-bold"><span id="online-staff-count">0</span> Staff Online</span>
-                            </div>
-                            <button onclick="manualRefresh()" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm font-bold" title="Refresh Data">
-                                <i class="fas fa-sync-alt"></i>
-                            </button>
-                            <button onclick="staffLogout()" class="text-red-400 hover:text-red-300 text-sm font-bold">
-                                <i class="fas fa-sign-out-alt mr-1"></i> Logout
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <div class="bg-black/40 p-4 rounded-lg border border-gray-700">
-                            <div class="text-gray-400 text-xs uppercase font-bold">Pending Apps</div>
-                            <div class="text-2xl font-bold text-white mt-1" id="stat-apps">0</div>
-                        </div>
-                        <div class="bg-black/40 p-4 rounded-lg border border-gray-700">
-                            <div class="text-gray-400 text-xs uppercase font-bold">Open Tickets</div>
-                            <div class="text-2xl font-bold text-white mt-1" id="stat-tickets">0</div>
-                        </div>
-                        <div class="bg-black/40 p-4 rounded-lg border border-emerald-500/30 cursor-pointer hover:bg-emerald-900/20 transition-colors" onclick="toggleAnnouncementForm()">
-                            <div class="text-emerald-400 text-xs uppercase font-bold"><i class="fas fa-plus mr-1"></i> New Action</div>
-                            <div class="text-lg font-bold text-white mt-1">Post Announcement</div>
-                        </div>
-                    </div>
-
-                    <div id="announcement-form" class="hidden mb-8 bg-emerald-900/10 p-6 rounded-lg border border-emerald-500/30">
-                        <h3 class="text-lg font-bold text-white mb-4">Post Global Announcement</h3>
-                        <div class="space-y-4">
-                            <input type="text" id="newAnnTitle" placeholder="Title" class="w-full input-field rounded p-3">
-                            <textarea id="newAnnBody" placeholder="Message content..." rows="3" class="w-full input-field rounded p-3"></textarea>
-                            <div class="flex gap-2">
-                                <button onclick="postNewAnnouncement()" id="postAnnBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded font-bold flex items-center gap-2">
-                                    <span>Post Now</span>
-                                </button>
-                                <button onclick="toggleAnnouncementForm()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded font-bold">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div>
-                            <h3 class="text-lg font-bold text-white mb-4 border-l-4 border-emerald-500 pl-3">Recent Applications</h3>
-                            <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2" id="admin-apps-list">
-                                <div class="text-center text-gray-500 py-4">Loading...</div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <h3 class="text-lg font-bold text-white mb-4 border-l-4 border-blue-500 pl-3">Support Tickets</h3>
-                            <div class="space-y-3 max-h-[500px] overflow-y-auto pr-2" id="admin-tickets-list">
-                                <div class="text-center text-gray-500 py-4">Loading...</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- NEW: Security & Encryption Section -->
+    <!-- Security & Encryption Section -->
     <section id="security" class="py-20 relative overflow-hidden">
-        <!-- Animated background elements -->
         <div class="absolute inset-0 bg-gradient-to-b from-emerald-900/10 to-transparent pointer-events-none"></div>
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
         
@@ -1126,13 +1022,12 @@
 
     <script>
         // ==========================================
-        // JSONBIN.IO CONFIGURATION - FIXED URLS (NO SPACES!)
+        // JSONBIN.IO CONFIGURATION
         // ==========================================
         
         const BIN_ID = '69aa217643b1c97be9b7f444';
         const MASTER_KEY = '$2a$10$GK8JfB9MpM7nksbKiYequemSxDWTeB.S/B0aVN3XtmLU9amuwpwgO';
         
-        // FIXED: Removed spaces from URLs!
         const READ_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
         const UPDATE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
         
@@ -1226,43 +1121,6 @@
         }
 
         // ==========================================
-        // STAFF AUTHENTICATION & ONLINE TRACKING
-        // ==========================================
-        
-        const STAFF_USERS = {
-            'admin': { password: 'admin123', name: 'EA JODECI', role: 'Owner' },
-            'mod': { password: 'mod123', name: 'EA Support', role: 'Moderator' }
-        };
-
-        // Simple Online Counter Logic using localStorage
-        function updateOnlineStaff() {
-            if (!currentStaff) return;
-            
-            // Register this session
-            const now = Date.now();
-            const sessionId = currentStaff.name + '_' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('staff_session_id', sessionId);
-            localStorage.setItem('staff_last_ping', now);
-
-            // Count active sessions
-            let count = 0;
-            // We can't easily read other tabs' localStorage in real-time without broadcasting,
-            // so we simulate "Online" based on the assumption this tab is 1, 
-            // and we could use BroadcastChannel for multi-tab, but for this single-file demo:
-            // We will just show 1 (You) + random variance or just 1 to be safe, 
-            // OR better: Use a ping system.
-            
-            // Let's just show "1" for the current user for this demo to be safe, 
-            // or we can try to count keys if we were using a server.
-            // For visual effect, let's say "1 Online (You)".
-            document.getElementById('online-staff-count').innerText = "1+"; 
-        }
-
-        setInterval(() => {
-            if(currentStaff) updateOnlineStaff();
-        }, 5000);
-
-        // ==========================================
         // ANNOUNCEMENT FUNCTIONS
         // ==========================================
         
@@ -1310,43 +1168,13 @@
             }
         }
 
-        async function postNewAnnouncement() {
-            const title = document.getElementById('newAnnTitle').value;
-            const body = document.getElementById('newAnnBody').value;
-            
-            if (!title || !body) return alert('Please fill in all fields');
-            
-            setLoading('postAnnBtn', true);
-            
-            const data = await getData();
-            data.announcements.push({ 
-                title, 
-                body, 
-                date: new Date().toISOString(),
-                postedBy: currentStaff ? currentStaff.name : 'Unknown'
-            });
-            
-            const success = await saveData(data);
-            
-            setLoading('postAnnBtn', false);
-            
-            if (success) {
-                alert('Announcement Posted!');
-                toggleAnnouncementForm();
-                document.getElementById('newAnnTitle').value = '';
-                document.getElementById('newAnnBody').value = '';
-            }
-        }
-
         window.addEventListener('DOMContentLoaded', () => {
-            ['submitBtn', 'ticketSubmitBtn', 'searchBtn', 'loginBtn', 'postAnnBtn'].forEach(id => {
+            ['submitBtn', 'ticketSubmitBtn', 'searchBtn'].forEach(id => {
                 const btn = document.getElementById(id);
                 if (btn) btn.setAttribute('data-text', btn.innerText.trim());
             });
             
-            if (!window.location.hash.includes('staff')) {
-                setTimeout(checkAnnouncements, 2000);
-            }
+            setTimeout(checkAnnouncements, 2000);
         });
 
         // ==========================================
@@ -1470,7 +1298,6 @@
                     <h4 class="text-white font-bold mb-1">${t.subject}</h4>
                     <p class="text-gray-400 text-sm mb-3 line-clamp-2">${t.description}</p>
                     
-                    <!-- Conversation History -->
                     <div class="bg-gray-900/50 p-3 rounded mb-3 text-sm space-y-2 max-h-32 overflow-y-auto">
                         ${t.responses && t.responses.length > 0 ? t.responses.map(r => `
                             <div class="${r.sender === 'User' ? 'text-right' : 'text-left'}">
@@ -1502,249 +1329,6 @@
                 ticket.status = 'Pending Staff';
                 await saveData(data);
                 loadUserTickets();
-            }
-        }
-
-        // ==========================================
-        // STAFF DASHBOARD FUNCTIONS
-        // ==========================================
-        
-        let currentStaff = null;
-        let autoRefreshInterval = null;
-
-        async function handleStaffLogin(e) {
-            e.preventDefault();
-            
-            const u = document.getElementById('staffUser').value;
-            const p = document.getElementById('staffPass').value;
-            
-            if (STAFF_USERS[u] && STAFF_USERS[u].password === p) {
-                currentStaff = STAFF_USERS[u];
-                document.getElementById('staff-login-view').classList.add('hidden');
-                document.getElementById('staff-dashboard-view').classList.remove('hidden');
-                document.getElementById('staffNameDisplay').innerText = currentStaff.name;
-                
-                updateOnlineStaff(); // Trigger online status
-                await renderAdminData();
-                
-                autoRefreshInterval = setInterval(() => {
-                    if (!document.getElementById('staff-dashboard-view').classList.contains('hidden')) {
-                        renderAdminData();
-                    }
-                }, 5000);
-            } else {
-                alert('Invalid Credentials');
-            }
-        }
-
-        function staffLogout() {
-            currentStaff = null;
-            document.getElementById('staff-dashboard-view').classList.add('hidden');
-            document.getElementById('staff-login-view').classList.remove('hidden');
-            document.getElementById('staffUser').value = '';
-            document.getElementById('staffPass').value = '';
-            
-            if (autoRefreshInterval) {
-                clearInterval(autoRefreshInterval);
-                autoRefreshInterval = null;
-            }
-        }
-
-        function toggleAnnouncementForm() {
-            const form = document.getElementById('announcement-form');
-            form.classList.toggle('hidden');
-        }
-
-        async function manualRefresh() {
-            const btn = document.querySelector('button[onclick="manualRefresh()"] i');
-            btn.classList.add('fa-spin');
-            await renderAdminData();
-            setTimeout(() => btn.classList.remove('fa-spin'), 1000);
-        }
-
-        // --- PERSISTENT DROPDOWN LOGIC (20 MINUTES) ---
-        const EXPAND_STORAGE_KEY = 'ea_league_expanded_items';
-        const EXPAND_DURATION = 20 * 60 * 1000; // 20 minutes in milliseconds
-
-        function loadExpandedState() {
-            const stored = localStorage.getItem(EXPAND_STORAGE_KEY);
-            if (!stored) return {};
-            try {
-                const data = JSON.parse(stored);
-                const now = Date.now();
-                // Filter out expired entries
-                const valid = {};
-                for (const [id, timestamp] of Object.entries(data)) {
-                    if (now - timestamp < EXPAND_DURATION) {
-                        valid[id] = timestamp;
-                    }
-                }
-                return valid;
-            } catch (e) {
-                return {};
-            }
-        }
-
-        function saveExpandedState(state) {
-            localStorage.setItem(EXPAND_STORAGE_KEY, JSON.stringify(state));
-        }
-
-        // Override the toggle function to include persistence
-        window.toggleExpand = function(id) {
-            const el = document.getElementById(id);
-            const icon = document.getElementById(id + '-icon');
-            const expandedState = loadExpandedState();
-            
-            if (el.classList.contains('open')) {
-                // Close it
-                el.classList.remove('open');
-                if(icon) {
-                    icon.classList.remove('fa-chevron-up');
-                    icon.classList.add('fa-chevron-down');
-                }
-                delete expandedState[id]; // Remove from storage
-            } else {
-                // Open it
-                el.classList.add('open');
-                if(icon) {
-                    icon.classList.remove('fa-chevron-down');
-                    icon.classList.add('fa-chevron-up');
-                }
-                expandedState[id] = Date.now(); // Add to storage with timestamp
-            }
-            saveExpandedState(expandedState);
-        }
-
-        async function renderAdminData() {
-            const data = await getData();
-            const apps = data.apps || [];
-            const tickets = data.tickets || [];
-            
-            document.getElementById('stat-apps').innerText = apps.filter(a => a.status === 'Pending').length;
-            document.getElementById('stat-tickets').innerText = tickets.filter(t => t.status === 'Open' || t.status === 'Pending Staff').length;
-
-            const expandedState = loadExpandedState();
-
-            // Render Applications with Expandable Details
-            const appContainer = document.getElementById('admin-apps-list');
-            appContainer.innerHTML = apps.length === 0 ? 
-                '<div class="text-center text-gray-500 py-4">No applications yet</div>' :
-                apps.slice().reverse().map(app => {
-                    const isExpanded = !!expandedState[`app-${app.id}`];
-                    return `
-                    <div class="bg-black/30 p-3 rounded border-l-2 ${app.status === 'Pending' ? 'border-yellow-500' : 'border-emerald-500'}">
-                        <div class="flex justify-between items-start cursor-pointer" onclick="toggleExpand('app-${app.id}')">
-                            <div>
-                                <div class="text-white font-bold text-sm flex items-center gap-2">
-                                    ${app.discord}
-                                    <i id="app-${app.id}-icon" class="fas ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-gray-500 text-xs"></i>
-                                </div>
-                                <div class="text-gray-500 text-xs">${app.team} | ${app.rank} | ${app.date}</div>
-                            </div>
-                            <div class="flex gap-2" onclick="event.stopPropagation()">
-                                ${app.status === 'Pending' ? `
-                                    <button onclick="updateAppStatus(${app.id}, 'Approved')" class="text-emerald-400 hover:text-white text-xs bg-emerald-900/30 px-2 py-1 rounded"><i class="fas fa-check"></i></button>
-                                    <button onclick="updateAppStatus(${app.id}, 'Denied')" class="text-red-400 hover:text-white text-xs bg-red-900/30 px-2 py-1 rounded"><i class="fas fa-times"></i></button>
-                                ` : `<span class="text-xs text-gray-500 font-bold px-2 py-1 bg-gray-800 rounded">${app.status}</span>`}
-                            </div>
-                        </div>
-                        
-                        <!-- Expandable Details -->
-                        <div id="app-${app.id}" class="expand-content ${isExpanded ? 'open' : ''} mt-2 pt-2 border-t border-gray-700">
-                            <div class="grid grid-cols-2 gap-2 text-xs mb-2">
-                                <div><span class="text-gray-500">Uplay:</span> <span class="text-gray-300">${app.uplay}</span></div>
-                                <div><span class="text-gray-500">Date:</span> <span class="text-gray-300">${app.date}</span></div>
-                            </div>
-                            <div class="bg-gray-900/50 p-2 rounded text-xs">
-                                <span class="text-gray-500 block mb-1">Application Response:</span>
-                                <p class="text-gray-300 italic">"${app.reason}"</p>
-                            </div>
-                        </div>
-                    </div>
-                `}).join('');
-
-            // Render Tickets with Expandable Details
-            const ticketContainer = document.getElementById('admin-tickets-list');
-            ticketContainer.innerHTML = tickets.length === 0 ?
-                '<div class="text-center text-gray-500 py-4">No tickets yet</div>' :
-                tickets.slice().reverse().map(t => {
-                    const isExpanded = !!expandedState[`ticket-${t.id}`];
-                    return `
-                    <div class="bg-black/30 p-3 rounded border-l-2 ${t.status === 'Open' ? 'border-red-500' : 'border-gray-600'}">
-                        <div class="flex justify-between items-start cursor-pointer" onclick="toggleExpand('ticket-${t.id}')">
-                            <div>
-                                <div class="text-white font-bold text-sm flex items-center gap-2">
-                                    ${t.subject}
-                                    <span class="text-[10px] text-gray-500 border border-gray-700 px-1 rounded">${t.id}</span>
-                                    <i id="ticket-${t.id}-icon" class="fas ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-gray-500 text-xs"></i>
-                                </div>
-                                <div class="text-gray-500 text-xs">By: ${t.discord} | Status: ${t.status}</div>
-                            </div>
-                            <button onclick="event.stopPropagation(); closeTicket('${t.id}')" class="text-xs bg-gray-700 hover:bg-gray-600 px-2 py-1 rounded text-white">Close</button>
-                        </div>
-
-                        <!-- Expandable Details -->
-                        <div id="ticket-${t.id}" class="expand-content ${isExpanded ? 'open' : ''} mt-2 pt-2 border-t border-gray-700">
-                            <div class="text-gray-400 text-xs mb-3 bg-black/20 p-2 rounded">
-                                ${t.description}
-                            </div>
-                            
-                            <div class="space-y-2 mb-3 max-h-32 overflow-y-auto pr-1">
-                                ${t.responses && t.responses.length > 0 ? t.responses.map(r => `
-                                    <div class="text-xs ${r.sender === 'User' ? 'text-left' : 'text-right'}">
-                                        <span class="text-gray-600 block mb-0.5">${r.sender} • ${new Date(r.date).toLocaleTimeString()}</span>
-                                        <span class="inline-block px-2 py-1 rounded ${r.sender === 'User' ? 'bg-gray-800 text-gray-300' : 'bg-emerald-900/40 text-emerald-200'}">${r.text}</span>
-                                    </div>
-                                `).join('') : '<p class="text-gray-600 italic text-xs">No messages.</p>'}
-                            </div>
-
-                            <div class="flex gap-2 mt-2">
-                                <input type="text" id="admin-reply-${t.id}" placeholder="Admin response..." class="flex-1 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-xs text-white">
-                                <button onclick="event.stopPropagation(); addAdminReply('${t.id}')" class="bg-emerald-700 hover:bg-emerald-600 text-white px-2 py-1 rounded text-xs">Reply</button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
-        }
-
-        async function updateAppStatus(id, status) {
-            const data = await getData();
-            const app = data.apps.find(a => a.id === id);
-            if (app) {
-                app.status = status;
-                app.reviewedBy = currentStaff ? currentStaff.name : 'Unknown';
-                app.reviewedAt = new Date().toLocaleString();
-                await saveData(data);
-                await renderAdminData();
-            }
-        }
-
-        async function addAdminReply(ticketId) {
-            const input = document.getElementById(`admin-reply-${ticketId}`);
-            const text = input.value;
-            if (!text) return;
-            
-            const data = await getData();
-            const ticket = data.tickets.find(t => t.id === ticketId);
-            
-            if (ticket) {
-                if (!ticket.responses) ticket.responses = [];
-                ticket.responses.push({ text, sender: currentStaff ? currentStaff.name : 'Staff', date: new Date() });
-                ticket.status = 'Pending User';
-                await saveData(data);
-                await renderAdminData();
-            }
-        }
-
-        async function closeTicket(ticketId) {
-            const data = await getData();
-            const ticket = data.tickets.find(t => t.id === ticketId);
-            if(ticket) {
-                ticket.status = 'Closed';
-                ticket.closedBy = currentStaff ? currentStaff.name : 'Unknown';
-                ticket.closedAt = new Date().toLocaleString();
-                await saveData(data);
-                await renderAdminData();
             }
         }
     </script>
