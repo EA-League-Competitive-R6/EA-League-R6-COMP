@@ -1,3 +1,5 @@
+---< TESTING -->--
+
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
@@ -142,6 +144,14 @@
             max-height: 500px; /* Arbitrary large height */
             opacity: 1;
         }
+
+        .staff-card {
+            transition: all 0.3s ease;
+        }
+        .staff-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col relative">
@@ -176,6 +186,7 @@
                     <div class="ml-10 flex items-baseline space-x-8">
                         <a href="#about" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">About</a>
                         <a href="#teams" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Teams</a>
+                        <a href="#staff-roster" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Staff</a>
                         <a href="#schedule" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Schedule</a>
                         <a href="#apply" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Apply</a>
                         <a href="#support" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Support</a>
@@ -195,6 +206,7 @@
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a href="#about" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">About</a>
                 <a href="#teams" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Teams</a>
+                <a href="#staff-roster" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Staff</a>
                 <a href="#schedule" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Schedule</a>
                 <a href="#apply" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Apply</a>
                 <a href="#support" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Support</a>
@@ -235,6 +247,9 @@
             </h1>
             <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-400 font-light">
                 Join the next generation of tactical shooters. Tropical vibes. Green Reign. Pure Dominance.
+            </p>
+            <p class="mt-2 text-sm text-emerald-500/80 font-medium tracking-wide">
+                <i class="fas fa-code mr-1"></i> Brought to you by EA Jodeci and EA Yoboytrippin
             </p>
             <div class="mt-10 flex justify-center gap-4">
                 <a href="#apply" class="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-lg transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] transform hover:-translate-y-1">
@@ -314,6 +329,189 @@
                     <div class="inline-flex items-center px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-sm font-bold">
                         <span class="w-2 h-2 bg-purple-500 rounded-full mr-2 animate-pulse"></span> Open - Join Anytime
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Staff Section -->
+    <section id="staff-roster" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4">Leadership Team</h2>
+                <p class="text-emerald-400/80 text-lg font-medium mb-2">The dedicated professionals powering our community</p>
+                <div class="w-24 h-1 bg-emerald-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- CEO -->
+                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-yellow-500 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-yellow-500/10 px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-crown text-yellow-500"></i>
+                    </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-500/20 to-yellow-600/40 flex items-center justify-center border-2 border-yellow-500/50">
+                            <span class="text-2xl font-bold text-yellow-400">J</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-display font-bold text-white">Jodeci</h3>
+                            <p class="text-yellow-500 text-sm font-bold tracking-wider uppercase">Chief Executive Officer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Visionary leader and founder of EA League, driving competitive excellence and community growth.</p>
+                </div>
+
+                <!-- Server Manager -->
+                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-emerald-500 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-emerald-500/10 px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-server text-emerald-500"></i>
+                    </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/40 flex items-center justify-center border-2 border-emerald-500/50">
+                            <span class="text-2xl font-bold text-emerald-400">Y</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-display font-bold text-white">Yoboytrippin</h3>
+                            <p class="text-emerald-500 text-sm font-bold tracking-wider uppercase">Server Manager</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Oversees server operations, technical infrastructure, and ensures seamless competitive experiences.</p>
+                </div>
+
+                <!-- Administration B2 -->
+                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-blue-500 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-500/10 px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-shield-alt text-blue-500"></i>
+                    </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/40 flex items-center justify-center border-2 border-blue-500/50">
+                            <span class="text-2xl font-bold text-blue-400">B</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-display font-bold text-white">B2</h3>
+                            <p class="text-blue-500 text-sm font-bold tracking-wider uppercase">Administration</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Senior administrator managing community policies and high-level dispute resolution.</p>
+                </div>
+
+                <!-- Administration Nas -->
+                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-blue-500 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-500/10 px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-shield-alt text-blue-500"></i>
+                    </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/40 flex items-center justify-center border-2 border-blue-500/50">
+                            <span class="text-2xl font-bold text-blue-400">N</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-display font-bold text-white">Nas</h3>
+                            <p class="text-blue-500 text-sm font-bold tracking-wider uppercase">Administration</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Administrative specialist focused on team coordination and competitive integrity.</p>
+                </div>
+
+                <!-- Administration jxstcloudzy -->
+                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-blue-500 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-500/10 px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-shield-alt text-blue-500"></i>
+                    </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/40 flex items-center justify-center border-2 border-blue-500/50">
+                            <span class="text-2xl font-bold text-blue-400">J</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-display font-bold text-white">jxstcloudzy</h3>
+                            <p class="text-blue-500 text-sm font-bold tracking-wider uppercase">Administration</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Administrative coordinator managing internal operations and staff communications.</p>
+                </div>
+
+                <!-- Moderation Ghost -->
+                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-purple-500 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-purple-500/10 px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-gavel text-purple-500"></i>
+                    </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/40 flex items-center justify-center border-2 border-purple-500/50">
+                            <span class="text-2xl font-bold text-purple-400">G</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-display font-bold text-white">Ghost</h3>
+                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase">Moderation</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Community moderator ensuring fair play and positive environment across all channels.</p>
+                </div>
+
+                <!-- Moderation Flakey -->
+                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-purple-500 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-purple-500/10 px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-gavel text-purple-500"></i>
+                    </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/40 flex items-center justify-center border-2 border-purple-500/50">
+                            <span class="text-2xl font-bold text-purple-400">F</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-display font-bold text-white">Flakey</h3>
+                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase">Moderation</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Active moderator monitoring Discord and in-game conduct to maintain community standards.</p>
+                </div>
+
+                <!-- Moderation straved -->
+                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-purple-500 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-purple-500/10 px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-gavel text-purple-500"></i>
+                    </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/40 flex items-center justify-center border-2 border-purple-500/50">
+                            <span class="text-2xl font-bold text-purple-400">S</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-display font-bold text-white">straved</h3>
+                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase">Moderation</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Dedicated moderator supporting player onboarding and conflict mediation.</p>
+                </div>
+
+                <!-- Moderation spook -->
+                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-purple-500 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-purple-500/10 px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-gavel text-purple-500"></i>
+                    </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/40 flex items-center justify-center border-2 border-purple-500/50">
+                            <span class="text-2xl font-bold text-purple-400">S</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-display font-bold text-white">spook</h3>
+                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase">Moderation</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Event moderator coordinating tournaments and competitive match oversight.</p>
+                </div>
+
+                <!-- Moderation maul -->
+                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-purple-500 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-purple-500/10 px-3 py-1 rounded-bl-lg">
+                        <i class="fas fa-gavel text-purple-500"></i>
+                    </div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/40 flex items-center justify-center border-2 border-purple-500/50">
+                            <span class="text-2xl font-bold text-purple-400">M</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-display font-bold text-white">maul</h3>
+                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase">Moderation</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 text-sm">Technical moderator assisting with server maintenance and anti-cheat enforcement.</p>
                 </div>
             </div>
         </div>
@@ -488,7 +686,7 @@
         </div>
     </section>
 
-    <!-- Staff Section -->
+    <!-- Staff Portal Section -->
     <section id="staff" class="py-20 relative">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="glass-panel rounded-2xl p-8 border border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
