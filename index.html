@@ -131,20 +131,20 @@
             z-index: 100;
         }
 
-        /* Expandable Content Transitions */
-        .expand-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
+        /* Scroll Reveal Animation */
+        .reveal {
             opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
         }
-        .expand-content.open {
-            max-height: 500px;
+        .reveal.active {
             opacity: 1;
+            transform: translateY(0);
         }
 
         .staff-card {
             transition: all 0.3s ease;
+            border-left: 3px solid transparent;
         }
         .staff-card:hover {
             transform: translateY(-5px);
@@ -176,23 +176,73 @@
             border-color: rgba(16, 185, 129, 0.5);
         }
 
-        /* Security Shield Animation */
-        @keyframes shield-pulse {
-            0%, 100% { filter: drop-shadow(0 0 5px rgba(16, 185, 129, 0.5)); }
-            50% { filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.8)); }
+        /* Mobile Menu Animation */
+        #mobile-menu {
+            transition: all 0.3s ease-in-out;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
         }
-        .shield-icon {
-            animation: shield-pulse 3s ease-in-out infinite;
+        #mobile-menu.open {
+            max-height: 400px;
+            opacity: 1;
         }
 
-        /* Lock Animation */
-        @keyframes lock-shake {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(-5deg); }
-            75% { transform: rotate(5deg); }
+        /* Form Success State */
+        .success-checkmark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: block;
+            stroke-width: 2;
+            stroke: #10b981;
+            stroke-miterlimit: 10;
+            margin: 10% auto;
+            box-shadow: inset 0px 0px 0px #10b981;
+            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
         }
-        .security-lock:hover {
-            animation: lock-shake 0.5s ease-in-out;
+        .checkmark__circle {
+            stroke-dasharray: 166;
+            stroke-dashoffset: 166;
+            stroke-width: 2;
+            stroke-miterlimit: 10;
+            stroke: #10b981;
+            fill: none;
+            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+        }
+        .checkmark__check {
+            transform-origin: 50% 50%;
+            stroke-dasharray: 48;
+            stroke-dashoffset: 48;
+            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+        }
+        @keyframes stroke {
+            100% { stroke-dashoffset: 0; }
+        }
+        @keyframes scale {
+            0%, 100% { transform: none; }
+            50% { transform: scale3d(1.1, 1.1, 1); }
+        }
+        @keyframes fill {
+            100% { box-shadow: inset 0px 0px 0px 30px rgba(16, 185, 129, 0.1); }
+        }
+
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Tab Active State */
+        .download-tab.active {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: #10b981;
+            color: #10b981;
         }
     </style>
 </head>
@@ -236,21 +286,21 @@
                     </div>
                 </div>
                 <div class="-mr-2 flex md:hidden">
-                    <button onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" class="inline-flex items-center justify-center p-2 rounded-md text-emerald-400 hover:text-white hover:bg-emerald-900 focus:outline-none">
-                        <i class="fas fa-bars text-2xl"></i>
+                    <button onclick="toggleMobileMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-emerald-400 hover:text-white hover:bg-emerald-900 focus:outline-none">
+                        <i class="fas fa-bars text-2xl" id="menu-icon"></i>
                     </button>
                 </div>
             </div>
         </div>
-        <div class="hidden md:hidden glass-panel border-t border-emerald-900/50" id="mobile-menu">
+        <div class="md:hidden glass-panel border-t border-emerald-900/50" id="mobile-menu">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#about" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">About</a>
-                <a href="#teams" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Teams</a>
-                <a href="#staff-roster" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Staff</a>
-                <a href="#schedule" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Schedule</a>
-                <a href="#downloads" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Downloads</a>
-                <a href="#apply" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Apply</a>
-                <a href="#support" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Support</a>
+                <a href="#about" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">About</a>
+                <a href="#teams" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">Teams</a>
+                <a href="#staff-roster" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">Staff</a>
+                <a href="#schedule" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">Schedule</a>
+                <a href="#downloads" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">Downloads</a>
+                <a href="#apply" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">Apply</a>
+                <a href="#support" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">Support</a>
             </div>
         </div>
     </nav>
@@ -279,19 +329,19 @@
     <!-- Hero Section -->
     <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <div class="inline-block mb-4 px-4 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-bold tracking-widest uppercase animate-pulse-slow">
+            <div class="inline-block mb-4 px-4 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-bold tracking-widest uppercase animate-pulse-slow reveal">
                 Rainbow Six Siege Competitive
             </div>
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-display font-black text-white mb-6 tracking-tight">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-display font-black text-white mb-6 tracking-tight reveal">
                 ELITE <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 text-glow">COMPETITIVE</span>
             </h1>
-            <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-400 font-light">
+            <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-300 font-light reveal">
                 Join the next generation of tactical shooters. Tropical vibes. Green Reign. Pure Dominance.
             </p>
-            <p class="mt-2 text-sm text-emerald-500/80 font-medium tracking-wide">
+            <p class="mt-2 text-sm text-emerald-500/80 font-medium tracking-wide reveal">
                 <i class="fas fa-code mr-1"></i> Brought to you by EA Jodeci and EA Yoboytrippin
             </p>
-            <div class="mt-10 flex justify-center gap-4">
+            <div class="mt-10 flex justify-center gap-4 reveal">
                 <a href="#apply" class="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-lg transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] transform hover:-translate-y-1">
                     Apply Now
                 </a>
@@ -305,69 +355,69 @@
     <!-- Teams Section -->
     <section id="teams" class="py-20 bg-black/30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 reveal">
                 <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4">Our Roster</h2>
                 <div class="w-24 h-1 bg-emerald-500 mx-auto rounded-full"></div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Team 0 - ELITE (Red Border, Invite Only) -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-red-600 relative overflow-hidden group">
+                <!-- Team 0 - ELITE (Red Scale) -->
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-red-600 relative overflow-hidden group reveal hover:border-red-500 transition-colors">
                     <div class="absolute top-0 right-0 bg-red-600/20 px-4 py-1 rounded-bl-lg text-red-400 text-xs font-bold tracking-widest">TIER 0 - ELITE</div>
                     <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 0</h3>
-                    <p class="text-gray-400 mb-6">The Absolute Elite. Our premier competitive roster. Hand-picked champions only.</p>
+                    <p class="text-gray-300 mb-6">The Absolute Elite. Our premier competitive roster. Hand-picked champions only.</p>
                     <div class="inline-flex items-center px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-bold">
                         <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span> Invite Only
                     </div>
                 </div>
 
-                <!-- Team 1 - Tryout Only (Yellow Border) -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-yellow-500 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 bg-yellow-500/10 px-4 py-1 rounded-bl-lg text-yellow-400 text-xs font-bold tracking-widest">TIER 1</div>
+                <!-- Team 1 - Tryout Only (Red Scale Lighter) -->
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-red-500 relative overflow-hidden group reveal hover:border-red-400 transition-colors">
+                    <div class="absolute top-0 right-0 bg-red-500/10 px-4 py-1 rounded-bl-lg text-red-400 text-xs font-bold tracking-widest">TIER 1</div>
                     <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 1</h3>
-                    <p class="text-gray-400 mb-6">Elite Squad. Best of the Best. Entry point for elite competition through tryouts.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/30 text-yellow-400 text-sm font-bold">
-                        <span class="w-2 h-2 bg-yellow-500 rounded-full mr-2 animate-pulse"></span> Tryout Only
+                    <p class="text-gray-300 mb-6">Elite Squad. Best of the Best. Entry point for elite competition through tryouts.</p>
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-bold">
+                        <span class="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></span> Tryout Only
                     </div>
                 </div>
 
-                <!-- Team 2 - Advanced Backup (Yellow Border) -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-yellow-600 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 bg-yellow-600/10 px-4 py-1 rounded-bl-lg text-yellow-500 text-xs font-bold tracking-widest">TIER 2</div>
+                <!-- Team 2 - Advanced Backup (Red Scale Lightest) -->
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-red-400 relative overflow-hidden group reveal hover:border-red-300 transition-colors">
+                    <div class="absolute top-0 right-0 bg-red-400/10 px-4 py-1 rounded-bl-lg text-red-300 text-xs font-bold tracking-widest">TIER 2</div>
                     <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 2</h3>
-                    <p class="text-gray-400 mb-6">Elite Squad. Best of the Best. Entry point for elite competition through tryouts.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-yellow-600/10 border border-yellow-600/30 text-yellow-500 text-sm font-bold">
-                        <span class="w-2 h-2 bg-yellow-600 rounded-full mr-2 animate-pulse"></span> Recruiting - Tryouts
+                    <p class="text-gray-300 mb-6">Elite Squad. Best of the Best. Entry point for elite competition through tryouts.</p>
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-red-400/10 border border-red-400/30 text-red-300 text-sm font-bold">
+                        <span class="w-2 h-2 bg-red-400 rounded-full mr-2 animate-pulse"></span> Recruiting - Tryouts
                     </div>
                 </div>
 
-                <!-- Team 3 - Intermediate -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-emerald-500 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 bg-emerald-500/10 px-4 py-1 rounded-bl-lg text-emerald-400 text-xs font-bold tracking-widest">TIER 3</div>
+                <!-- Team 3 - Intermediate (Emerald Scale) -->
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-emerald-600 relative overflow-hidden group reveal hover:border-emerald-500 transition-colors">
+                    <div class="absolute top-0 right-0 bg-emerald-600/10 px-4 py-1 rounded-bl-lg text-emerald-400 text-xs font-bold tracking-widest">TIER 3</div>
                     <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 3</h3>
-                    <p class="text-gray-400 mb-6">Intermediate Squad. Perfect for players looking to break into competitive play.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-bold">
-                        <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse"></span> Open - Apply Below
+                    <p class="text-gray-300 mb-6">Intermediate Squad. Perfect for players looking to break into competitive play.</p>
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-600/10 border border-emerald-600/30 text-emerald-400 text-sm font-bold">
+                        <span class="w-2 h-2 bg-emerald-600 rounded-full mr-2 animate-pulse"></span> Open - Apply Below
                     </div>
                 </div>
 
                 <!-- Team 4 - Intermediate -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-blue-500 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 bg-blue-500/10 px-4 py-1 rounded-bl-lg text-blue-400 text-xs font-bold tracking-widest">TIER 4</div>
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-emerald-500 relative overflow-hidden group reveal hover:border-emerald-400 transition-colors">
+                    <div class="absolute top-0 right-0 bg-emerald-500/10 px-4 py-1 rounded-bl-lg text-emerald-400 text-xs font-bold tracking-widest">TIER 4</div>
                     <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 4</h3>
-                    <p class="text-gray-400 mb-6">Intermediate Squad. Perfect for players looking to break into competitive play.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-sm font-bold">
-                        <span class="w-2 h-2 bg-blue-500 rounded-full mr-2 animate-pulse"></span> Open - Join Anytime
+                    <p class="text-gray-300 mb-6">Intermediate Squad. Perfect for players looking to break into competitive play.</p>
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-bold">
+                        <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse"></span> Open - Join Anytime
                     </div>
                 </div>
 
                 <!-- Team 5 - Intermediate -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-purple-500 relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 bg-purple-500/10 px-4 py-1 rounded-bl-lg text-purple-400 text-xs font-bold tracking-widest">TIER 5</div>
+                <div class="glass-panel p-8 rounded-2xl border-l-4 border-emerald-400 relative overflow-hidden group reveal hover:border-emerald-300 transition-colors">
+                    <div class="absolute top-0 right-0 bg-emerald-400/10 px-4 py-1 rounded-bl-lg text-emerald-300 text-xs font-bold tracking-widest">TIER 5</div>
                     <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 5</h3>
-                    <p class="text-gray-400 mb-6">Intermediate Squad. Perfect for players looking to break into competitive play.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-400 text-sm font-bold">
-                        <span class="w-2 h-2 bg-purple-500 rounded-full mr-2 animate-pulse"></span> Open - Join Anytime
+                    <p class="text-gray-300 mb-6">Intermediate Squad. Perfect for players looking to break into competitive play.</p>
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-400/10 border border-emerald-400/30 text-emerald-300 text-sm font-bold">
+                        <span class="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></span> Open - Join Anytime
                     </div>
                 </div>
             </div>
@@ -377,7 +427,7 @@
     <!-- Staff Section -->
     <section id="staff-roster" class="py-20 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 reveal">
                 <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4">Leadership Team</h2>
                 <p class="text-emerald-400/80 text-lg font-medium mb-2">The dedicated professionals powering our community</p>
                 <div class="w-24 h-1 bg-emerald-500 mx-auto rounded-full"></div>
@@ -385,173 +435,163 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- CEO -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-yellow-500 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-yellow-500/10 px-3 py-1 rounded-bl-lg">
-                        <i class="fas fa-crown text-yellow-500"></i>
-                    </div>
+                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-yellow-500 relative overflow-hidden reveal">
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-yellow-500/20 to-yellow-600/40 flex items-center justify-center border-2 border-yellow-500/50">
-                            <span class="text-2xl font-bold text-yellow-400">J</span>
+                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
+                            <span class="text-2xl font-bold text-white">J</span>
                         </div>
                         <div>
-                            <h3 class="text-xl font-display font-bold text-white">Jodeci</h3>
-                            <p class="text-yellow-500 text-sm font-bold tracking-wider uppercase">Chief Executive Officer</p>
+                            <h3 class="text-xl font-bold text-white">Jodeci</h3>
+                            <p class="text-yellow-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
+                                <i class="fas fa-crown text-xs"></i> Chief Executive Officer
+                            </p>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm">Visionary leader and founder of EA League, driving competitive excellence and community growth.</p>
+                    <p class="text-gray-300 text-sm">Visionary leader and founder of EA League, driving competitive excellence and community growth.</p>
                 </div>
 
                 <!-- Server Manager -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-emerald-500 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-emerald-500/10 px-3 py-1 rounded-bl-lg">
-                        <i class="fas fa-server text-emerald-500"></i>
-                    </div>
+                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-emerald-500 relative overflow-hidden reveal">
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-600/40 flex items-center justify-center border-2 border-emerald-500/50">
-                            <span class="text-2xl font-bold text-emerald-400">Y</span>
+                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
+                            <span class="text-2xl font-bold text-white">Y</span>
                         </div>
                         <div>
-                            <h3 class="text-xl font-display font-bold text-white">Yoboytrippin</h3>
-                            <p class="text-emerald-500 text-sm font-bold tracking-wider uppercase">Server Manager</p>
+                            <h3 class="text-xl font-bold text-white">Yoboytrippin</h3>
+                            <p class="text-emerald-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
+                                <i class="fas fa-server text-xs"></i> Server Manager
+                            </p>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm">Oversees server operations, technical infrastructure, and ensures seamless competitive experiences.</p>
+                    <p class="text-gray-300 text-sm">Oversees server operations, technical infrastructure, and ensures seamless competitive experiences.</p>
                 </div>
 
                 <!-- Administration B2 -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-blue-500 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-blue-500/10 px-3 py-1 rounded-bl-lg">
-                        <i class="fas fa-shield-alt text-blue-500"></i>
-                    </div>
+                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-blue-500 relative overflow-hidden reveal">
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/40 flex items-center justify-center border-2 border-blue-500/50">
-                            <span class="text-2xl font-bold text-blue-400">B</span>
+                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
+                            <span class="text-2xl font-bold text-white">B</span>
                         </div>
                         <div>
-                            <h3 class="text-xl font-display font-bold text-white">B2</h3>
-                            <p class="text-blue-500 text-sm font-bold tracking-wider uppercase">Administration</p>
+                            <h3 class="text-xl font-bold text-white">B2</h3>
+                            <p class="text-blue-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
+                                <i class="fas fa-shield-alt text-xs"></i> Administration
+                            </p>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm">Senior administrator managing community policies and high-level dispute resolution.</p>
+                    <p class="text-gray-300 text-sm">Senior administrator managing community policies and high-level dispute resolution.</p>
                 </div>
 
                 <!-- Administration Nas -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-blue-500 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-blue-500/10 px-3 py-1 rounded-bl-lg">
-                        <i class="fas fa-shield-alt text-blue-500"></i>
-                    </div>
+                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-blue-500 relative overflow-hidden reveal">
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/40 flex items-center justify-center border-2 border-blue-500/50">
-                            <span class="text-2xl font-bold text-blue-400">N</span>
+                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
+                            <span class="text-2xl font-bold text-white">N</span>
                         </div>
                         <div>
-                            <h3 class="text-xl font-display font-bold text-white">Nas</h3>
-                            <p class="text-blue-500 text-sm font-bold tracking-wider uppercase">Administration</p>
+                            <h3 class="text-xl font-bold text-white">Nas</h3>
+                            <p class="text-blue-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
+                                <i class="fas fa-shield-alt text-xs"></i> Administration
+                            </p>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm">Administrative specialist focused on team coordination and competitive integrity.</p>
+                    <p class="text-gray-300 text-sm">Administrative specialist focused on team coordination and competitive integrity.</p>
                 </div>
 
                 <!-- Administration jxstcloudzy -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-blue-500 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-blue-500/10 px-3 py-1 rounded-bl-lg">
-                        <i class="fas fa-shield-alt text-blue-500"></i>
-                    </div>
+                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-blue-500 relative overflow-hidden reveal">
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500/20 to-blue-600/40 flex items-center justify-center border-2 border-blue-500/50">
-                            <span class="text-2xl font-bold text-blue-400">J</span>
+                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
+                            <span class="text-2xl font-bold text-white">J</span>
                         </div>
                         <div>
-                            <h3 class="text-xl font-display font-bold text-white">jxstcloudzy</h3>
-                            <p class="text-blue-500 text-sm font-bold tracking-wider uppercase">Administration</p>
+                            <h3 class="text-xl font-bold text-white">jxstcloudzy</h3>
+                            <p class="text-blue-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
+                                <i class="fas fa-shield-alt text-xs"></i> Administration
+                            </p>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm">Administrative coordinator managing internal operations and staff communications.</p>
+                    <p class="text-gray-300 text-sm">Administrative coordinator managing internal operations and staff communications.</p>
                 </div>
 
                 <!-- Moderation Ghost -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-purple-500 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-purple-500/10 px-3 py-1 rounded-bl-lg">
-                        <i class="fas fa-gavel text-purple-500"></i>
-                    </div>
+                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-purple-500 relative overflow-hidden reveal">
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/40 flex items-center justify-center border-2 border-purple-500/50">
-                            <span class="text-2xl font-bold text-purple-400">G</span>
+                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
+                            <span class="text-2xl font-bold text-white">G</span>
                         </div>
                         <div>
-                            <h3 class="text-xl font-display font-bold text-white">Ghost</h3>
-                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase">Moderation</p>
+                            <h3 class="text-xl font-bold text-white">Ghost</h3>
+                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
+                                <i class="fas fa-gavel text-xs"></i> Moderation
+                            </p>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm">Community moderator ensuring fair play and positive environment across all channels.</p>
+                    <p class="text-gray-300 text-sm">Community moderator ensuring fair play and positive environment across all channels.</p>
                 </div>
 
                 <!-- Moderation Flakey -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-purple-500 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-purple-500/10 px-3 py-1 rounded-bl-lg">
-                        <i class="fas fa-gavel text-purple-500"></i>
-                    </div>
+                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-purple-500 relative overflow-hidden reveal">
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/40 flex items-center justify-center border-2 border-purple-500/50">
-                            <span class="text-2xl font-bold text-purple-400">F</span>
+                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
+                            <span class="text-2xl font-bold text-white">F</span>
                         </div>
                         <div>
-                            <h3 class="text-xl font-display font-bold text-white">Flakey</h3>
-                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase">Moderation</p>
+                            <h3 class="text-xl font-bold text-white">Flakey</h3>
+                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
+                                <i class="fas fa-gavel text-xs"></i> Moderation
+                            </p>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm">Active moderator monitoring Discord and in-game conduct to maintain community standards.</p>
+                    <p class="text-gray-300 text-sm">Active moderator monitoring Discord and in-game conduct to maintain community standards.</p>
                 </div>
 
                 <!-- Moderation straved -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-purple-500 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-purple-500/10 px-3 py-1 rounded-bl-lg">
-                        <i class="fas fa-gavel text-purple-500"></i>
-                    </div>
+                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-purple-500 relative overflow-hidden reveal">
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/40 flex items-center justify-center border-2 border-purple-500/50">
-                            <span class="text-2xl font-bold text-purple-400">S</span>
+                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
+                            <span class="text-2xl font-bold text-white">S</span>
                         </div>
                         <div>
-                            <h3 class="text-xl font-display font-bold text-white">straved</h3>
-                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase">Moderation</p>
+                            <h3 class="text-xl font-bold text-white">straved</h3>
+                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
+                                <i class="fas fa-gavel text-xs"></i> Moderation
+                            </p>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm">Dedicated moderator supporting player onboarding and conflict mediation.</p>
+                    <p class="text-gray-300 text-sm">Dedicated moderator supporting player onboarding and conflict mediation.</p>
                 </div>
 
                 <!-- Moderation spook -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-purple-500 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-purple-500/10 px-3 py-1 rounded-bl-lg">
-                        <i class="fas fa-gavel text-purple-500"></i>
-                    </div>
+                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-purple-500 relative overflow-hidden reveal">
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/40 flex items-center justify-center border-2 border-purple-500/50">
-                            <span class="text-2xl font-bold text-purple-400">S</span>
+                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
+                            <span class="text-2xl font-bold text-white">S</span>
                         </div>
                         <div>
-                            <h3 class="text-xl font-display font-bold text-white">spook</h3>
-                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase">Moderation</p>
+                            <h3 class="text-xl font-bold text-white">spook</h3>
+                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
+                                <i class="fas fa-gavel text-xs"></i> Moderation
+                            </p>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm">Event moderator coordinating tournaments and competitive match oversight.</p>
+                    <p class="text-gray-300 text-sm">Event moderator coordinating tournaments and competitive match oversight.</p>
                 </div>
 
                 <!-- Moderation maul -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-t-4 border-purple-500 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-purple-500/10 px-3 py-1 rounded-bl-lg">
-                        <i class="fas fa-gavel text-purple-500"></i>
-                    </div>
+                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-purple-500 relative overflow-hidden reveal">
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500/20 to-purple-600/40 flex items-center justify-center border-2 border-purple-500/50">
-                            <span class="text-2xl font-bold text-purple-400">M</span>
+                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
+                            <span class="text-2xl font-bold text-white">M</span>
                         </div>
                         <div>
-                            <h3 class="text-xl font-display font-bold text-white">maul</h3>
-                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase">Moderation</p>
+                            <h3 class="text-xl font-bold text-white">maul</h3>
+                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
+                                <i class="fas fa-gavel text-xs"></i> Moderation
+                            </p>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm">Technical moderator assisting with server maintenance and anti-cheat enforcement.</p>
+                    <p class="text-gray-300 text-sm">Technical moderator assisting with server maintenance and anti-cheat enforcement.</p>
                 </div>
             </div>
         </div>
@@ -560,15 +600,15 @@
     <!-- Matchmaking Schedule Section -->
     <section id="schedule" class="py-20 relative">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 reveal">
                 <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4">Matchmaking Schedule</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">Our structured scrimmage rotation ensures every team gets the right level of competition.</p>
+                <p class="text-gray-300 max-w-2xl mx-auto">Our structured scrimmage rotation ensures every team gets the right level of competition.</p>
                 <div class="w-24 h-1 bg-emerald-500 mx-auto rounded-full mt-4"></div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Schedule 1 -->
-                <div class="glass-panel p-6 rounded-xl border-t-4 border-emerald-500 hover:-translate-y-2 transition-transform duration-300">
+                <div class="glass-panel p-6 rounded-xl border-t-4 border-emerald-500 hover:-translate-y-2 transition-transform duration-300 reveal">
                     <div class="flex items-center gap-3 mb-4">
                         <div class="bg-emerald-500/20 p-3 rounded-full text-emerald-400">
                             <i class="fas fa-sync-alt text-xl"></i>
@@ -577,45 +617,45 @@
                     </div>
                     <div class="space-y-2">
                         <div class="flex items-center justify-between bg-black/40 p-3 rounded">
-                            <span class="text-gray-300 font-bold">Teams 3, 4, 5</span>
+                            <span class="text-gray-200 font-bold">Teams 3, 4, 5</span>
                             <span class="text-xs bg-emerald-900 text-emerald-300 px-2 py-1 rounded">Vs Each Other</span>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm mt-4">Our intermediate squads rotate scrimmages weekly to build chemistry and skill in a controlled environment.</p>
+                    <p class="text-gray-300 text-sm mt-4">Our intermediate squads rotate scrimmages weekly to build chemistry and skill in a controlled environment.</p>
                 </div>
 
                 <!-- Schedule 2 -->
-                <div class="glass-panel p-6 rounded-xl border-t-4 border-yellow-500 hover:-translate-y-2 transition-transform duration-300">
+                <div class="glass-panel p-6 rounded-xl border-t-4 border-red-500 hover:-translate-y-2 transition-transform duration-300 reveal">
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="bg-yellow-500/20 p-3 rounded-full text-yellow-400">
+                        <div class="bg-red-500/20 p-3 rounded-full text-red-400">
                             <i class="fas fa-bolt text-xl"></i>
                         </div>
                         <h3 class="text-xl font-bold text-white">Advanced Scrimmage</h3>
                     </div>
                     <div class="space-y-2">
                         <div class="flex items-center justify-between bg-black/40 p-3 rounded">
-                            <span class="text-gray-300 font-bold">Teams 1 & 2</span>
-                            <span class="text-xs bg-yellow-900 text-yellow-300 px-2 py-1 rounded">Vs Each Other</span>
+                            <span class="text-gray-200 font-bold">Teams 1 & 2</span>
+                            <span class="text-xs bg-red-900 text-red-300 px-2 py-1 rounded">Vs Each Other</span>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm mt-4">High-intensity practice between our two elite squads to refine strategies and maintain peak performance.</p>
+                    <p class="text-gray-300 text-sm mt-4">High-intensity practice between our two elite squads to refine strategies and maintain peak performance.</p>
                 </div>
 
                 <!-- Schedule 3 -->
-                <div class="glass-panel p-6 rounded-xl border-t-4 border-red-500 hover:-translate-y-2 transition-transform duration-300">
+                <div class="glass-panel p-6 rounded-xl border-t-4 border-yellow-500 hover:-translate-y-2 transition-transform duration-300 reveal">
                     <div class="flex items-center gap-3 mb-4">
-                        <div class="bg-red-500/20 p-3 rounded-full text-red-400">
+                        <div class="bg-yellow-500/20 p-3 rounded-full text-yellow-400">
                             <i class="fas fa-globe-americas text-xl"></i>
                         </div>
                         <h3 class="text-xl font-bold text-white">Server Wars</h3>
                     </div>
                     <div class="space-y-2">
                         <div class="flex items-center justify-between bg-black/40 p-3 rounded">
-                            <span class="text-gray-300 font-bold">Team 0</span>
-                            <span class="text-xs bg-red-900 text-red-300 px-2 py-1 rounded">Vs Other Servers</span>
+                            <span class="text-gray-200 font-bold">Team 0</span>
+                            <span class="text-xs bg-yellow-900 text-yellow-300 px-2 py-1 rounded">Vs Other Servers</span>
                         </div>
                     </div>
-                    <p class="text-gray-400 text-sm mt-4">Our premier roster represents EA League against rival servers and organizations in external competitions.</p>
+                    <p class="text-gray-300 text-sm mt-4">Our premier roster represents EA League against rival servers and organizations in external competitions.</p>
                 </div>
             </div>
         </div>
@@ -627,18 +667,26 @@
         <div class="absolute bottom-0 left-0 w-96 h-96 bg-cyan-900/10 rounded-full blur-3xl -z-10"></div>
         
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-12 reveal">
                 <div class="inline-block mb-4 px-4 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-bold tracking-widest uppercase">
                     <i class="fas fa-download mr-2"></i>Essential Tools
                 </div>
                 <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4">Competitive Downloads</h2>
-                <p class="text-gray-400 max-w-2xl mx-auto">Curated software to enhance your Rainbow Six Siege experience. All tools are tournament-legal and widely used by professional players.</p>
+                <p class="text-gray-300 max-w-2xl mx-auto">Curated software to enhance your Rainbow Six Siege experience. All tools are tournament-legal and widely used by professional players.</p>
                 <div class="w-24 h-1 bg-emerald-500 mx-auto rounded-full mt-4"></div>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Download Category Tabs -->
+            <div class="flex justify-center gap-4 mb-8 reveal">
+                <button onclick="filterDownloads('all')" class="download-tab active px-6 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-emerald-500/50 transition-all text-sm font-bold" data-category="all">All Tools</button>
+                <button onclick="filterDownloads('performance')" class="download-tab px-6 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-emerald-500/50 transition-all text-sm font-bold" data-category="performance">Performance</button>
+                <button onclick="filterDownloads('audio')" class="download-tab px-6 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-emerald-500/50 transition-all text-sm font-bold" data-category="audio">Audio</button>
+                <button onclick="filterDownloads('visual')" class="download-tab px-6 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-emerald-500/50 transition-all text-sm font-bold" data-category="visual">Visual</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="downloads-grid">
                 <!-- Stats Overlay -->
-                <a href="https://stats.cc/siege" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block">
+                <a href="https://stats.cc/siege" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="performance">
                     <div class="flex items-center justify-between mb-4">
                         <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/40 flex items-center justify-center border border-blue-500/30">
                             <i class="fas fa-chart-line text-blue-400 text-xl"></i>
@@ -646,7 +694,7 @@
                         <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Siege Stats</h3>
-                    <p class="text-gray-400 text-sm mb-3">Enhanced scoreboard overlay with damage reports and real-time match statistics.</p>
+                    <p class="text-gray-300 text-sm mb-3">Enhanced scoreboard overlay with damage reports and real-time match statistics.</p>
                     <div class="flex items-center text-xs text-blue-400">
                         <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
                         Overlay Tool
@@ -654,7 +702,7 @@
                 </a>
 
                 <!-- Crosshair V2 -->
-                <a href="https://apps.microsoft.com/detail/9n1k9q56hvxr?hl=en-US&gl=US" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block">
+                <a href="https://apps.microsoft.com/detail/9n1k9q56hvxr?hl=en-US&gl=US" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="visual">
                     <div class="flex items-center justify-between mb-4">
                         <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-600/40 flex items-center justify-center border border-purple-500/30">
                             <i class="fas fa-crosshairs text-purple-400 text-xl"></i>
@@ -662,7 +710,7 @@
                         <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Crosshair V2</h3>
-                    <p class="text-gray-400 text-sm mb-3">Custom crosshair overlay for improved aim precision and center-screen reference.</p>
+                    <p class="text-gray-300 text-sm mb-3">Custom crosshair overlay for improved aim precision and center-screen reference.</p>
                     <div class="flex items-center text-xs text-purple-400">
                         <span class="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
                         Microsoft Store
@@ -670,7 +718,7 @@
                 </a>
 
                 <!-- FxSound -->
-                <a href="https://fxsound.org/download/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block">
+                <a href="https://fxsound.org/download/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="audio">
                     <div class="flex items-center justify-between mb-4">
                         <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-500/20 to-red-600/40 flex items-center justify-center border border-orange-500/30">
                             <i class="fas fa-volume-up text-orange-400 text-xl"></i>
@@ -678,7 +726,7 @@
                         <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">FxSound</h3>
-                    <p class="text-gray-400 text-sm mb-3">Advanced audio enhancement with parametric EQ, volume boost, and bass enhancement.</p>
+                    <p class="text-gray-300 text-sm mb-3">Advanced audio enhancement with parametric EQ, volume boost, and bass enhancement.</p>
                     <div class="flex items-center text-xs text-orange-400">
                         <span class="w-2 h-2 bg-orange-400 rounded-full mr-2"></span>
                         Audio Enhancer
@@ -686,7 +734,7 @@
                 </a>
 
                 <!-- R6 Tracker -->
-                <a href="https://r6.tracker.network/r6siege/app" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block">
+                <a href="https://r6.tracker.network/r6siege/app" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="performance">
                     <div class="flex items-center justify-between mb-4">
                         <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-600/40 flex items-center justify-center border border-cyan-500/30">
                             <i class="fas fa-network-wired text-cyan-400 text-xl"></i>
@@ -694,7 +742,7 @@
                         <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">R6 Tracker</h3>
-                    <p class="text-gray-400 text-sm mb-3">Real-time player stats, match history tracking, and opponent analysis overlay.</p>
+                    <p class="text-gray-300 text-sm mb-3">Real-time player stats, match history tracking, and opponent analysis overlay.</p>
                     <div class="flex items-center text-xs text-cyan-400">
                         <span class="w-2 h-2 bg-cyan-400 rounded-full mr-2"></span>
                         Stats Tracker
@@ -702,7 +750,7 @@
                 </a>
 
                 <!-- Equalizer APO -->
-                <a href="https://sourceforge.net/projects/equalizerapo/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block">
+                <a href="https://sourceforge.net/projects/equalizerapo/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="audio">
                     <div class="flex items-center justify-between mb-4">
                         <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-gray-500/20 to-gray-600/40 flex items-center justify-center border border-gray-500/30">
                             <i class="fas fa-sliders-h text-gray-400 text-xl"></i>
@@ -710,7 +758,7 @@
                         <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Equalizer APO</h3>
-                    <p class="text-gray-400 text-sm mb-3">System-wide parametric equalizer for Windows. Essential for audio fine-tuning.</p>
+                    <p class="text-gray-300 text-sm mb-3">System-wide parametric equalizer for Windows. Essential for audio fine-tuning.</p>
                     <div class="flex items-center text-xs text-gray-400">
                         <span class="w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
                         System Audio
@@ -718,7 +766,7 @@
                 </a>
 
                 <!-- Peace Equalizer -->
-                <a href="https://sourceforge.net/projects/peace-equalizer-apo-extension/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block">
+                <a href="https://sourceforge.net/projects/peace-equalizer-apo-extension/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="audio">
                     <div class="flex items-center justify-between mb-4">
                         <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-600/40 flex items-center justify-center border border-emerald-500/30">
                             <i class="fas fa-peace text-emerald-400 text-xl"></i>
@@ -726,7 +774,7 @@
                         <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Peace Equalizer</h3>
-                    <p class="text-gray-400 text-sm mb-3">User-friendly interface for Equalizer APO with advanced effects and presets.</p>
+                    <p class="text-gray-300 text-sm mb-3">User-friendly interface for Equalizer APO with advanced effects and presets.</p>
                     <div class="flex items-center text-xs text-emerald-400">
                         <span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>
                         GUI for APO
@@ -734,7 +782,7 @@
                 </a>
 
                 <!-- R6 Calls -->
-                <a href="https://r6calls.com/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block">
+                <a href="https://r6calls.com/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="visual">
                     <div class="flex items-center justify-between mb-4">
                         <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-red-500/20 to-pink-600/40 flex items-center justify-center border border-red-500/30">
                             <i class="fas fa-map-marked-alt text-red-400 text-xl"></i>
@@ -742,7 +790,7 @@
                         <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">R6 Calls</h3>
-                    <p class="text-gray-400 text-sm mb-3">Interactive map callouts and strategic planning tool for all R6 maps.</p>
+                    <p class="text-gray-300 text-sm mb-3">Interactive map callouts and strategic planning tool for all R6 maps.</p>
                     <div class="flex items-center text-xs text-red-400">
                         <span class="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
                         Map Tool
@@ -750,7 +798,7 @@
                 </a>
 
                 <!-- R6 Analyst -->
-                <a href="https://r6analyst.com/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block">
+                <a href="https://r6analyst.com/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="performance">
                     <div class="flex items-center justify-between mb-4">
                         <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-500/20 to-purple-600/40 flex items-center justify-center border border-indigo-500/30">
                             <i class="fas fa-brain text-indigo-400 text-xl"></i>
@@ -758,7 +806,7 @@
                         <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">R6 Analyst</h3>
-                    <p class="text-gray-400 text-sm mb-3">Personal coaching overlay with real-time tips, META analysis, and performance tracking.</p>
+                    <p class="text-gray-300 text-sm mb-3">Personal coaching overlay with real-time tips, META analysis, and performance tracking.</p>
                     <div class="flex items-center text-xs text-indigo-400">
                         <span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>
                         Coaching Tool
@@ -766,14 +814,14 @@
                 </a>
             </div>
 
-            <div class="mt-12 glass-panel p-6 rounded-xl border border-yellow-500/30 bg-yellow-500/5">
+            <div class="mt-12 glass-panel p-6 rounded-xl border border-yellow-500/30 bg-yellow-500/5 reveal">
                 <div class="flex items-start gap-4">
                     <div class="bg-yellow-500/20 p-3 rounded-full flex-shrink-0">
                         <i class="fas fa-exclamation-triangle text-yellow-400 text-xl"></i>
                     </div>
                     <div>
                         <h4 class="text-white font-bold mb-2">Usage Disclaimer</h4>
-                        <p class="text-gray-400 text-sm">All software listed here is widely used in the competitive R6 community and considered tournament-legal. However, always check current ESL and Ubisoft guidelines before using in official matches. EA League is not responsible for any account restrictions resulting from third-party software usage.</p>
+                        <p class="text-gray-300 text-sm">All software listed here is widely used in the competitive R6 community and considered tournament-legal. However, always check current ESL and Ubisoft guidelines before using in official matches. EA League is not responsible for any account restrictions resulting from third-party software usage.</p>
                     </div>
                 </div>
             </div>
@@ -783,27 +831,27 @@
     <!-- Application Section -->
     <section id="apply" class="py-20 relative">
         <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="glass-panel rounded-2xl p-8 md:p-12 border border-emerald-500/20 shadow-2xl">
-                <div class="text-center mb-10">
+            <div class="glass-panel rounded-2xl p-8 md:p-12 border border-emerald-500/20 shadow-2xl reveal">
+                <div class="text-center mb-10" id="form-header">
                     <h2 class="text-3xl font-display font-bold text-white">Join The League</h2>
-                    <p class="text-gray-400 mt-2">Fill out the form below to apply for a team.</p>
+                    <p class="text-gray-300 mt-2">Fill out the form below to apply for a team.</p>
                 </div>
 
                 <form id="applicationForm" class="space-y-6" onsubmit="handleApplication(event)">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Discord Username</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Discord Username</label>
                             <input type="text" id="appDiscord" required class="w-full input-field rounded-lg p-3" placeholder="User#1234">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Uplay ID</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Uplay ID</label>
                             <input type="text" id="appUplay" required class="w-full input-field rounded-lg p-3" placeholder="UplayName">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Current Rank</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Current Rank</label>
                             <select id="appRank" required class="w-full input-field rounded-lg p-3">
                                 <option value="" disabled selected>Select Rank</option>
                                 <option value="Champion">Champion</option>
@@ -816,7 +864,7 @@
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-400 mb-2">Target Team</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Target Team</label>
                             <select id="appTeam" required class="w-full input-field rounded-lg p-3">
                                 <option value="" disabled selected>Select Team</option>
                                 <option value="Team 1">Team 1 (Champion/Diamond - Tryout)</option>
@@ -828,7 +876,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-sm font-medium text-gray-400 mb-2">Why should we pick you?</label>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Why should we pick you?</label>
                         <textarea id="appReason" required rows="4" class="w-full input-field rounded-lg p-3" placeholder="Tell us about your experience..."></textarea>
                     </div>
 
@@ -836,6 +884,19 @@
                         <span>Submit Application</span>
                     </button>
                 </form>
+
+                <!-- Success State (Hidden by default) -->
+                <div id="success-state" class="hidden text-center py-12">
+                    <svg class="success-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                    </svg>
+                    <h3 class="text-2xl font-bold text-white mb-2">Application Received!</h3>
+                    <p class="text-gray-300 mb-6">We'll review your application and contact you via Discord within 48 hours.</p>
+                    <button onclick="resetApplicationForm()" class="text-emerald-400 hover:text-emerald-300 font-bold transition-colors">
+                        Submit Another Application
+                    </button>
+                </div>
             </div>
         </div>
     </section>
@@ -843,12 +904,12 @@
     <!-- Support Section -->
     <section id="support" class="py-20 bg-black/30">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
+            <div class="text-center mb-12 reveal">
                 <h2 class="text-3xl font-display font-bold text-white">Support Center</h2>
-                <p class="text-gray-400 mt-2">Need help? Create a ticket or check your existing tickets.</p>
+                <p class="text-gray-300 mt-2">Need help? Create a ticket or check your existing tickets.</p>
             </div>
 
-            <div class="glass-panel rounded-2xl p-8 border border-gray-800">
+            <div class="glass-panel rounded-2xl p-8 border border-gray-800 reveal">
                 <div class="flex border-b border-gray-700 mb-8">
                     <button onclick="switchSupportTab('create')" id="tab-create" class="px-6 py-3 text-emerald-400 border-b-2 border-emerald-500 font-bold transition-colors">Create Ticket</button>
                     <button onclick="switchSupportTab('view')" id="tab-view" class="px-6 py-3 text-gray-400 hover:text-white transition-colors">View My Tickets</button>
@@ -857,11 +918,11 @@
                 <div id="panel-create" class="support-panel">
                     <form onsubmit="handleTicketCreate(event)" class="space-y-4">
                         <div>
-                            <label class="block text-sm text-gray-400 mb-1">Subject</label>
+                            <label class="block text-sm text-gray-300 mb-1">Subject</label>
                             <input type="text" id="ticketSubject" required class="w-full input-field rounded p-3">
                         </div>
                         <div>
-                            <label class="block text-sm text-gray-400 mb-1">Description</label>
+                            <label class="block text-sm text-gray-300 mb-1">Description</label>
                             <textarea id="ticketDesc" required rows="4" class="w-full input-field rounded p-3"></textarea>
                         </div>
                         <button type="submit" id="ticketSubmitBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded font-bold transition-colors flex items-center gap-2">
@@ -888,58 +949,77 @@
     <!-- Security & Encryption Section -->
     <section id="security" class="py-20 relative overflow-hidden">
         <div class="absolute inset-0 bg-gradient-to-b from-emerald-900/10 to-transparent pointer-events-none"></div>
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
         
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 reveal">
                 <div class="inline-block mb-4 px-4 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-bold tracking-widest uppercase">
                     <i class="fas fa-shield-alt mr-2"></i>Protection First
                 </div>
                 <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-6">
                     Your Security is Our <span class="text-emerald-400 text-glow">Highest Priority</span>
                 </h2>
-                <p class="text-gray-400 max-w-3xl mx-auto text-lg">
+                <p class="text-gray-300 max-w-3xl mx-auto text-lg">
                     We employ military-grade encryption and advanced security protocols to ensure your data remains protected at all times.
                 </p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                 <!-- Encryption -->
-                <div class="glass-panel p-8 rounded-2xl border border-emerald-500/20 text-center group hover:border-emerald-500/50 transition-all duration-300">
-                    <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30 shield-icon">
-                        <i class="fas fa-lock text-3xl text-emerald-400 security-lock"></i>
+                <div class="glass-panel p-8 rounded-2xl border border-emerald-500/20 text-center group hover:border-emerald-500/50 transition-all duration-300 reveal">
+                    <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30">
+                        <i class="fas fa-lock text-3xl text-emerald-400"></i>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-3">End-to-End Encryption</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">
+                    <p class="text-gray-300 text-sm leading-relaxed">
                         All data transmitted between your browser and our servers is protected with AES-256 encryption. Your personal information, applications, and support tickets are encrypted both in transit and at rest.
                     </p>
                 </div>
 
                 <!-- Data Protection -->
-                <div class="glass-panel p-8 rounded-2xl border border-emerald-500/20 text-center group hover:border-emerald-500/50 transition-all duration-300">
+                <div class="glass-panel p-8 rounded-2xl border border-emerald-500/20 text-center group hover:border-emerald-500/50 transition-all duration-300 reveal">
                     <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/30">
                         <i class="fas fa-user-shield text-3xl text-blue-400"></i>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-3">Privacy Protection</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">
+                    <p class="text-gray-300 text-sm leading-relaxed">
                         We never sell or share your data with third parties. Your Discord and Uplay information is stored securely and only accessible to authorized staff members with proper authentication.
                     </p>
                 </div>
 
                 <!-- Secure Infrastructure -->
-                <div class="glass-panel p-8 rounded-2xl border border-emerald-500/20 text-center group hover:border-emerald-500/50 transition-all duration-300">
+                <div class="glass-panel p-8 rounded-2xl border border-emerald-500/20 text-center group hover:border-emerald-500/50 transition-all duration-300 reveal">
                     <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-purple-500/10 flex items-center justify-center border border-purple-500/30">
                         <i class="fas fa-server text-3xl text-purple-400"></i>
                     </div>
                     <h3 class="text-xl font-bold text-white mb-3">Secure Infrastructure</h3>
-                    <p class="text-gray-400 text-sm leading-relaxed">
+                    <p class="text-gray-300 text-sm leading-relaxed">
                         Our database uses JSONBin.io with master key authentication and secure HTTPS connections. Regular security audits and monitoring ensure your data stays safe from unauthorized access.
                     </p>
                 </div>
             </div>
 
+            <!-- Trust Badges -->
+            <div class="flex justify-center gap-8 mb-12 reveal">
+                <div class="flex items-center gap-2 text-gray-300">
+                    <i class="fas fa-lock text-emerald-400"></i>
+                    <span class="text-sm font-bold">HTTPS Enabled</span>
+                </div>
+                <div class="flex items-center gap-2 text-gray-300">
+                    <i class="fas fa-certificate text-emerald-400"></i>
+                    <span class="text-sm font-bold">SSL Certified</span>
+                </div>
+                <div class="flex items-center gap-2 text-gray-300">
+                    <i class="fas fa-shield-alt text-emerald-400"></i>
+                    <span class="text-sm font-bold">AES-256 Encrypted</span>
+                </div>
+                <div class="flex items-center gap-2 text-gray-300">
+                    <i class="fas fa-user-lock text-emerald-400"></i>
+                    <span class="text-sm font-bold">GDPR Compliant</span>
+                </div>
+            </div>
+
             <!-- Security Features List -->
-            <div class="glass-panel rounded-2xl p-8 border border-emerald-500/20">
+            <div class="glass-panel rounded-2xl p-8 border border-emerald-500/20 reveal">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                     <div>
                         <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
@@ -971,32 +1051,16 @@
                     </div>
                     <div class="relative">
                         <div class="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-full"></div>
-                        <div class="relative glass-panel p-6 rounded-xl border border-emerald-500/30">
-                            <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-700">
-                                <span class="text-gray-400 text-sm">Encryption Status</span>
-                                <span class="flex items-center gap-2 text-emerald-400 text-sm font-bold">
-                                    <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                                    Active
-                                </span>
-                            </div>
-                            <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-700">
-                                <span class="text-gray-400 text-sm">SSL Certificate</span>
-                                <span class="text-emerald-400 text-sm font-bold">Valid</span>
-                            </div>
-                            <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-700">
-                                <span class="text-gray-400 text-sm">Data Protection</span>
-                                <span class="text-emerald-400 text-sm font-bold">Enabled</span>
-                            </div>
-                            <div class="flex items-center justify-between">
-                                <span class="text-gray-400 text-sm">Last Security Audit</span>
-                                <span class="text-emerald-400 text-sm font-bold">Current</span>
-                            </div>
+                        <div class="relative glass-panel p-6 rounded-xl border border-emerald-500/30 text-center">
+                            <i class="fas fa-shield-check text-6xl text-emerald-400 mb-4"></i>
+                            <h4 class="text-white font-bold mb-2">Security Verified</h4>
+                            <p class="text-gray-300 text-sm">Your data is protected by industry-standard security protocols</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="mt-12 text-center">
+            <div class="mt-12 text-center reveal">
                 <p class="text-gray-500 text-sm">
                     <i class="fas fa-info-circle mr-2"></i>
                     Have security concerns? Contact our administration team immediately through the support center.
@@ -1006,17 +1070,23 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-black border-t border-gray-800 py-12 mt-auto">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="flex justify-center space-x-6 mb-8">
-                <a href="https://www.tiktok.com/@ealeague" target="_blank" class="text-gray-400 hover:text-white text-2xl transition-colors"><i class="fab fa-tiktok"></i></a>
-                <a href="https://www.instagram.com/ea_league_r6/" target="_blank" class="text-gray-400 hover:text-white text-2xl transition-colors"><i class="fab fa-instagram"></i></a>
-                <a href="https://discord.gg/rsp8MBkvzu" target="_blank" class="text-gray-400 hover:text-white text-2xl transition-colors"><i class="fab fa-discord"></i></a>
+    <footer class="bg-black border-t border-gray-800 py-6 mt-auto">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                    <span class="font-display font-black text-xl tracking-tighter text-white">
+                        EA <span class="text-emerald-500">LEAGUE</span>
+                    </span>
+                </div>
+                <div class="flex justify-center space-x-6">
+                    <a href="https://www.tiktok.com/@ealeague" target="_blank" class="text-gray-400 hover:text-white text-xl transition-colors"><i class="fab fa-tiktok"></i></a>
+                    <a href="https://www.instagram.com/ea_league_r6/" target="_blank" class="text-gray-400 hover:text-white text-xl transition-colors"><i class="fab fa-instagram"></i></a>
+                    <a href="https://discord.gg/rsp8MBkvzu" target="_blank" class="text-gray-400 hover:text-white text-xl transition-colors"><i class="fab fa-discord"></i></a>
+                </div>
+                <p class="text-gray-500 text-sm">
+                    &copy; 2026 EA League. Not associated with Ubisoft.
+                </p>
             </div>
-            <p class="text-gray-500 text-sm">
-                &copy; 2026 EA League. Not associated with Ubisoft. <br>
-                Rainbow Six Siege is a trademark of Ubisoft Entertainment.
-            </p>
         </div>
     </footer>
 
@@ -1069,6 +1139,85 @@
                 btn.disabled = false;
                 btn.innerHTML = '<span>' + btn.getAttribute('data-text') + '</span>';
             }
+        }
+
+        // ==========================================
+        // MOBILE MENU FUNCTIONS
+        // ==========================================
+        
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            menu.classList.toggle('open');
+            if (menu.classList.contains('open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        }
+        
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            menu.classList.remove('open');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+        }
+
+        // ==========================================
+        // SCROLL REVEAL ANIMATION
+        // ==========================================
+        
+        function initScrollReveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            reveals.forEach(el => observer.observe(el));
+        }
+
+        // ==========================================
+        // DOWNLOADS FILTER
+        // ==========================================
+        
+        function filterDownloads(category) {
+            const tabs = document.querySelectorAll('.download-tab');
+            const cards = document.querySelectorAll('.download-card');
+            
+            tabs.forEach(tab => {
+                if (tab.dataset.category === category) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 50);
+                } else {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                    }, 300);
+                }
+            });
         }
 
         // ==========================================
@@ -1168,15 +1317,6 @@
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            ['submitBtn', 'ticketSubmitBtn', 'searchBtn'].forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) btn.setAttribute('data-text', btn.innerText.trim());
-            });
-            
-            setTimeout(checkAnnouncements, 2000);
-        });
-
         // ==========================================
         // APPLICATION FUNCTIONS
         // ==========================================
@@ -1204,9 +1344,17 @@
             setLoading('submitBtn', false);
             
             if (success) {
-                alert('Application Submitted Successfully!');
-                e.target.reset();
+                document.getElementById('applicationForm').classList.add('hidden');
+                document.getElementById('form-header').classList.add('hidden');
+                document.getElementById('success-state').classList.remove('hidden');
             }
+        }
+        
+        function resetApplicationForm() {
+            document.getElementById('applicationForm').reset();
+            document.getElementById('applicationForm').classList.remove('hidden');
+            document.getElementById('form-header').classList.remove('hidden');
+            document.getElementById('success-state').classList.add('hidden');
         }
 
         // ==========================================
@@ -1276,6 +1424,22 @@
                 return;
             }
             
+            // Show skeleton loading
+            container.innerHTML = `
+                <div class="space-y-4">
+                    <div class="glass-panel p-4 rounded border border-gray-700">
+                        <div class="skeleton h-4 w-24 mb-2 rounded"></div>
+                        <div class="skeleton h-6 w-3/4 mb-2 rounded"></div>
+                        <div class="skeleton h-4 w-full rounded"></div>
+                    </div>
+                    <div class="glass-panel p-4 rounded border border-gray-700">
+                        <div class="skeleton h-4 w-24 mb-2 rounded"></div>
+                        <div class="skeleton h-6 w-1/2 mb-2 rounded"></div>
+                        <div class="skeleton h-4 w-full rounded"></div>
+                    </div>
+                </div>
+            `;
+            
             setLoading('searchBtn', true);
             
             const data = await getData();
@@ -1290,13 +1454,13 @@
             }
             
             container.innerHTML = userTickets.map(t => `
-                <div class="bg-black/40 p-4 rounded border border-gray-700">
+                <div class="bg-black/40 p-4 rounded border border-gray-700 hover:border-emerald-500/30 transition-colors">
                     <div class="flex justify-between mb-2">
                         <span class="text-emerald-400 font-bold text-sm">${t.id}</span>
                         <span class="text-xs px-2 py-1 rounded bg-gray-800 text-gray-300">${t.status}</span>
                     </div>
                     <h4 class="text-white font-bold mb-1">${t.subject}</h4>
-                    <p class="text-gray-400 text-sm mb-3 line-clamp-2">${t.description}</p>
+                    <p class="text-gray-300 text-sm mb-3 line-clamp-2">${t.description}</p>
                     
                     <div class="bg-gray-900/50 p-3 rounded mb-3 text-sm space-y-2 max-h-32 overflow-y-auto">
                         ${t.responses && t.responses.length > 0 ? t.responses.map(r => `
@@ -1308,8 +1472,8 @@
                     </div>
 
                     <div class="flex gap-2">
-                        <input type="text" id="reply-${t.id}" placeholder="Reply..." class="flex-1 bg-black border border-gray-700 rounded px-2 py-1 text-sm text-white">
-                        <button onclick="addUserReply('${t.id}')" class="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1 rounded text-sm">Send</button>
+                        <input type="text" id="reply-${t.id}" placeholder="Reply..." class="flex-1 bg-black border border-gray-700 rounded px-2 py-1 text-sm text-white focus:border-emerald-500 focus:outline-none transition-colors">
+                        <button onclick="addUserReply('${t.id}')" class="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1 rounded text-sm transition-colors">Send</button>
                     </div>
                 </div>
             `).join('');
@@ -1331,6 +1495,20 @@
                 loadUserTickets();
             }
         }
+
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            ['submitBtn', 'ticketSubmitBtn', 'searchBtn'].forEach(id => {
+                const btn = document.getElementById(id);
+                if (btn) btn.setAttribute('data-text', btn.innerText.trim());
+            });
+            
+            initScrollReveal();
+            setTimeout(checkAnnouncements, 2000);
+        });
     </script>
 </body>
 </html>
