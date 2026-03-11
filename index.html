@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EA League | Competitive Gaming</title>
+    <title>EA League | Staff Portal</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
@@ -22,16 +22,6 @@
                             accent: '#10b981',
                             glow: '#34d399',
                             dim: '#064e3b'
-                        }
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'float': 'float 6s ease-in-out infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
                         }
                     }
                 }
@@ -55,9 +45,6 @@
             background: #10b981; 
             border-radius: 4px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #34d399; 
-        }
 
         .glass-panel {
             background: rgba(15, 17, 21, 0.7);
@@ -72,10 +59,6 @@
             border-bottom: 1px solid rgba(16, 185, 129, 0.3);
         }
 
-        .text-glow {
-            text-shadow: 0 0 10px rgba(16, 185, 129, 0.5), 0 0 20px rgba(16, 185, 129, 0.3);
-        }
-
         .input-field {
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid #334155;
@@ -88,13 +71,6 @@
             outline: none;
         }
 
-        .bg-grid {
-            background-size: 40px 40px;
-            background-image: linear-gradient(to right, rgba(16, 185, 129, 0.05) 1px, transparent 1px),
-                              linear-gradient(to bottom, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
-            mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-        }
-        
         .loading {
             display: inline-block;
             width: 20px;
@@ -107,1381 +83,1517 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        
-        .status-indicator {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            margin-right: 6px;
-        }
-        .status-online { background-color: #10b981; box-shadow: 0 0 8px #10b981; }
-        .status-offline { background-color: #ef4444; }
-        
-        .error-banner {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            color: #fca5a5;
-        }
-        
-        .sync-status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-        }
 
-        /* Scroll Reveal Animation */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease-out;
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .staff-card {
-            transition: all 0.3s ease;
-            border-left: 3px solid transparent;
-        }
-        .staff-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
-        }
-
-        /* Download Card Hover Effects */
-        .download-card {
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .download-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
-            transition: left 0.5s;
-        }
-        .download-card:hover::before {
-            left: 100%;
-        }
-        .download-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.2);
-            border-color: rgba(16, 185, 129, 0.5);
-        }
-
-        /* Mobile Menu Animation */
-        #mobile-menu {
-            transition: all 0.3s ease-in-out;
+        .expand-content {
             max-height: 0;
             overflow: hidden;
+            transition: max-height 0.4s ease-out, opacity 0.4s ease-out;
             opacity: 0;
         }
-        #mobile-menu.open {
-            max-height: 400px;
+        .expand-content.open {
+            max-height: 500px;
             opacity: 1;
         }
 
-        /* Form Success State */
-        .success-checkmark {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            display: block;
-            stroke-width: 2;
-            stroke: #10b981;
-            stroke-miterlimit: 10;
-            margin: 10% auto;
-            box-shadow: inset 0px 0px 0px #10b981;
-            animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
-        }
-        .checkmark__circle {
-            stroke-dasharray: 166;
-            stroke-dashoffset: 166;
-            stroke-width: 2;
-            stroke-miterlimit: 10;
-            stroke: #10b981;
-            fill: none;
-            animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-        }
-        .checkmark__check {
-            transform-origin: 50% 50%;
-            stroke-dasharray: 48;
-            stroke-dashoffset: 48;
-            animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
-        }
-        @keyframes stroke {
-            100% { stroke-dashoffset: 0; }
-        }
-        @keyframes scale {
-            0%, 100% { transform: none; }
-            50% { transform: scale3d(1.1, 1.1, 1); }
-        }
-        @keyframes fill {
-            100% { box-shadow: inset 0px 0px 0px 30px rgba(16, 185, 129, 0.1); }
-        }
-
-        /* Skeleton Loading */
         .skeleton {
             background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
             background-size: 200% 100%;
-            animation: loading 1.5s infinite;
+            animation: skeleton-loading 1.5s infinite;
         }
-        @keyframes loading {
+        @keyframes skeleton-loading {
             0% { background-position: 200% 0; }
             100% { background-position: -200% 0; }
         }
 
-        /* Tab Active State */
-        .download-tab.active {
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+        }
+        .toast.show {
+            transform: translateX(0);
+        }
+        .toast.success { background: #059669; }
+        .toast.error { background: #dc2626; }
+        .toast.info { background: #2563eb; }
+
+        .selected-item {
+            border: 2px solid #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 100;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        .connection-status.online {
             background: rgba(16, 185, 129, 0.2);
-            border-color: #10b981;
+            border: 1px solid #10b981;
             color: #10b981;
+        }
+        .connection-status.offline {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            color: #ef4444;
+        }
+        .connection-status.checking {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .debug-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 12px;
+            max-width: 400px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 11px;
+            z-index: 999;
+            display: none;
+        }
+        .debug-panel.show {
+            display: block;
+        }
+        .debug-entry {
+            margin-bottom: 4px;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+        .debug-error { background: rgba(239, 68, 68, 0.2); color: #fca5a5; }
+        .debug-info { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+        .debug-success { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+        
+        /* Empty state styling */
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #6b7280;
+        }
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
         }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col relative">
+<body class="antialiased min-h-screen bg-black">
 
-    <!-- Background Effects -->
-    <div class="fixed inset-0 z-[-1] bg-grid pointer-events-none"></div>
-    <div class="fixed top-0 left-0 w-full h-full z-[-2] overflow-hidden">
-        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-900/20 rounded-full blur-[120px]"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-emerald-800/20 rounded-full blur-[120px]"></div>
+    <!-- Connection Status Indicator -->
+    <div id="db-status" class="connection-status checking hidden">
+        <span class="status-dot"></span>
+        <span id="db-status-text">Checking...</span>
     </div>
 
-    <!-- Connection Status -->
-    <div id="connection-status" class="fixed top-20 right-4 z-50 glass-panel px-3 py-1 rounded-full text-xs font-bold hidden">
-        <span class="status-indicator status-online"></span>Live Sync
+    <!-- Debug Panel -->
+    <div id="debug-panel" class="debug-panel">
+        <div class="flex justify-between items-center mb-2 border-b border-gray-700 pb-1">
+            <span class="text-gray-400 font-bold">Debug Log</span>
+            <button onclick="toggleDebug()" class="text-gray-500 hover:text-white text-xs">Close</button>
+        </div>
+        <div id="debug-content"></div>
     </div>
+    <button onclick="toggleDebug()" class="fixed bottom-4 left-4 bg-gray-800 hover:bg-gray-700 text-gray-400 px-3 py-1 rounded text-xs z-50">
+        <i class="fas fa-bug mr-1"></i>Debug
+    </button>
 
-    <!-- Error Banner -->
-    <div id="error-banner" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 error-banner px-4 py-2 rounded-lg text-sm font-bold hidden max-w-md text-center">
-        <i class="fas fa-exclamation-triangle mr-2"></i><span id="error-message">Connection Error</span>
-    </div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
+    <nav class="fixed w-full z-50 glass-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <div class="flex-shrink-0 cursor-pointer" onclick="window.scrollTo(0,0)">
+                <div class="flex-shrink-0">
                     <span class="font-display font-black text-3xl tracking-tighter text-white">
-                        EA <span class="text-emerald-500 text-glow">LEAGUE</span>
+                        EA <span class="text-emerald-500">LEAGUE</span>
                     </span>
                 </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="#about" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">About</a>
-                        <a href="#teams" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Teams</a>
-                        <a href="#staff-roster" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Staff</a>
-                        <a href="#schedule" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Schedule</a>
-                        <a href="#downloads" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Downloads</a>
-                        <a href="#apply" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Apply</a>
-                        <a href="#support" class="hover:text-emerald-400 px-3 py-2 rounded-md text-lg font-medium transition-colors">Support</a>
-                    </div>
-                </div>
-                <div class="-mr-2 flex md:hidden">
-                    <button onclick="toggleMobileMenu()" class="inline-flex items-center justify-center p-2 rounded-md text-emerald-400 hover:text-white hover:bg-emerald-900 focus:outline-none">
-                        <i class="fas fa-bars text-2xl" id="menu-icon"></i>
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fas fa-home mr-2"></i>Back to Site
+                    </a>
+                    <button id="logoutBtn" onclick="staffLogout()" class="hidden text-red-400 hover:text-red-300 font-bold">
+                        <i class="fas fa-sign-out-alt mr-2"></i>Logout
                     </button>
                 </div>
-            </div>
-        </div>
-        <div class="md:hidden glass-panel border-t border-emerald-900/50" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#about" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">About</a>
-                <a href="#teams" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">Teams</a>
-                <a href="#staff-roster" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">Staff</a>
-                <a href="#schedule" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">Schedule</a>
-                <a href="#downloads" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">Downloads</a>
-                <a href="#apply" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">Apply</a>
-                <a href="#support" onclick="closeMobileMenu()" class="text-gray-300 hover:text-white hover:bg-emerald-900/30 block px-3 py-2 rounded-md text-base font-medium transition-colors">Support</a>
             </div>
         </div>
     </nav>
 
-    <!-- Global Announcement Modal -->
-    <div id="global-announcement-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
-        <div class="glass-panel bg-[#0f1115] p-8 rounded-2xl max-w-lg w-full mx-4 border border-emerald-500/50 shadow-[0_0_50px_rgba(16,185,129,0.2)] transform scale-95 transition-transform duration-300" id="announcement-content">
-            <div class="flex justify-between items-start mb-4">
-                <div class="flex items-center gap-3">
-                    <div class="bg-emerald-500/20 p-2 rounded-full">
-                        <i class="fas fa-bullhorn text-emerald-400 text-xl"></i>
+    <!-- Login View -->
+    <div id="login-view" class="pt-32 pb-20 px-4">
+        <div class="max-w-md mx-auto">
+            <div class="glass-panel rounded-2xl p-8 border border-emerald-500/30 shadow-[0_0_30px_rgba(16,185,129,0.1)]">
+                <div class="text-center mb-8">
+                    <div class="w-20 h-20 bg-emerald-900/50 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-emerald-500/50">
+                        <i class="fas fa-shield-alt text-3xl text-emerald-400"></i>
                     </div>
-                    <h2 class="text-2xl font-display font-bold text-white">Announcement</h2>
+                    <h1 class="text-3xl font-display font-bold text-white mb-2">Staff Portal</h1>
+                    <p class="text-gray-400">Authorized personnel only</p>
                 </div>
-                <button onclick="closeAnnouncement()" class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <div id="announcement-body" class="text-gray-300 mb-6 leading-relaxed"></div>
-            <button onclick="closeAnnouncement()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-lg transition-all shadow-lg shadow-emerald-900/50">
-                Acknowledge
-            </button>
-        </div>
-    </div>
-
-    <!-- Hero Section -->
-    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <div class="inline-block mb-4 px-4 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-bold tracking-widest uppercase animate-pulse-slow reveal">
-                Rainbow Six Siege Competitive
-            </div>
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-display font-black text-white mb-6 tracking-tight reveal">
-                ELITE <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 text-glow">COMPETITIVE</span>
-            </h1>
-            <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-300 font-light reveal">
-                Join the next generation of tactical shooters. Tropical vibes. Green Reign. Pure Dominance.
-            </p>
-            <p class="mt-2 text-sm text-emerald-500/80 font-medium tracking-wide reveal">
-                <i class="fas fa-code mr-1"></i> Brought to you by EA Jodeci and EA Yoboytrippin
-            </p>
-            <div class="mt-10 flex justify-center gap-4 reveal">
-                <a href="#apply" class="px-8 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg font-bold text-lg transition-all shadow-[0_0_20px_rgba(16,185,129,0.4)] hover:shadow-[0_0_30px_rgba(16,185,129,0.6)] transform hover:-translate-y-1">
-                    Apply Now
-                </a>
-                <a href="https://discord.gg/rsp8MBkvzu" target="_blank" class="px-8 py-4 glass-panel hover:bg-white/5 text-white rounded-lg font-bold text-lg transition-all border border-gray-700 hover:border-emerald-500/50 flex items-center gap-2">
-                    <i class="fab fa-discord text-indigo-400"></i> Join Discord
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Teams Section -->
-    <section id="teams" class="py-20 bg-black/30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4">Our Roster</h2>
-                <div class="w-24 h-1 bg-emerald-500 mx-auto rounded-full"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Team 0 - ELITE (Red Scale) -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-red-600 relative overflow-hidden group reveal hover:border-red-500 transition-colors">
-                    <div class="absolute top-0 right-0 bg-red-600/20 px-4 py-1 rounded-bl-lg text-red-400 text-xs font-bold tracking-widest">TIER 0 - ELITE</div>
-                    <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 0</h3>
-                    <p class="text-gray-300 mb-6">The Absolute Elite. Our premier competitive roster. Hand-picked champions only.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-bold">
-                        <span class="w-2 h-2 bg-red-500 rounded-full mr-2"></span> Invite Only
-                    </div>
-                </div>
-
-                <!-- Team 1 - Tryout Only (Red Scale Lighter) -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-red-500 relative overflow-hidden group reveal hover:border-red-400 transition-colors">
-                    <div class="absolute top-0 right-0 bg-red-500/10 px-4 py-1 rounded-bl-lg text-red-400 text-xs font-bold tracking-widest">TIER 1</div>
-                    <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 1</h3>
-                    <p class="text-gray-300 mb-6">Elite Squad. Best of the Best. Entry point for elite competition through tryouts.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-400 text-sm font-bold">
-                        <span class="w-2 h-2 bg-red-500 rounded-full mr-2 animate-pulse"></span> Tryout Only
-                    </div>
-                </div>
-
-                <!-- Team 2 - Advanced Backup (Red Scale Lightest) -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-red-400 relative overflow-hidden group reveal hover:border-red-300 transition-colors">
-                    <div class="absolute top-0 right-0 bg-red-400/10 px-4 py-1 rounded-bl-lg text-red-300 text-xs font-bold tracking-widest">TIER 2</div>
-                    <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 2</h3>
-                    <p class="text-gray-300 mb-6">Elite Squad. Best of the Best. Entry point for elite competition through tryouts.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-red-400/10 border border-red-400/30 text-red-300 text-sm font-bold">
-                        <span class="w-2 h-2 bg-red-400 rounded-full mr-2 animate-pulse"></span> Recruiting - Tryouts
-                    </div>
-                </div>
-
-                <!-- Team 3 - Intermediate (Emerald Scale) -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-emerald-600 relative overflow-hidden group reveal hover:border-emerald-500 transition-colors">
-                    <div class="absolute top-0 right-0 bg-emerald-600/10 px-4 py-1 rounded-bl-lg text-emerald-400 text-xs font-bold tracking-widest">TIER 3</div>
-                    <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 3</h3>
-                    <p class="text-gray-300 mb-6">Intermediate Squad. Perfect for players looking to break into competitive play.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-600/10 border border-emerald-600/30 text-emerald-400 text-sm font-bold">
-                        <span class="w-2 h-2 bg-emerald-600 rounded-full mr-2 animate-pulse"></span> Open - Apply Below
-                    </div>
-                </div>
-
-                <!-- Team 4 - Intermediate -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-emerald-500 relative overflow-hidden group reveal hover:border-emerald-400 transition-colors">
-                    <div class="absolute top-0 right-0 bg-emerald-500/10 px-4 py-1 rounded-bl-lg text-emerald-400 text-xs font-bold tracking-widest">TIER 4</div>
-                    <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 4</h3>
-                    <p class="text-gray-300 mb-6">Intermediate Squad. Perfect for players looking to break into competitive play.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-sm font-bold">
-                        <span class="w-2 h-2 bg-emerald-500 rounded-full mr-2 animate-pulse"></span> Open - Join Anytime
-                    </div>
-                </div>
-
-                <!-- Team 5 - Intermediate -->
-                <div class="glass-panel p-8 rounded-2xl border-l-4 border-emerald-400 relative overflow-hidden group reveal hover:border-emerald-300 transition-colors">
-                    <div class="absolute top-0 right-0 bg-emerald-400/10 px-4 py-1 rounded-bl-lg text-emerald-300 text-xs font-bold tracking-widest">TIER 5</div>
-                    <h3 class="text-3xl font-display font-bold text-white mb-2">TEAM 5</h3>
-                    <p class="text-gray-300 mb-6">Intermediate Squad. Perfect for players looking to break into competitive play.</p>
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-400/10 border border-emerald-400/30 text-emerald-300 text-sm font-bold">
-                        <span class="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></span> Open - Join Anytime
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Staff Section -->
-    <section id="staff-roster" class="py-20 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4">Leadership Team</h2>
-                <p class="text-emerald-400/80 text-lg font-medium mb-2">The dedicated professionals powering our community</p>
-                <div class="w-24 h-1 bg-emerald-500 mx-auto rounded-full"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- CEO -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-yellow-500 relative overflow-hidden reveal">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
-                            <span class="text-2xl font-bold text-white">J</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white">Jodeci</h3>
-                            <p class="text-yellow-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
-                                <i class="fas fa-crown text-xs"></i> Chief Executive Officer
-                            </p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 text-sm">Visionary leader and founder of EA League, driving competitive excellence and community growth.</p>
-                </div>
-
-                <!-- Server Manager -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-emerald-500 relative overflow-hidden reveal">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
-                            <span class="text-2xl font-bold text-white">Y</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white">Yoboytrippin</h3>
-                            <p class="text-emerald-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
-                                <i class="fas fa-server text-xs"></i> Server Manager
-                            </p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 text-sm">Oversees server operations, technical infrastructure, and ensures seamless competitive experiences.</p>
-                </div>
-
-                <!-- Administration B2 -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-blue-500 relative overflow-hidden reveal">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
-                            <span class="text-2xl font-bold text-white">B</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white">B2</h3>
-                            <p class="text-blue-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
-                                <i class="fas fa-shield-alt text-xs"></i> Administration
-                            </p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 text-sm">Senior administrator managing community policies and high-level dispute resolution.</p>
-                </div>
-
-                <!-- Administration Nas -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-blue-500 relative overflow-hidden reveal">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
-                            <span class="text-2xl font-bold text-white">N</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white">Nas</h3>
-                            <p class="text-blue-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
-                                <i class="fas fa-shield-alt text-xs"></i> Administration
-                            </p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 text-sm">Administrative specialist focused on team coordination and competitive integrity.</p>
-                </div>
-
-                <!-- Administration jxstcloudzy -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-blue-500 relative overflow-hidden reveal">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
-                            <span class="text-2xl font-bold text-white">J</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white">jxstcloudzy</h3>
-                            <p class="text-blue-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
-                                <i class="fas fa-shield-alt text-xs"></i> Administration
-                            </p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 text-sm">Administrative coordinator managing internal operations and staff communications.</p>
-                </div>
-
-                <!-- Moderation Ghost -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-purple-500 relative overflow-hidden reveal">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
-                            <span class="text-2xl font-bold text-white">G</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white">Ghost</h3>
-                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
-                                <i class="fas fa-gavel text-xs"></i> Moderation
-                            </p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 text-sm">Community moderator ensuring fair play and positive environment across all channels.</p>
-                </div>
-
-                <!-- Moderation Flakey -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-purple-500 relative overflow-hidden reveal">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
-                            <span class="text-2xl font-bold text-white">F</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white">Flakey</h3>
-                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
-                                <i class="fas fa-gavel text-xs"></i> Moderation
-                            </p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 text-sm">Active moderator monitoring Discord and in-game conduct to maintain community standards.</p>
-                </div>
-
-                <!-- Moderation straved -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-purple-500 relative overflow-hidden reveal">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
-                            <span class="text-2xl font-bold text-white">S</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white">straved</h3>
-                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
-                                <i class="fas fa-gavel text-xs"></i> Moderation
-                            </p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 text-sm">Dedicated moderator supporting player onboarding and conflict mediation.</p>
-                </div>
-
-                <!-- Moderation spook -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-purple-500 relative overflow-hidden reveal">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
-                            <span class="text-2xl font-bold text-white">S</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white">spook</h3>
-                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
-                                <i class="fas fa-gavel text-xs"></i> Moderation
-                            </p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 text-sm">Event moderator coordinating tournaments and competitive match oversight.</p>
-                </div>
-
-                <!-- Moderation maul -->
-                <div class="staff-card glass-panel p-6 rounded-xl border-l-4 border-purple-500 relative overflow-hidden reveal">
-                    <div class="flex items-center gap-4 mb-4">
-                        <div class="w-16 h-16 rounded-full bg-gray-800 flex items-center justify-center border border-gray-700">
-                            <span class="text-2xl font-bold text-white">M</span>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold text-white">maul</h3>
-                            <p class="text-purple-500 text-sm font-bold tracking-wider uppercase flex items-center gap-2">
-                                <i class="fas fa-gavel text-xs"></i> Moderation
-                            </p>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 text-sm">Technical moderator assisting with server maintenance and anti-cheat enforcement.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Matchmaking Schedule Section -->
-    <section id="schedule" class="py-20 relative">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16 reveal">
-                <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4">Matchmaking Schedule</h2>
-                <p class="text-gray-300 max-w-2xl mx-auto">Our structured scrimmage rotation ensures every team gets the right level of competition.</p>
-                <div class="w-24 h-1 bg-emerald-500 mx-auto rounded-full mt-4"></div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Schedule 1 -->
-                <div class="glass-panel p-6 rounded-xl border-t-4 border-emerald-500 hover:-translate-y-2 transition-transform duration-300 reveal">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="bg-emerald-500/20 p-3 rounded-full text-emerald-400">
-                            <i class="fas fa-sync-alt text-xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-white">Internal Rotation</h3>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between bg-black/40 p-3 rounded">
-                            <span class="text-gray-200 font-bold">Teams 3, 4, 5</span>
-                            <span class="text-xs bg-emerald-900 text-emerald-300 px-2 py-1 rounded">Vs Each Other</span>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 text-sm mt-4">Our intermediate squads rotate scrimmages weekly to build chemistry and skill in a controlled environment.</p>
-                </div>
-
-                <!-- Schedule 2 -->
-                <div class="glass-panel p-6 rounded-xl border-t-4 border-red-500 hover:-translate-y-2 transition-transform duration-300 reveal">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="bg-red-500/20 p-3 rounded-full text-red-400">
-                            <i class="fas fa-bolt text-xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-white">Advanced Scrimmage</h3>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between bg-black/40 p-3 rounded">
-                            <span class="text-gray-200 font-bold">Teams 1 & 2</span>
-                            <span class="text-xs bg-red-900 text-red-300 px-2 py-1 rounded">Vs Each Other</span>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 text-sm mt-4">High-intensity practice between our two elite squads to refine strategies and maintain peak performance.</p>
-                </div>
-
-                <!-- Schedule 3 -->
-                <div class="glass-panel p-6 rounded-xl border-t-4 border-yellow-500 hover:-translate-y-2 transition-transform duration-300 reveal">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div class="bg-yellow-500/20 p-3 rounded-full text-yellow-400">
-                            <i class="fas fa-globe-americas text-xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-white">Server Wars</h3>
-                    </div>
-                    <div class="space-y-2">
-                        <div class="flex items-center justify-between bg-black/40 p-3 rounded">
-                            <span class="text-gray-200 font-bold">Team 0</span>
-                            <span class="text-xs bg-yellow-900 text-yellow-300 px-2 py-1 rounded">Vs Other Servers</span>
-                        </div>
-                    </div>
-                    <p class="text-gray-300 text-sm mt-4">Our premier roster represents EA League against rival servers and organizations in external competitions.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Downloads Section -->
-    <section id="downloads" class="py-20 bg-black/30 relative overflow-hidden">
-        <div class="absolute top-0 right-0 w-96 h-96 bg-emerald-900/10 rounded-full blur-3xl -z-10"></div>
-        <div class="absolute bottom-0 left-0 w-96 h-96 bg-cyan-900/10 rounded-full blur-3xl -z-10"></div>
-        
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12 reveal">
-                <div class="inline-block mb-4 px-4 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-bold tracking-widest uppercase">
-                    <i class="fas fa-download mr-2"></i>Essential Tools
-                </div>
-                <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4">Competitive Downloads</h2>
-                <p class="text-gray-300 max-w-2xl mx-auto">Curated software to enhance your Rainbow Six Siege experience. All tools are tournament-legal and widely used by professional players.</p>
-                <div class="w-24 h-1 bg-emerald-500 mx-auto rounded-full mt-4"></div>
-            </div>
-
-            <!-- Download Category Tabs -->
-            <div class="flex justify-center gap-4 mb-8 reveal">
-                <button onclick="filterDownloads('all')" class="download-tab active px-6 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-emerald-500/50 transition-all text-sm font-bold" data-category="all">All Tools</button>
-                <button onclick="filterDownloads('performance')" class="download-tab px-6 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-emerald-500/50 transition-all text-sm font-bold" data-category="performance">Performance</button>
-                <button onclick="filterDownloads('audio')" class="download-tab px-6 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-emerald-500/50 transition-all text-sm font-bold" data-category="audio">Audio</button>
-                <button onclick="filterDownloads('visual')" class="download-tab px-6 py-2 rounded-full border border-gray-700 text-gray-300 hover:border-emerald-500/50 transition-all text-sm font-bold" data-category="visual">Visual</button>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="downloads-grid">
-                <!-- Stats Overlay -->
-                <a href="https://stats.cc/siege" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="performance">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500/20 to-blue-600/40 flex items-center justify-center border border-blue-500/30">
-                            <i class="fas fa-chart-line text-blue-400 text-xl"></i>
-                        </div>
-                        <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Siege Stats</h3>
-                    <p class="text-gray-300 text-sm mb-3">Enhanced scoreboard overlay with damage reports and real-time match statistics.</p>
-                    <div class="flex items-center text-xs text-blue-400">
-                        <span class="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
-                        Overlay Tool
-                    </div>
-                </a>
-
-                <!-- Crosshair V2 -->
-                <a href="https://apps.microsoft.com/detail/9n1k9q56hvxr?hl=en-US&gl=US" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="visual">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500/20 to-purple-600/40 flex items-center justify-center border border-purple-500/30">
-                            <i class="fas fa-crosshairs text-purple-400 text-xl"></i>
-                        </div>
-                        <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Crosshair V2</h3>
-                    <p class="text-gray-300 text-sm mb-3">Custom crosshair overlay for improved aim precision and center-screen reference.</p>
-                    <div class="flex items-center text-xs text-purple-400">
-                        <span class="w-2 h-2 bg-purple-400 rounded-full mr-2"></span>
-                        Microsoft Store
-                    </div>
-                </a>
-
-                <!-- FxSound -->
-                <a href="https://fxsound.org/download/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="audio">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-orange-500/20 to-red-600/40 flex items-center justify-center border border-orange-500/30">
-                            <i class="fas fa-volume-up text-orange-400 text-xl"></i>
-                        </div>
-                        <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">FxSound</h3>
-                    <p class="text-gray-300 text-sm mb-3">Advanced audio enhancement with parametric EQ, volume boost, and bass enhancement.</p>
-                    <div class="flex items-center text-xs text-orange-400">
-                        <span class="w-2 h-2 bg-orange-400 rounded-full mr-2"></span>
-                        Audio Enhancer
-                    </div>
-                </a>
-
-                <!-- R6 Tracker -->
-                <a href="https://r6.tracker.network/r6siege/app" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="performance">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-600/40 flex items-center justify-center border border-cyan-500/30">
-                            <i class="fas fa-network-wired text-cyan-400 text-xl"></i>
-                        </div>
-                        <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">R6 Tracker</h3>
-                    <p class="text-gray-300 text-sm mb-3">Real-time player stats, match history tracking, and opponent analysis overlay.</p>
-                    <div class="flex items-center text-xs text-cyan-400">
-                        <span class="w-2 h-2 bg-cyan-400 rounded-full mr-2"></span>
-                        Stats Tracker
-                    </div>
-                </a>
-
-                <!-- Equalizer APO -->
-                <a href="https://sourceforge.net/projects/equalizerapo/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="audio">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-gray-500/20 to-gray-600/40 flex items-center justify-center border border-gray-500/30">
-                            <i class="fas fa-sliders-h text-gray-400 text-xl"></i>
-                        </div>
-                        <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Equalizer APO</h3>
-                    <p class="text-gray-300 text-sm mb-3">System-wide parametric equalizer for Windows. Essential for audio fine-tuning.</p>
-                    <div class="flex items-center text-xs text-gray-400">
-                        <span class="w-2 h-2 bg-gray-400 rounded-full mr-2"></span>
-                        System Audio
-                    </div>
-                </a>
-
-                <!-- Peace Equalizer -->
-                <a href="https://sourceforge.net/projects/peace-equalizer-apo-extension/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="audio">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-emerald-500/20 to-teal-600/40 flex items-center justify-center border border-emerald-500/30">
-                            <i class="fas fa-peace text-emerald-400 text-xl"></i>
-                        </div>
-                        <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">Peace Equalizer</h3>
-                    <p class="text-gray-300 text-sm mb-3">User-friendly interface for Equalizer APO with advanced effects and presets.</p>
-                    <div class="flex items-center text-xs text-emerald-400">
-                        <span class="w-2 h-2 bg-emerald-400 rounded-full mr-2"></span>
-                        GUI for APO
-                    </div>
-                </a>
-
-                <!-- R6 Calls -->
-                <a href="https://r6calls.com/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="visual">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-red-500/20 to-pink-600/40 flex items-center justify-center border border-red-500/30">
-                            <i class="fas fa-map-marked-alt text-red-400 text-xl"></i>
-                        </div>
-                        <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">R6 Calls</h3>
-                    <p class="text-gray-300 text-sm mb-3">Interactive map callouts and strategic planning tool for all R6 maps.</p>
-                    <div class="flex items-center text-xs text-red-400">
-                        <span class="w-2 h-2 bg-red-400 rounded-full mr-2"></span>
-                        Map Tool
-                    </div>
-                </a>
-
-                <!-- R6 Analyst -->
-                <a href="https://r6analyst.com/" target="_blank" class="download-card glass-panel p-6 rounded-xl border border-gray-800 hover:border-emerald-500/50 group block reveal" data-category="performance">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-500/20 to-purple-600/40 flex items-center justify-center border border-indigo-500/30">
-                            <i class="fas fa-brain text-indigo-400 text-xl"></i>
-                        </div>
-                        <i class="fas fa-external-link-alt text-gray-600 group-hover:text-emerald-400 transition-colors"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2 group-hover:text-emerald-400 transition-colors">R6 Analyst</h3>
-                    <p class="text-gray-300 text-sm mb-3">Personal coaching overlay with real-time tips, META analysis, and performance tracking.</p>
-                    <div class="flex items-center text-xs text-indigo-400">
-                        <span class="w-2 h-2 bg-indigo-400 rounded-full mr-2"></span>
-                        Coaching Tool
-                    </div>
-                </a>
-            </div>
-
-            <div class="mt-12 glass-panel p-6 rounded-xl border border-yellow-500/30 bg-yellow-500/5 reveal">
-                <div class="flex items-start gap-4">
-                    <div class="bg-yellow-500/20 p-3 rounded-full flex-shrink-0">
-                        <i class="fas fa-exclamation-triangle text-yellow-400 text-xl"></i>
+                
+                <form onsubmit="return handleStaffLogin(event)" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Username</label>
+                        <input type="text" id="staffUser" required class="w-full input-field rounded-lg p-3" autocomplete="off">
                     </div>
                     <div>
-                        <h4 class="text-white font-bold mb-2">Usage Disclaimer</h4>
-                        <p class="text-gray-300 text-sm">All software listed here is widely used in the competitive R6 community and considered tournament-legal. However, always check current ESL and Ubisoft guidelines before using in official matches. EA League is not responsible for any account restrictions resulting from third-party software usage.</p>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Password</label>
+                        <input type="password" id="staffPass" required class="w-full input-field rounded-lg p-3">
                     </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Application Section -->
-    <section id="apply" class="py-20 relative">
-        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="glass-panel rounded-2xl p-8 md:p-12 border border-emerald-500/20 shadow-2xl reveal">
-                <div class="text-center mb-10" id="form-header">
-                    <h2 class="text-3xl font-display font-bold text-white">Join The League</h2>
-                    <p class="text-gray-300 mt-2">Fill out the form below to apply for a team.</p>
-                </div>
-
-                <form id="applicationForm" class="space-y-6" onsubmit="handleApplication(event)">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Discord Username</label>
-                            <input type="text" id="appDiscord" required class="w-full input-field rounded-lg p-3" placeholder="User#1234">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Uplay ID</label>
-                            <input type="text" id="appUplay" required class="w-full input-field rounded-lg p-3" placeholder="UplayName">
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Current Rank</label>
-                            <select id="appRank" required class="w-full input-field rounded-lg p-3">
-                                <option value="" disabled selected>Select Rank</option>
-                                <option value="Champion">Champion</option>
-                                <option value="Diamond">Diamond</option>
-                                <option value="Emerald">Emerald</option>
-                                <option value="Platinum">Platinum</option>
-                                <option value="Gold">Gold</option>
-                                <option value="Silver">Silver</option>
-                                <option value="Bronze">Bronze</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Target Team</label>
-                            <select id="appTeam" required class="w-full input-field rounded-lg p-3">
-                                <option value="" disabled selected>Select Team</option>
-                                <option value="Team 1">Team 1 (Champion/Diamond - Tryout)</option>
-                                <option value="Team 2">Team 2 (Emerald/Plat)</option>
-                                <option value="Team 3">Team 3 (Gold/Silver)</option>
-                                <option value="Team 4">Team 4 (Bronze/Copper)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">Why should we pick you?</label>
-                        <textarea id="appReason" required rows="4" class="w-full input-field rounded-lg p-3" placeholder="Tell us about your experience..."></textarea>
-                    </div>
-
-                    <button type="submit" id="submitBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-4 rounded-lg transition-all shadow-lg shadow-emerald-900/50 transform hover:-translate-y-1 flex items-center justify-center gap-2">
-                        <span>Submit Application</span>
+                    <div id="login-error" class="text-red-400 text-sm hidden"></div>
+                    <button type="submit" id="loginBtn" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span id="loginBtnText">Access Dashboard</span>
                     </button>
                 </form>
 
-                <!-- Success State (Hidden by default) -->
-                <div id="success-state" class="hidden text-center py-12">
-                    <svg class="success-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                        <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
-                        <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-                    </svg>
-                    <h3 class="text-2xl font-bold text-white mb-2">Application Received!</h3>
-                    <p class="text-gray-300 mb-6">We'll review your application and contact you via Discord within 48 hours.</p>
-                    <button onclick="resetApplicationForm()" class="text-emerald-400 hover:text-emerald-300 font-bold transition-colors">
-                        Submit Another Application
+                <!-- Database Config Notice -->
+                <div class="mt-6 p-3 bg-blue-900/20 border border-blue-500/30 rounded-lg">
+                    <p class="text-blue-400 text-xs text-center">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        Database configured. Click "Debug" button if you encounter issues.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="dashboard-view" class="hidden pt-24 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- Header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div>
+                    <h1 class="text-3xl font-display font-bold text-white">Admin Dashboard</h1>
+                    <p class="text-emerald-400">Welcome, <span id="staffNameDisplay">Admin</span> <span id="staffRoleDisplay" class="text-xs bg-emerald-900/50 px-2 py-1 rounded ml-2">Role</span></p>
+                </div>
+                <div class="flex items-center gap-3 flex-wrap">
+                    <div class="bg-black/40 px-3 py-1 rounded border border-emerald-500/30 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                        <span class="text-xs text-gray-300 font-bold">Staff Online</span>
+                    </div>
+                    <button onclick="manualRefresh()" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm font-bold" title="Refresh Data">
+                        <i class="fas fa-sync-alt" id="refreshIcon"></i>
+                    </button>
+                    <button onclick="testDatabaseConnection()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-sm font-bold" title="Test DB Connection">
+                        <i class="fas fa-database mr-1"></i>Test DB
+                    </button>
+                    <button onclick="initializeEmptyBin()" class="bg-yellow-600 hover:bg-yellow-500 text-white px-3 py-1 rounded text-sm font-bold" title="Initialize Empty Bin">
+                        <i class="fas fa-rocket mr-1"></i>Init Bin
+                    </button>
+                    <button onclick="exportToCSV()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded text-sm font-bold" title="Export Data">
+                        <i class="fas fa-download mr-1"></i>Export
+                    </button>
+                    <button onclick="clearLocalData()" class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded text-sm font-bold" title="Clear Local Data">
+                        <i class="fas fa-trash mr-1"></i>Clear Local
                     </button>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Support Section -->
-    <section id="support" class="py-20 bg-black/30">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12 reveal">
-                <h2 class="text-3xl font-display font-bold text-white">Support Center</h2>
-                <p class="text-gray-300 mt-2">Need help? Create a ticket or check your existing tickets.</p>
+            <!-- Database Connection Alert -->
+            <div id="db-alert" class="hidden mb-6 bg-red-900/20 border border-red-500/30 rounded-lg p-4 flex items-center gap-3">
+                <i class="fas fa-exclamation-triangle text-red-400 text-xl"></i>
+                <div class="flex-1">
+                    <h4 class="text-red-400 font-bold">Database Connection Error</h4>
+                    <p class="text-gray-400 text-sm" id="db-error-message">Unable to connect to JSONBin.io. Check debug panel for details.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="testDatabaseConnection()" class="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded text-sm font-bold">
+                        Retry
+                    </button>
+                    <button onclick="initializeEmptyBin()" class="bg-yellow-600 hover:bg-yellow-500 text-white px-4 py-2 rounded text-sm font-bold">
+                        Init Bin
+                    </button>
+                </div>
             </div>
 
-            <div class="glass-panel rounded-2xl p-8 border border-gray-800 reveal">
-                <div class="flex border-b border-gray-700 mb-8">
-                    <button onclick="switchSupportTab('create')" id="tab-create" class="px-6 py-3 text-emerald-400 border-b-2 border-emerald-500 font-bold transition-colors">Create Ticket</button>
-                    <button onclick="switchSupportTab('view')" id="tab-view" class="px-6 py-3 text-gray-400 hover:text-white transition-colors">View My Tickets</button>
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="glass-panel p-4 rounded-lg border border-gray-700">
+                    <div class="text-gray-400 text-xs uppercase font-bold">Pending Apps</div>
+                    <div class="text-2xl font-bold text-white mt-1" id="stat-apps">0</div>
                 </div>
+                <div class="glass-panel p-4 rounded-lg border border-gray-700">
+                    <div class="text-gray-400 text-xs uppercase font-bold">Open Tickets</div>
+                    <div class="text-2xl font-bold text-white mt-1" id="stat-tickets">0</div>
+                </div>
+                <div class="glass-panel p-4 rounded-lg border border-gray-700">
+                    <div class="text-gray-400 text-xs uppercase font-bold">Total Apps</div>
+                    <div class="text-2xl font-bold text-white mt-1" id="stat-total-apps">0</div>
+                </div>
+                <div class="glass-panel p-4 rounded-lg border border-emerald-500/30 cursor-pointer hover:bg-emerald-900/20 transition-colors" onclick="toggleAnnouncementForm()">
+                    <div class="text-emerald-400 text-xs uppercase font-bold"><i class="fas fa-bullhorn mr-1"></i> Action</div>
+                    <div class="text-lg font-bold text-white mt-1">Send Announcement</div>
+                </div>
+            </div>
 
-                <div id="panel-create" class="support-panel">
-                    <form onsubmit="handleTicketCreate(event)" class="space-y-4">
-                        <div>
-                            <label class="block text-sm text-gray-300 mb-1">Subject</label>
-                            <input type="text" id="ticketSubject" required class="w-full input-field rounded p-3">
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-300 mb-1">Description</label>
-                            <textarea id="ticketDesc" required rows="4" class="w-full input-field rounded p-3"></textarea>
-                        </div>
-                        <button type="submit" id="ticketSubmitBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2 rounded font-bold transition-colors flex items-center gap-2">
-                            <span>Submit Ticket</span>
+            <!-- Announcement Form -->
+            <div id="announcement-form" class="hidden mb-8 glass-panel p-6 rounded-lg border border-emerald-500/30">
+                <h3 class="text-lg font-bold text-white mb-4">Send Global Announcement</h3>
+                <div class="space-y-4">
+                    <input type="text" id="newAnnTitle" placeholder="Announcement Title" class="w-full input-field rounded-lg p-3">
+                    <textarea id="newAnnBody" placeholder="Message content..." rows="3" class="w-full input-field rounded-lg p-3"></textarea>
+                    <div class="flex gap-2">
+                        <button onclick="postNewAnnouncement()" id="postAnnBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg font-bold disabled:opacity-50">
+                            Send to Main Site
                         </button>
-                    </form>
-                </div>
-
-                <div id="panel-view" class="support-panel hidden">
-                    <div class="mb-4 flex gap-2">
-                        <input type="text" id="searchDiscord" placeholder="Enter Discord User#1234" class="flex-1 input-field rounded p-3">
-                        <button onclick="loadUserTickets()" id="searchBtn" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded font-bold flex items-center gap-2">
-                            <span>Search</span>
-                        </button>
-                    </div>
-                    <div id="ticketListContainer" class="space-y-4 max-h-[400px] overflow-y-auto pr-2">
-                        <div class="text-center text-gray-500 py-8">Enter your Discord to view tickets</div>
+                        <button onclick="toggleAnnouncementForm()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-bold">Cancel</button>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Security & Encryption Section -->
-    <section id="security" class="py-20 relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-b from-emerald-900/10 to-transparent pointer-events-none"></div>
-        
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-16 reveal">
-                <div class="inline-block mb-4 px-4 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-sm font-bold tracking-widest uppercase">
-                    <i class="fas fa-shield-alt mr-2"></i>Protection First
-                </div>
-                <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-6">
-                    Your Security is Our <span class="text-emerald-400 text-glow">Highest Priority</span>
-                </h2>
-                <p class="text-gray-300 max-w-3xl mx-auto text-lg">
-                    We employ military-grade encryption and advanced security protocols to ensure your data remains protected at all times.
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-                <!-- Encryption -->
-                <div class="glass-panel p-8 rounded-2xl border border-emerald-500/20 text-center group hover:border-emerald-500/50 transition-all duration-300 reveal">
-                    <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/30">
-                        <i class="fas fa-lock text-3xl text-emerald-400"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-3">End-to-End Encryption</h3>
-                    <p class="text-gray-300 text-sm leading-relaxed">
-                        All data transmitted between your browser and our servers is protected with AES-256 encryption. Your personal information, applications, and support tickets are encrypted both in transit and at rest.
-                    </p>
-                </div>
-
-                <!-- Data Protection -->
-                <div class="glass-panel p-8 rounded-2xl border border-emerald-500/20 text-center group hover:border-emerald-500/50 transition-all duration-300 reveal">
-                    <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-blue-500/10 flex items-center justify-center border border-blue-500/30">
-                        <i class="fas fa-user-shield text-3xl text-blue-400"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-3">Privacy Protection</h3>
-                    <p class="text-gray-300 text-sm leading-relaxed">
-                        We never sell or share your data with third parties. Your Discord and Uplay information is stored securely and only accessible to authorized staff members with proper authentication.
-                    </p>
-                </div>
-
-                <!-- Secure Infrastructure -->
-                <div class="glass-panel p-8 rounded-2xl border border-emerald-500/20 text-center group hover:border-emerald-500/50 transition-all duration-300 reveal">
-                    <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-purple-500/10 flex items-center justify-center border border-purple-500/30">
-                        <i class="fas fa-server text-3xl text-purple-400"></i>
-                    </div>
-                    <h3 class="text-xl font-bold text-white mb-3">Secure Infrastructure</h3>
-                    <p class="text-gray-300 text-sm leading-relaxed">
-                        Our database uses JSONBin.io with master key authentication and secure HTTPS connections. Regular security audits and monitoring ensure your data stays safe from unauthorized access.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Trust Badges -->
-            <div class="flex justify-center gap-8 mb-12 reveal">
-                <div class="flex items-center gap-2 text-gray-300">
-                    <i class="fas fa-lock text-emerald-400"></i>
-                    <span class="text-sm font-bold">HTTPS Enabled</span>
-                </div>
-                <div class="flex items-center gap-2 text-gray-300">
-                    <i class="fas fa-certificate text-emerald-400"></i>
-                    <span class="text-sm font-bold">SSL Certified</span>
-                </div>
-                <div class="flex items-center gap-2 text-gray-300">
-                    <i class="fas fa-shield-alt text-emerald-400"></i>
-                    <span class="text-sm font-bold">AES-256 Encrypted</span>
-                </div>
-                <div class="flex items-center gap-2 text-gray-300">
-                    <i class="fas fa-user-lock text-emerald-400"></i>
-                    <span class="text-sm font-bold">GDPR Compliant</span>
-                </div>
-            </div>
-
-            <!-- Security Features List -->
-            <div class="glass-panel rounded-2xl p-8 border border-emerald-500/20 reveal">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                    <div>
-                        <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                            <i class="fas fa-check-circle text-emerald-400"></i>
-                            Security Measures in Place
-                        </h3>
-                        <ul class="space-y-4">
-                            <li class="flex items-start gap-3 text-gray-300">
-                                <i class="fas fa-check text-emerald-400 mt-1"></i>
-                                <span class="text-sm"><strong class="text-white">HTTPS Everywhere:</strong> All connections use TLS 1.3 encryption protocols</span>
-                            </li>
-                            <li class="flex items-start gap-3 text-gray-300">
-                                <i class="fas fa-check text-emerald-400 mt-1"></i>
-                                <span class="text-sm"><strong class="text-white">Secure Authentication:</strong> Staff portal protected with hashed credentials and session management</span>
-                            </li>
-                            <li class="flex items-start gap-3 text-gray-300">
-                                <i class="fas fa-check text-emerald-400 mt-1"></i>
-                                <span class="text-sm"><strong class="text-white">Data Minimization:</strong> We only collect essential information needed for team applications</span>
-                            </li>
-                            <li class="flex items-start gap-3 text-gray-300">
-                                <i class="fas fa-check text-emerald-400 mt-1"></i>
-                                <span class="text-sm"><strong class="text-white">Regular Backups:</strong> Automated data backups to prevent information loss</span>
-                            </li>
-                            <li class="flex items-start gap-3 text-gray-300">
-                                <i class="fas fa-check text-emerald-400 mt-1"></i>
-                                <span class="text-sm"><strong class="text-white">Access Controls:</strong> Role-based permissions ensure staff only access necessary data</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-emerald-500/20 blur-3xl rounded-full"></div>
-                        <div class="relative glass-panel p-6 rounded-xl border border-emerald-500/30 text-center">
-                            <i class="fas fa-shield-check text-6xl text-emerald-400 mb-4"></i>
-                            <h4 class="text-white font-bold mb-2">Security Verified</h4>
-                            <p class="text-gray-300 text-sm">Your data is protected by industry-standard security protocols</p>
+            <!-- Main Content Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Applications -->
+                <div class="glass-panel rounded-lg p-6 border border-gray-800">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-white border-l-4 border-emerald-500 pl-3">Applications</h3>
+                        <div class="flex gap-2">
+                            <input type="text" id="appSearch" placeholder="Search..." onkeyup="filterApplications()" 
+                                class="bg-black/50 border border-gray-700 rounded px-3 py-1 text-sm text-white focus:border-emerald-500 focus:outline-none">
+                            <select id="appSort" onchange="sortApplications()" class="bg-black/50 border border-gray-700 rounded px-2 py-1 text-sm text-white">
+                                <option value="newest">Newest</option>
+                                <option value="oldest">Oldest</option>
+                                <option value="status">Status</option>
+                                <option value="team">Team</option>
+                            </select>
                         </div>
                     </div>
+                    <div class="mb-3 flex gap-2 items-center">
+                        <input type="checkbox" id="selectAllApps" onchange="toggleSelectAllApps()" class="rounded bg-gray-800 border-gray-600">
+                        <label for="selectAllApps" class="text-sm text-gray-400">Select All</label>
+                        <div id="bulkActions" class="hidden ml-4 flex gap-2">
+                            <button onclick="bulkApprove()" class="text-xs bg-emerald-600 hover:bg-emerald-500 text-white px-2 py-1 rounded">Approve Selected</button>
+                            <button onclick="bulkDeny()" class="text-xs bg-red-600 hover:bg-red-500 text-white px-2 py-1 rounded">Deny Selected</button>
+                        </div>
+                    </div>
+                    <div class="space-y-3 max-h-[600px] overflow-y-auto pr-2" id="admin-apps-list">
+                        <div class="skeleton h-20 rounded"></div>
+                        <div class="skeleton h-20 rounded"></div>
+                        <div class="skeleton h-20 rounded"></div>
+                    </div>
+                </div>
+
+                <!-- Tickets -->
+                <div class="glass-panel rounded-lg p-6 border border-gray-800">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-white border-l-4 border-blue-500 pl-3">Support Tickets</h3>
+                        <div class="flex gap-2">
+                            <input type="text" id="ticketSearch" placeholder="Search..." onkeyup="filterTickets()" 
+                                class="bg-black/50 border border-gray-700 rounded px-3 py-1 text-sm text-white focus:border-blue-500 focus:outline-none">
+                            <select id="ticketSort" onchange="sortTickets()" class="bg-black/50 border border-gray-700 rounded px-2 py-1 text-sm text-white">
+                                <option value="newest">Newest</option>
+                                <option value="oldest">Oldest</option>
+                                <option value="status">Status</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="space-y-3 max-h-[600px] overflow-y-auto pr-2" id="admin-tickets-list">
+                        <div class="skeleton h-20 rounded"></div>
+                        <div class="skeleton h-20 rounded"></div>
+                        <div class="skeleton h-20 rounded"></div>
+                    </div>
                 </div>
             </div>
 
-            <div class="mt-12 text-center reveal">
-                <p class="text-gray-500 text-sm">
-                    <i class="fas fa-info-circle mr-2"></i>
-                    Have security concerns? Contact our administration team immediately through the support center.
-                </p>
+            <!-- Activity Log -->
+            <div class="mt-8 glass-panel rounded-lg p-6 border border-gray-800">
+                <h3 class="text-lg font-bold text-white mb-4 border-l-4 border-purple-500 pl-3">Recent Activity</h3>
+                <div id="activity-log" class="space-y-2 max-h-40 overflow-y-auto text-sm">
+                    <p class="text-gray-500">No recent activity</p>
+                </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Footer -->
-    <footer class="bg-black border-t border-gray-800 py-6 mt-auto">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="flex items-center gap-2">
-                    <span class="font-display font-black text-xl tracking-tighter text-white">
-                        EA <span class="text-emerald-500">LEAGUE</span>
-                    </span>
-                </div>
-                <div class="flex justify-center space-x-6">
-                    <a href="https://www.tiktok.com/@ealeague" target="_blank" class="text-gray-400 hover:text-white text-xl transition-colors"><i class="fab fa-tiktok"></i></a>
-                    <a href="https://www.instagram.com/ea_league_r6/" target="_blank" class="text-gray-400 hover:text-white text-xl transition-colors"><i class="fab fa-instagram"></i></a>
-                    <a href="https://discord.gg/rsp8MBkvzu" target="_blank" class="text-gray-400 hover:text-white text-xl transition-colors"><i class="fab fa-discord"></i></a>
-                </div>
-                <p class="text-gray-500 text-sm">
-                    &copy; 2026 EA League. Not associated with Ubisoft.
-                </p>
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="hidden fixed inset-0 bg-black/80 z-50 flex items-center justify-center">
+        <div class="glass-panel p-6 rounded-lg max-w-md w-full mx-4 border border-gray-700">
+            <h3 class="text-xl font-bold text-white mb-4" id="confirmTitle">Confirm Action</h3>
+            <p class="text-gray-300 mb-6" id="confirmMessage">Are you sure?</p>
+            <div class="flex gap-3 justify-end">
+                <button onclick="closeConfirmModal()" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded font-bold">Cancel</button>
+                <button id="confirmBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded font-bold">Confirm</button>
             </div>
         </div>
-    </footer>
+    </div>
 
     <script>
         // ==========================================
-        // JSONBIN.IO CONFIGURATION
+        // YOUR CONFIGURATION - ALREADY SET
         // ==========================================
         
-        const BIN_ID = '69aa217643b1c97be9b7f444';
-        const MASTER_KEY = '$2a$10$GK8JfB9MpM7nksbKiYequemSxDWTeB.S/B0aVN3XtmLU9amuwpwgO';
-        
-        const READ_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}/latest`;
-        const UPDATE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
-        
+        const CONFIG = {
+            BIN_ID: '69aa217643b1c97be9b7f444',
+            MASTER_KEY: '$2a$10$GK8JfB9MpM7nksbKiYequemSxDWTeB.S/B0aVN3XtmLU9amuwpwgO'
+        };
+
         // ==========================================
-        // ERROR HANDLING & UI HELPERS
+        // DEBUGGING SYSTEM
         // ==========================================
         
-        function showError(message) {
-            const banner = document.getElementById('error-banner');
-            const msg = document.getElementById('error-message');
-            msg.textContent = message;
-            banner.classList.remove('hidden');
-            setTimeout(() => banner.classList.add('hidden'), 5000);
-        }
+        let debugLog = [];
         
-        function showConnectionStatus(online) {
-            const status = document.getElementById('connection-status');
-            const indicator = status.querySelector('.status-indicator');
-            status.classList.remove('hidden');
+        function debug(message, type = 'info') {
+            const entry = { time: new Date().toLocaleTimeString(), message, type };
+            debugLog.push(entry);
+            console.log(`[${type.toUpperCase()}] ${message}`);
             
-            if (online) {
-                indicator.className = 'status-indicator status-online';
-                status.innerHTML = '<span class="status-indicator status-online"></span>Live Sync';
-                setTimeout(() => status.classList.add('hidden'), 3000);
-            } else {
-                indicator.className = 'status-indicator status-offline';
-                status.innerHTML = '<span class="status-indicator status-offline"></span>Offline';
-            }
-        }
-        
-        function setLoading(buttonId, isLoading) {
-            const btn = document.getElementById(buttonId);
-            if (!btn) return;
-            
-            if (isLoading) {
-                btn.disabled = true;
-                btn.innerHTML = '<div class="loading"></div>';
-            } else {
-                btn.disabled = false;
-                btn.innerHTML = '<span>' + btn.getAttribute('data-text') + '</span>';
+            const debugContent = document.getElementById('debug-content');
+            if (debugContent) {
+                const div = document.createElement('div');
+                div.className = `debug-entry debug-${type}`;
+                div.textContent = `[${entry.time}] ${message}`;
+                debugContent.insertBefore(div, debugContent.firstChild);
+                
+                while (debugContent.children.length > 50) {
+                    debugContent.removeChild(debugContent.lastChild);
+                }
             }
         }
 
-        // ==========================================
-        // MOBILE MENU FUNCTIONS
-        // ==========================================
-        
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            const icon = document.getElementById('menu-icon');
-            menu.classList.toggle('open');
-            if (menu.classList.contains('open')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        }
-        
-        function closeMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            const icon = document.getElementById('menu-icon');
-            menu.classList.remove('open');
-            icon.classList.remove('fa-times');
-            icon.classList.add('fa-bars');
+        function toggleDebug() {
+            const panel = document.getElementById('debug-panel');
+            panel.classList.toggle('show');
         }
 
         // ==========================================
-        // SCROLL REVEAL ANIMATION
+        // API URLs
         // ==========================================
         
-        function initScrollReveal() {
-            const reveals = document.querySelectorAll('.reveal');
+        const READ_URL = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}/latest`;
+        const UPDATE_URL = `https://api.jsonbin.io/v3/b/${CONFIG.BIN_ID}`;
+
+        // ==========================================
+        // STATE MANAGEMENT
+        // ==========================================
+        
+        let currentStaff = null;
+        let autoRefreshInterval = null;
+        let currentData = { 
+            apps: [], 
+            tickets: [], 
+            announcements: [],
+            metadata: { lastUpdated: new Date().toISOString() }
+        };
+        let selectedApps = new Set();
+        let activityLog = [];
+        let isDatabaseConnected = false;
+        let useLocalFallback = false;
+
+        const EXPAND_STORAGE_KEY = 'ea_staff_expanded_items';
+        const LOCAL_DATA_KEY = 'ea_staff_local_data';
+        const DATA_VERSION_KEY = 'ea_staff_data_version';
+        const CURRENT_DATA_VERSION = 2; // Increment when structure changes
+
+        // ==========================================
+        // LOCALSTORAGE FALLBACK WITH MIGRATION
+        // ==========================================
+        
+        function checkAndMigrateData() {
+            const storedVersion = parseInt(localStorage.getItem(DATA_VERSION_KEY) || '0');
             
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('active');
+            if (storedVersion < CURRENT_DATA_VERSION) {
+                debug(`Migrating data from version ${storedVersion} to ${CURRENT_DATA_VERSION}`, 'info');
+                
+                // Migration logic here
+                const oldData = loadLocalData();
+                if (oldData && storedVersion === 0) {
+                    // Ensure all apps have IDs
+                    if (oldData.apps) {
+                        oldData.apps = oldData.apps.map((app, index) => ({
+                            ...app,
+                            id: app.id || Date.now() + index,
+                            status: app.status || 'Pending'
+                        }));
                     }
-                });
-            }, {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            });
-            
-            reveals.forEach(el => observer.observe(el));
+                    saveLocalData(oldData);
+                }
+                
+                localStorage.setItem(DATA_VERSION_KEY, CURRENT_DATA_VERSION.toString());
+            }
         }
 
-        // ==========================================
-        // DOWNLOADS FILTER
-        // ==========================================
-        
-        function filterDownloads(category) {
-            const tabs = document.querySelectorAll('.download-tab');
-            const cards = document.querySelectorAll('.download-card');
-            
-            tabs.forEach(tab => {
-                if (tab.dataset.category === category) {
-                    tab.classList.add('active');
-                } else {
-                    tab.classList.remove('active');
-                }
-            });
-            
-            cards.forEach(card => {
-                if (category === 'all' || card.dataset.category === category) {
-                    card.style.display = 'block';
-                    setTimeout(() => {
-                        card.style.opacity = '1';
-                        card.style.transform = 'translateY(0)';
-                    }, 50);
-                } else {
-                    card.style.opacity = '0';
-                    card.style.transform = 'translateY(20px)';
-                    setTimeout(() => {
-                        card.style.display = 'none';
-                    }, 300);
-                }
-            });
-        }
-
-        // ==========================================
-        // CORE API FUNCTIONS
-        // ==========================================
-        
-        async function getData() {
+        function saveLocalData(data = currentData) {
             try {
+                const payload = {
+                    data: data,
+                    version: CURRENT_DATA_VERSION,
+                    timestamp: Date.now()
+                };
+                localStorage.setItem(LOCAL_DATA_KEY, JSON.stringify(payload));
+                debug('Data saved to localStorage', 'success');
+                return true;
+            } catch (e) {
+                if (e.name === 'QuotaExceededError') {
+                    debug('Storage quota exceeded, clearing old data', 'error');
+                    // Clear old data and retry
+                    localStorage.clear();
+                    try {
+                        localStorage.setItem(LOCAL_DATA_KEY, JSON.stringify({ data: data, version: CURRENT_DATA_VERSION, timestamp: Date.now() }));
+                        return true;
+                    } catch (e2) {
+                        debug('Failed to save even after clearing', 'error');
+                    }
+                }
+                debug(`localStorage error: ${e.message}`, 'error');
+                return false;
+            }
+        }
+
+        function loadLocalData() {
+            try {
+                const stored = localStorage.getItem(LOCAL_DATA_KEY);
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    debug('Loaded from localStorage', 'success');
+                    return parsed.data || parsed; // Handle both new and old format
+                }
+            } catch (e) {
+                debug(`localStorage error: ${e.message}`, 'error');
+            }
+            return null;
+        }
+
+        function clearLocalData() {
+            localStorage.removeItem(LOCAL_DATA_KEY);
+            localStorage.removeItem(DATA_VERSION_KEY);
+            localStorage.removeItem(EXPAND_STORAGE_KEY);
+            currentData = { apps: [], tickets: [], announcements: [], metadata: {} };
+            renderApplications();
+            renderTickets();
+            showToast('Local data cleared', 'info');
+            debug('Local data cleared', 'info');
+        }
+
+        // ==========================================
+        // DATABASE FUNCTIONS WITH CORS HANDLING
+        // ==========================================
+
+        function updateConnectionStatus(status, message) {
+            const statusEl = document.getElementById('db-status');
+            const textEl = document.getElementById('db-status-text');
+            const alertEl = document.getElementById('db-alert');
+            const errorMsgEl = document.getElementById('db-error-message');
+            
+            if (!statusEl) return;
+            
+            statusEl.classList.remove('hidden', 'online', 'offline', 'checking');
+            
+            switch(status) {
+                case 'online':
+                    statusEl.classList.add('online');
+                    textEl.textContent = message || 'Connected';
+                    isDatabaseConnected = true;
+                    useLocalFallback = false;
+                    if (alertEl) alertEl.classList.add('hidden');
+                    setTimeout(() => statusEl.classList.add('hidden'), 3000);
+                    break;
+                case 'offline':
+                    statusEl.classList.add('offline');
+                    textEl.textContent = message || 'Offline';
+                    isDatabaseConnected = false;
+                    useLocalFallback = true;
+                    if (errorMsgEl) errorMsgEl.textContent = message || 'Connection failed. Check debug panel.';
+                    if (alertEl) alertEl.classList.remove('hidden');
+                    break;
+                case 'checking':
+                    statusEl.classList.add('checking');
+                    textEl.textContent = message || 'Connecting...';
+                    break;
+            }
+        }
+
+        async function testDatabaseConnection() {
+            updateConnectionStatus('checking', 'Testing...');
+            debug(`Testing bin: ${CONFIG.BIN_ID}`, 'info');
+            
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+                
                 const response = await fetch(READ_URL, {
                     method: 'GET',
-                    headers: { 'X-Master-Key': MASTER_KEY }
+                    headers: { 
+                        'X-Master-Key': CONFIG.MASTER_KEY,
+                        'X-Bin-Meta': 'false',
+                        'Content-Type': 'application/json'
+                    },
+                    signal: controller.signal
                 });
                 
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                clearTimeout(timeoutId);
                 
-                const result = await response.json();
-                showConnectionStatus(true);
-                return result.record || { apps: [], tickets: [], announcements: [] };
+                debug(`Response: ${response.status} ${response.statusText}`, 'info');
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    debug(`Error: ${errorText}`, 'error');
+                    throw new Error(`${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                debug(`Success! Keys: ${Object.keys(data).join(', ')}`, 'success');
+                
+                // Check if data has record property (JSONBin v3 structure)
+                const record = data.record || data;
+                const apps = Array.isArray(record.apps) ? record.apps.length : 0;
+                const tickets = Array.isArray(record.tickets) ? record.tickets.length : 0;
+                debug(`Data: ${apps} apps, ${tickets} tickets`, 'success');
+                
+                updateConnectionStatus('online', 'Connected');
+                showToast('Database connected!', 'success');
+                return true;
                 
             } catch (error) {
-                console.error('Error fetching data:', error);
-                showConnectionStatus(false);
-                showError('Database connection failed.');
-                return { apps: [], tickets: [], announcements: [] };
+                if (error.name === 'AbortError') {
+                    debug('Connection timed out', 'error');
+                    updateConnectionStatus('offline', 'Timeout');
+                } else {
+                    debug(`Failed: ${error.message}`, 'error');
+                    updateConnectionStatus('offline', `Error: ${error.message}`);
+                }
+                showToast(`Connection failed: ${error.message}`, 'error');
+                return false;
             }
         }
-        
-        async function saveData(data) {
+
+        // Initialize empty bin structure
+        async function initializeEmptyBin() {
+            debug('Initializing empty bin...', 'info');
+            
+            const emptyData = {
+                apps: [],
+                tickets: [],
+                announcements: [],
+                metadata: { 
+                    initialized: new Date().toISOString(),
+                    initializedBy: currentStaff?.name || 'System'
+                }
+            };
+            
             try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+                
                 const response = await fetch(UPDATE_URL, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-Master-Key': MASTER_KEY
+                        'X-Master-Key': CONFIG.MASTER_KEY
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(emptyData),
+                    signal: controller.signal
                 });
                 
-                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                clearTimeout(timeoutId);
                 
-                showConnectionStatus(true);
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    debug(`Init error: ${errorText}`, 'error');
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                debug('Bin initialized successfully!', 'success');
+                showToast('Database initialized!', 'success');
+                currentData = emptyData;
+                saveLocalData();
+                await renderAdminData();
                 return true;
                 
             } catch (error) {
-                console.error('Error saving data:', error);
-                showConnectionStatus(false);
-                showError('Failed to save data.');
+                debug(`Init failed: ${error.message}`, 'error');
+                showToast(`Failed to initialize: ${error.message}`, 'error');
+                return false;
+            }
+        }
+
+        async function getData() {
+            // Check localStorage first for quick loading
+            if (useLocalFallback) {
+                const local = loadLocalData();
+                if (local) {
+                    currentData = local;
+                    return currentData;
+                }
+            }
+            
+            updateConnectionStatus('checking', 'Fetching...');
+            debug('Fetching data from JSONBin...', 'info');
+            
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+                
+                const response = await fetch(READ_URL, {
+                    method: 'GET',
+                    headers: { 
+                        'X-Master-Key': CONFIG.MASTER_KEY,
+                        'X-Bin-Meta': 'false',
+                        'Content-Type': 'application/json'
+                    },
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    debug(`Fetch error ${response.status}: ${errorText}`, 'error');
+                    
+                    if (response.status === 404) {
+                        debug('Bin not found! Click "Init Bin" to create it.', 'error');
+                        showToast('Database not found. Click "Init Bin" button.', 'error');
+                    } else if (response.status === 401) {
+                        debug('Authentication failed! Check your Master Key.', 'error');
+                        showToast('Authentication failed. Check credentials.', 'error');
+                    } else if (response.status === 403) {
+                        debug('CORS or permission error. Check JSONBin dashboard.', 'error');
+                    }
+                    
+                    throw new Error(`${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                debug(`Raw response received`, 'info');
+                
+                // Handle JSONBin v3 structure - data is in result.record
+                // Also handle case where meta=false returns data directly
+                const record = result.record || result;
+                
+                if (!record) {
+                    throw new Error('No data found in response');
+                }
+                
+                // Validate and sanitize data structure
+                currentData = validateAndSanitizeData(record);
+                
+                debug(`Parsed: ${currentData.apps.length} apps, ${currentData.tickets.length} tickets`, 'success');
+                
+                // Log first app for debugging
+                if (currentData.apps.length > 0) {
+                    debug(`First app ID: ${currentData.apps[0].id}`, 'info');
+                }
+                
+                saveLocalData();
+                updateConnectionStatus('online', 'Synced');
+                return currentData;
+                
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    debug('Fetch timed out, using local data', 'error');
+                } else {
+                    debug(`Fetch failed: ${error.message}`, 'error');
+                }
+                
+                updateConnectionStatus('offline', 'Failed - using local');
+                
+                const local = loadLocalData();
+                if (local) {
+                    currentData = local;
+                    useLocalFallback = true;
+                    showToast('Using cached data (offline mode)', 'info');
+                    return currentData;
+                }
+                
+                // Return empty data structure as last resort
+                return currentData;
+            }
+        }
+
+        // Validate and sanitize data from API
+        function validateAndSanitizeData(record) {
+            const data = {
+                apps: [],
+                tickets: [],
+                announcements: [],
+                metadata: record.metadata || { lastUpdated: new Date().toISOString() }
+            };
+            
+            // Validate apps array
+            if (Array.isArray(record.apps)) {
+                data.apps = record.apps
+                    .filter(app => app && typeof app === 'object')
+                    .map((app, index) => ({
+                        id: app.id || Date.now() + index,
+                        discord: String(app.discord || '').trim(),
+                        uplay: String(app.uplay || '').trim(),
+                        team: String(app.team || '').trim(),
+                        rank: String(app.rank || '').trim(),
+                        reason: String(app.reason || '').trim(),
+                        status: ['Pending', 'Approved', 'Denied'].includes(app.status) ? app.status : 'Pending',
+                        date: app.date || new Date().toISOString(),
+                        reviewedBy: app.reviewedBy || null,
+                        reviewedAt: app.reviewedAt || null
+                    }));
+            }
+            
+            // Validate tickets array
+            if (Array.isArray(record.tickets)) {
+                data.tickets = record.tickets
+                    .filter(ticket => ticket && typeof ticket === 'object')
+                    .map((ticket, index) => ({
+                        id: ticket.id || `ticket-${Date.now()}-${index}`,
+                        discord: String(ticket.discord || '').trim(),
+                        subject: String(ticket.subject || '').trim(),
+                        description: String(ticket.description || '').trim(),
+                        status: ['Open', 'Pending Staff', 'Pending User', 'Closed'].includes(ticket.status) ? ticket.status : 'Open',
+                        date: ticket.date || new Date().toISOString(),
+                        responses: Array.isArray(ticket.responses) ? ticket.responses : [],
+                        closedBy: ticket.closedBy || null,
+                        closedAt: ticket.closedAt || null
+                    }));
+            }
+            
+            // Validate announcements
+            if (Array.isArray(record.announcements)) {
+                data.announcements = record.announcements
+                    .filter(ann => ann && typeof ann === 'object')
+                    .slice(-10); // Keep only last 10
+            }
+            
+            return data;
+        }
+        
+        async function saveData(data) {
+            if (useLocalFallback) {
+                currentData = data;
+                saveLocalData();
+                showToast('Saved locally (offline)', 'info');
+                return true;
+            }
+            
+            updateConnectionStatus('checking', 'Saving...');
+            debug('Saving data...', 'info');
+            
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+                
+                const payload = {
+                    apps: data.apps || [],
+                    tickets: data.tickets || [],
+                    announcements: data.announcements || [],
+                    metadata: {
+                        lastUpdated: new Date().toISOString(),
+                        lastModifiedBy: currentStaff?.name || 'Unknown'
+                    }
+                };
+                
+                const response = await fetch(UPDATE_URL, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': CONFIG.MASTER_KEY
+                    },
+                    body: JSON.stringify(payload),
+                    signal: controller.signal
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    debug(`Save error: ${errorText}`, 'error');
+                    throw new Error(`${response.status}: ${response.statusText}`);
+                }
+                
+                currentData = payload;
+                saveLocalData();
+                debug('Saved to cloud', 'success');
+                updateConnectionStatus('online', 'Saved');
+                showToast('Saved!', 'success');
+                return true;
+                
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    debug('Save timed out', 'error');
+                } else {
+                    debug(`Save failed: ${error.message}`, 'error');
+                }
+                
+                updateConnectionStatus('offline', 'Failed - local only');
+                currentData = data;
+                saveLocalData();
+                useLocalFallback = true;
+                showToast('Cloud save failed. Saved locally.', 'error');
                 return false;
             }
         }
 
         // ==========================================
-        // ANNOUNCEMENT FUNCTIONS
+        // AUTHENTICATION
         // ==========================================
         
-        let currentAnnouncement = null;
-        let lastAnnouncementId = null;
-        
-        async function checkAnnouncements() {
-            const data = await getData();
-            const announcements = data.announcements || [];
-            
-            if (announcements.length > 0) {
-                const latest = announcements[announcements.length - 1];
-                const annId = latest.title + latest.body + latest.date;
-                if (annId !== lastAnnouncementId && !sessionStorage.getItem('seen_' + annId)) {
-                    currentAnnouncement = latest;
-                    lastAnnouncementId = annId;
-                    showAnnouncementModal(latest.title, latest.body);
-                }
+        async function sha256(message) {
+            const msgBuffer = new TextEncoder().encode(message);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        const STAFF_USERS = {
+            'admin': { 
+                passwordHash: '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9',
+                name: 'EA JODECI', 
+                role: 'Owner' 
+            },
+            'mod': { 
+                passwordHash: '1a3d5e7f9b2c4d6e8f0a1b3c5d7e9f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d',
+                name: 'EA Support', 
+                role: 'Moderator' 
             }
+        };
+
+        function escapeHtml(text) {
+            if (text === null || text === undefined) return '';
+            const div = document.createElement('div');
+            div.textContent = String(text);
+            return div.innerHTML;
         }
 
-        function showAnnouncementModal(title, body) {
-            const modal = document.getElementById('global-announcement-modal');
-            const content = document.getElementById('announcement-content');
-            document.getElementById('announcement-body').innerHTML = `<h3 class="text-xl font-bold text-white mb-2">${title}</h3><p>${body}</p>`;
-            modal.classList.remove('hidden');
-            setTimeout(() => {
-                modal.classList.remove('opacity-0');
-                content.classList.remove('scale-95');
-                content.classList.add('scale-100');
-            }, 10);
-        }
-
-        function closeAnnouncement() {
-            const modal = document.getElementById('global-announcement-modal');
-            const content = document.getElementById('announcement-content');
-            modal.classList.add('opacity-0');
-            content.classList.remove('scale-100');
-            content.classList.add('scale-95');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-            
-            if (currentAnnouncement) {
-                const annId = currentAnnouncement.title + currentAnnouncement.body + currentAnnouncement.date;
-                sessionStorage.setItem('seen_' + annId, 'true');
-            }
+        function sanitizeInput(input) {
+            if (!input) return '';
+            return input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
         }
 
         // ==========================================
-        // APPLICATION FUNCTIONS
+        // UI UTILITIES
         // ==========================================
         
-        async function handleApplication(e) {
-            e.preventDefault();
-            setLoading('submitBtn', true);
-            
-            const data = await getData();
-            
-            const newApp = {
-                id: Date.now(),
-                discord: document.getElementById('appDiscord').value,
-                uplay: document.getElementById('appUplay').value,
-                rank: document.getElementById('appRank').value,
-                team: document.getElementById('appTeam').value,
-                reason: document.getElementById('appReason').value,
-                date: new Date().toLocaleDateString(),
-                status: 'Pending'
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            toast.textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function showConfirmModal(title, message, onConfirm) {
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmModal').classList.remove('hidden');
+            document.getElementById('confirmBtn').onclick = () => {
+                closeConfirmModal();
+                onConfirm();
             };
-            
-            data.apps.push(newApp);
-            const success = await saveData(data);
-            
-            setLoading('submitBtn', false);
-            
-            if (success) {
-                document.getElementById('applicationForm').classList.add('hidden');
-                document.getElementById('form-header').classList.add('hidden');
-                document.getElementById('success-state').classList.remove('hidden');
-            }
-        }
-        
-        function resetApplicationForm() {
-            document.getElementById('applicationForm').reset();
-            document.getElementById('applicationForm').classList.remove('hidden');
-            document.getElementById('form-header').classList.remove('hidden');
-            document.getElementById('success-state').classList.add('hidden');
         }
 
-        // ==========================================
-        // SUPPORT TICKET FUNCTIONS
-        // ==========================================
-        
-        function switchSupportTab(tab) {
-            document.querySelectorAll('.support-panel').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`panel-${tab}`).classList.remove('hidden');
-            const createBtn = document.getElementById('tab-create');
-            const viewBtn = document.getElementById('tab-view');
-            if (tab === 'create') {
-                createBtn.className = "px-6 py-3 text-emerald-400 border-b-2 border-emerald-500 font-bold transition-colors";
-                viewBtn.className = "px-6 py-3 text-gray-400 hover:text-white transition-colors";
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+        }
+
+        function setLoading(elementId, loading) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (loading) {
+                el.disabled = true;
+                el.dataset.originalText = el.innerHTML;
+                el.innerHTML = '<div class="loading"></div>';
             } else {
-                viewBtn.className = "px-6 py-3 text-emerald-400 border-b-2 border-emerald-500 font-bold transition-colors";
-                createBtn.className = "px-6 py-3 text-gray-400 hover:text-white transition-colors";
+                el.disabled = false;
+                el.innerHTML = el.dataset.originalText || el.innerText;
             }
         }
 
-        async function handleTicketCreate(e) {
-            e.preventDefault();
-            
-            const discord = prompt("Please confirm your Discord User#1234 to link this ticket:");
-            if (!discord) return;
-            
-            setLoading('ticketSubmitBtn', true);
-            
-            const data = await getData();
-            
-            const newTicket = {
-                id: 'TKT-' + Math.floor(Math.random() * 10000),
-                discord: discord,
-                subject: document.getElementById('ticketSubject').value,
-                description: document.getElementById('ticketDesc').value,
-                status: 'Open',
-                date: new Date().toLocaleString(),
-                responses: [
-                    {
-                        text: "Thanks for contacting support. A staff member will be with you shortly.",
-                        sender: "System",
-                        date: new Date().toLocaleString()
-                    }
-                ]
+        function addActivity(action, details) {
+            const entry = {
+                action,
+                details,
+                staff: currentStaff?.name || 'Unknown',
+                time: new Date().toLocaleString()
             };
-            
-            data.tickets.push(newTicket);
-            const success = await saveData(data);
-            
-            setLoading('ticketSubmitBtn', false);
-            
-            if (success) {
-                alert(`Ticket Created: ${newTicket.id}.`);
-                e.target.reset();
-                switchSupportTab('view');
-                document.getElementById('searchDiscord').value = discord;
-                loadUserTickets();
-            }
+            activityLog.unshift(entry);
+            if (activityLog.length > 50) activityLog.pop();
+            renderActivityLog();
         }
 
-        async function loadUserTickets() {
-            const discord = document.getElementById('searchDiscord').value.trim();
-            const container = document.getElementById('ticketListContainer');
-            
-            if (!discord) {
-                container.innerHTML = '<div class="text-center text-gray-500 py-4">Please enter your Discord username</div>';
+        function renderActivityLog() {
+            const container = document.getElementById('activity-log');
+            if (!container) return;
+            if (activityLog.length === 0) {
+                container.innerHTML = '<p class="text-gray-500">No recent activity</p>';
                 return;
             }
-            
-            // Show skeleton loading
-            container.innerHTML = `
-                <div class="space-y-4">
-                    <div class="glass-panel p-4 rounded border border-gray-700">
-                        <div class="skeleton h-4 w-24 mb-2 rounded"></div>
-                        <div class="skeleton h-6 w-3/4 mb-2 rounded"></div>
-                        <div class="skeleton h-4 w-full rounded"></div>
-                    </div>
-                    <div class="glass-panel p-4 rounded border border-gray-700">
-                        <div class="skeleton h-4 w-24 mb-2 rounded"></div>
-                        <div class="skeleton h-6 w-1/2 mb-2 rounded"></div>
-                        <div class="skeleton h-4 w-full rounded"></div>
-                    </div>
-                </div>
-            `;
-            
-            setLoading('searchBtn', true);
-            
-            const data = await getData();
-            const tickets = data.tickets || [];
-            const userTickets = tickets.filter(t => t.discord.toLowerCase() === discord.toLowerCase());
-            
-            setLoading('searchBtn', false);
-            
-            if (userTickets.length === 0) {
-                container.innerHTML = `<div class="text-center text-gray-500 py-4">No tickets found for ${discord}</div>`;
-                return;
-            }
-            
-            container.innerHTML = userTickets.map(t => `
-                <div class="bg-black/40 p-4 rounded border border-gray-700 hover:border-emerald-500/30 transition-colors">
-                    <div class="flex justify-between mb-2">
-                        <span class="text-emerald-400 font-bold text-sm">${t.id}</span>
-                        <span class="text-xs px-2 py-1 rounded bg-gray-800 text-gray-300">${t.status}</span>
-                    </div>
-                    <h4 class="text-white font-bold mb-1">${t.subject}</h4>
-                    <p class="text-gray-300 text-sm mb-3 line-clamp-2">${t.description}</p>
-                    
-                    <div class="bg-gray-900/50 p-3 rounded mb-3 text-sm space-y-2 max-h-32 overflow-y-auto">
-                        ${t.responses && t.responses.length > 0 ? t.responses.map(r => `
-                            <div class="${r.sender === 'User' ? 'text-right' : 'text-left'}">
-                                <span class="text-xs text-gray-500 block mb-0.5">${r.sender}</span>
-                                <span class="inline-block px-2 py-1 rounded ${r.sender === 'User' ? 'bg-emerald-900/30 text-emerald-200' : 'bg-gray-700 text-gray-200'}">${r.text}</span>
-                            </div>
-                        `).join('') : '<p class="text-gray-600 italic">No responses yet.</p>'}
-                    </div>
-
-                    <div class="flex gap-2">
-                        <input type="text" id="reply-${t.id}" placeholder="Reply..." class="flex-1 bg-black border border-gray-700 rounded px-2 py-1 text-sm text-white focus:border-emerald-500 focus:outline-none transition-colors">
-                        <button onclick="addUserReply('${t.id}')" class="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1 rounded text-sm transition-colors">Send</button>
-                    </div>
+            container.innerHTML = activityLog.map(entry => `
+                <div class="flex justify-between items-center py-1 border-b border-gray-800 last:border-0">
+                    <span class="text-gray-300">${escapeHtml(entry.action)}: ${escapeHtml(entry.details)}</span>
+                    <span class="text-gray-500 text-xs">${escapeHtml(entry.staff)} • ${entry.time}</span>
                 </div>
             `).join('');
         }
 
-        async function addUserReply(ticketId) {
-            const input = document.getElementById(`reply-${ticketId}`);
-            const text = input.value;
+        // ==========================================
+        // AUTHENTICATION
+        // ==========================================
+        
+        async function handleStaffLogin(e) {
+            e.preventDefault();
+            
+            const u = document.getElementById('staffUser').value.trim();
+            const p = document.getElementById('staffPass').value;
+            const errorDiv = document.getElementById('login-error');
+            
+            setLoading('loginBtn', true);
+            errorDiv.classList.add('hidden');
+            
+            const attempts = parseInt(localStorage.getItem('loginAttempts') || '0');
+            const lastAttempt = parseInt(localStorage.getItem('lastAttempt') || '0');
+            const now = Date.now();
+            
+            if (attempts >= 5 && now - lastAttempt < 300000) {
+                setLoading('loginBtn', false);
+                errorDiv.textContent = 'Too many attempts. Try again in 5 minutes.';
+                errorDiv.classList.remove('hidden');
+                return false;
+            }
+            
+            if (STAFF_USERS[u]) {
+                const hash = await sha256(p);
+                if (hash === STAFF_USERS[u].passwordHash) {
+                    currentStaff = STAFF_USERS[u];
+                    localStorage.setItem('loginAttempts', '0');
+                    
+                    document.getElementById('login-view').classList.add('hidden');
+                    document.getElementById('dashboard-view').classList.remove('hidden');
+                    document.getElementById('logoutBtn').classList.remove('hidden');
+                    document.getElementById('staffNameDisplay').innerText = currentStaff.name;
+                    document.getElementById('staffRoleDisplay').innerText = currentStaff.role;
+                    
+                    await renderAdminData();
+                    
+                    autoRefreshInterval = setInterval(() => {
+                        if (isDatabaseConnected) renderAdminData(false);
+                    }, 30000);
+                    
+                    showToast('Login successful!', 'success');
+                    addActivity('Login', 'Staff logged in');
+                    
+                    setLoading('loginBtn', false);
+                    return false;
+                }
+            }
+            
+            localStorage.setItem('loginAttempts', (attempts + 1).toString());
+            localStorage.setItem('lastAttempt', now.toString());
+            
+            setLoading('loginBtn', false);
+            errorDiv.textContent = 'Invalid credentials';
+            errorDiv.classList.remove('hidden');
+            
+            return false;
+        }
+
+        function staffLogout() {
+            currentStaff = null;
+            selectedApps.clear();
+            document.getElementById('dashboard-view').classList.add('hidden');
+            document.getElementById('login-view').classList.remove('hidden');
+            document.getElementById('logoutBtn').classList.add('hidden');
+            document.getElementById('staffUser').value = '';
+            document.getElementById('staffPass').value = '';
+            document.getElementById('login-error').classList.add('hidden');
+            
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+                autoRefreshInterval = null;
+            }
+            
+            showToast('Logged out', 'info');
+        }
+
+        // ==========================================
+        // ANNOUNCEMENTS
+        // ==========================================
+        
+        function toggleAnnouncementForm() {
+            const form = document.getElementById('announcement-form');
+            form.classList.toggle('hidden');
+        }
+
+        async function postNewAnnouncement() {
+            const title = sanitizeInput(document.getElementById('newAnnTitle').value.trim());
+            const body = sanitizeInput(document.getElementById('newAnnBody').value.trim());
+            
+            if (!title || !body) {
+                showToast('Fill in all fields', 'error');
+                return;
+            }
+            
+            setLoading('postAnnBtn', true);
+            
+            const data = await getData();
+            
+            data.announcements = data.announcements || [];
+            data.announcements.push({ 
+                title: title, 
+                body: body, 
+                date: new Date().toISOString(),
+                postedBy: currentStaff ? currentStaff.name : 'Unknown',
+                id: Date.now()
+            });
+            
+            if (data.announcements.length > 10) {
+                data.announcements = data.announcements.slice(-10);
+            }
+            
+            const success = await saveData(data);
+            
+            setLoading('postAnnBtn', false);
+            
+            if (success) {
+                showToast('Announcement sent!', 'success');
+                addActivity('Announcement', `Posted: ${title}`);
+                document.getElementById('newAnnTitle').value = '';
+                document.getElementById('newAnnBody').value = '';
+                toggleAnnouncementForm();
+            }
+        }
+
+        // ==========================================
+        // DASHBOARD & FILTERING
+        // ==========================================
+        
+        async function manualRefresh() {
+            const icon = document.getElementById('refreshIcon');
+            icon.classList.add('fa-spin');
+            await renderAdminData();
+            setTimeout(() => icon.classList.remove('fa-spin'), 1000);
+        }
+
+        function loadExpandedState() {
+            const stored = localStorage.getItem(EXPAND_STORAGE_KEY);
+            return stored ? JSON.parse(stored) : {};
+        }
+
+        function saveExpandedState(state) {
+            localStorage.setItem(EXPAND_STORAGE_KEY, JSON.stringify(state));
+        }
+
+        window.toggleExpand = function(id) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById(id + '-icon');
+            const expandedState = loadExpandedState();
+            
+            if (el.classList.contains('open')) {
+                el.classList.remove('open');
+                if(icon) {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+                delete expandedState[id];
+            } else {
+                el.classList.add('open');
+                if(icon) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                }
+                expandedState[id] = true;
+            }
+            saveExpandedState(expandedState);
+        }
+
+        let appFilterText = '';
+        let appSortMethod = 'newest';
+        let ticketFilterText = '';
+        let ticketSortMethod = 'newest';
+
+        function filterApplications() {
+            appFilterText = document.getElementById('appSearch').value.toLowerCase();
+            renderApplications();
+        }
+
+        function sortApplications() {
+            appSortMethod = document.getElementById('appSort').value;
+            renderApplications();
+        }
+
+        function filterTickets() {
+            ticketFilterText = document.getElementById('ticketSearch').value.toLowerCase();
+            renderTickets();
+        }
+
+        function sortTickets() {
+            ticketSortMethod = document.getElementById('ticketSort').value;
+            renderTickets();
+        }
+
+        function getFilteredAndSortedApps(apps) {
+            if (!Array.isArray(apps)) return [];
+            
+            let filtered = apps.filter(app => {
+                if (!app || typeof app !== 'object') return false;
+                const discord = (app.discord || '').toLowerCase();
+                const uplay = (app.uplay || '').toLowerCase();
+                const team = (app.team || '').toLowerCase();
+                const rank = (app.rank || '').toLowerCase();
+                return discord.includes(appFilterText) ||
+                       uplay.includes(appFilterText) ||
+                       team.includes(appFilterText) ||
+                       rank.includes(appFilterText);
+            });
+
+            switch(appSortMethod) {
+                case 'oldest':
+                    return filtered.sort((a, b) => (a.id || 0) - (b.id || 0));
+                case 'status':
+                    const statusOrder = { 'Pending': 0, 'Approved': 1, 'Denied': 2 };
+                    return filtered.sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
+                case 'team':
+                    return filtered.sort((a, b) => (a.team || '').localeCompare(b.team || ''));
+                case 'newest':
+                default:
+                    return filtered.sort((a, b) => (b.id || 0) - (a.id || 0));
+            }
+        }
+
+        function getFilteredAndSortedTickets(tickets) {
+            if (!Array.isArray(tickets)) return [];
+            
+            let filtered = tickets.filter(t => {
+                if (!t || typeof t !== 'object') return false;
+                const subject = (t.subject || '').toLowerCase();
+                const discord = (t.discord || '').toLowerCase();
+                const id = (t.id || '').toLowerCase();
+                return subject.includes(ticketFilterText) ||
+                       discord.includes(ticketFilterText) ||
+                       id.includes(ticketFilterText);
+            });
+
+            switch(ticketSortMethod) {
+                case 'oldest':
+                    return filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+                case 'status':
+                    const statusOrder = { 'Open': 0, 'Pending Staff': 1, 'Pending User': 2, 'Closed': 3 };
+                    return filtered.sort((a, b) => statusOrder[a.status] - statusOrder[b.status]);
+                case 'newest':
+                default:
+                    return filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+            }
+        }
+
+        function toggleSelectAllApps() {
+            const checkboxes = document.querySelectorAll('.app-checkbox');
+            const selectAll = document.getElementById('selectAllApps').checked;
+            
+            checkboxes.forEach(cb => {
+                cb.checked = selectAll;
+                const appId = parseInt(cb.dataset.id);
+                if (selectAll) selectedApps.add(appId);
+                else selectedApps.delete(appId);
+            });
+            
+            updateBulkActions();
+        }
+
+        function toggleAppSelection(appId) {
+            if (selectedApps.has(appId)) selectedApps.delete(appId);
+            else selectedApps.add(appId);
+            updateBulkActions();
+        }
+
+        function updateBulkActions() {
+            const bulkDiv = document.getElementById('bulkActions');
+            if (selectedApps.size > 0) bulkDiv.classList.remove('hidden');
+            else bulkDiv.classList.add('hidden');
+        }
+
+        async function bulkApprove() {
+            showConfirmModal(
+                'Bulk Approve',
+                `Approve ${selectedApps.size} selected?`,
+                async () => {
+                    const data = await getData();
+                    let count = 0;
+                    selectedApps.forEach(id => {
+                        const app = data.apps.find(a => a.id === id);
+                        if (app && app.status === 'Pending') {
+                            app.status = 'Approved';
+                            app.reviewedBy = currentStaff?.name || 'Unknown';
+                            app.reviewedAt = new Date().toLocaleString();
+                            count++;
+                        }
+                    });
+                    
+                    if (await saveData(data)) {
+                        showToast(`Approved ${count}`, 'success');
+                        addActivity('Bulk Approve', `${count} apps`);
+                        selectedApps.clear();
+                        document.getElementById('selectAllApps').checked = false;
+                        updateBulkActions();
+                        await renderAdminData();
+                    }
+                }
+            );
+        }
+
+        async function bulkDeny() {
+            showConfirmModal(
+                'Bulk Deny',
+                `Deny ${selectedApps.size} selected?`,
+                async () => {
+                    const data = await getData();
+                    let count = 0;
+                    selectedApps.forEach(id => {
+                        const app = data.apps.find(a => a.id === id);
+                        if (app && app.status === 'Pending') {
+                            app.status = 'Denied';
+                            app.reviewedBy = currentStaff?.name || 'Unknown';
+                            app.reviewedAt = new Date().toLocaleString();
+                            count++;
+                        }
+                    });
+                    
+                    if (await saveData(data)) {
+                        showToast(`Denied ${count}`, 'success');
+                        addActivity('Bulk Deny', `${count} apps`);
+                        selectedApps.clear();
+                        document.getElementById('selectAllApps').checked = false;
+                        updateBulkActions();
+                        await renderAdminData();
+                    }
+                }
+            );
+        }
+
+        // ==========================================
+        // RENDERING
+        // ==========================================
+        
+        async function renderAdminData(showLoading = true) {
+            debug('Rendering admin data...', 'info');
+            
+            if (showLoading) {
+                document.getElementById('admin-apps-list').innerHTML = '<div class="skeleton h-20 rounded mb-2"></div><div class="skeleton h-20 rounded mb-2"></div>';
+                document.getElementById('admin-tickets-list').innerHTML = '<div class="skeleton h-20 rounded mb-2"></div><div class="skeleton h-20 rounded mb-2"></div>';
+            }
+            
+            const data = await getData();
+            
+            const pendingApps = data.apps.filter(a => a.status === 'Pending').length;
+            const openTickets = data.tickets.filter(t => t.status === 'Open' || t.status === 'Pending Staff').length;
+            
+            document.getElementById('stat-apps').innerText = pendingApps;
+            document.getElementById('stat-tickets').innerText = openTickets;
+            document.getElementById('stat-total-apps').innerText = data.apps.length;
+
+            renderApplications();
+            renderTickets();
+        }
+
+        function renderApplications() {
+            const apps = currentData.apps || [];
+            debug(`Rendering ${apps.length} applications`, 'info');
+            
+            const filteredApps = getFilteredAndSortedApps(apps);
+            const container = document.getElementById('admin-apps-list');
+            const expandedState = loadExpandedState();
+
+            if (filteredApps.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>No applications found</p>
+                        <p class="text-xs mt-1">Applications will appear here when submitted</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = filteredApps.map(app => {
+                const isExpanded = !!expandedState[`app-${app.id}`];
+                const isSelected = selectedApps.has(app.id);
+                const statusColor = app.status === 'Pending' ? 'border-yellow-500' : app.status === 'Approved' ? 'border-emerald-500' : 'border-red-500';
+                
+                return `
+                <div class="bg-black/30 p-3 rounded border-l-2 ${statusColor} ${isSelected ? 'selected-item' : ''} mb-2 hover:bg-black/50 transition-colors">
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center gap-2 flex-1 cursor-pointer" onclick="toggleExpand('app-${app.id}')">
+                            <input type="checkbox" class="app-checkbox rounded bg-gray-800 border-gray-600 cursor-pointer" 
+                                data-id="${app.id}" ${isSelected ? 'checked' : ''} 
+                                onclick="event.stopPropagation(); toggleAppSelection(${app.id})">
+                            <div class="flex-1 min-w-0">
+                                <div class="text-white font-bold text-sm flex items-center gap-2 flex-wrap">
+                                    <span class="truncate">${escapeHtml(app.discord || 'Unknown')}</span>
+                                    <span class="text-xs px-2 py-0.5 rounded bg-gray-800 text-gray-300 whitespace-nowrap">${escapeHtml(app.status)}</span>
+                                    <i id="app-${app.id}-icon" class="fas ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-gray-500 text-xs"></i>
+                                </div>
+                                <div class="text-gray-500 text-xs mt-1 truncate">
+                                    ${escapeHtml(app.team || 'No Team')} | ${escapeHtml(app.rank || 'No Rank')} | ${escapeHtml(app.date || 'No Date')}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex gap-1 ml-2">
+                            ${app.status === 'Pending' ? `
+                                <button onclick="event.stopPropagation(); updateAppStatus(${app.id}, 'Approved')" class="text-emerald-400 hover:text-white text-xs bg-emerald-900/30 px-2 py-1 rounded transition-colors" title="Approve">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button onclick="event.stopPropagation(); updateAppStatus(${app.id}, 'Denied')" class="text-red-400 hover:text-white text-xs bg-red-900/30 px-2 py-1 rounded transition-colors" title="Deny">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            ` : `
+                                <button onclick="event.stopPropagation(); updateAppStatus(${app.id}, 'Pending')" class="text-yellow-400 hover:text-white text-xs bg-yellow-900/30 px-2 py-1 rounded transition-colors" title="Reset">
+                                    <i class="fas fa-undo"></i>
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                    
+                    <div id="app-${app.id}" class="expand-content ${isExpanded ? 'open' : ''} mt-2 pt-2 border-t border-gray-700">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs mb-2">
+                            <div><span class="text-gray-500">Uplay:</span> <span class="text-gray-300">${escapeHtml(app.uplay || 'N/A')}</span></div>
+                            <div><span class="text-gray-500">Date:</span> <span class="text-gray-300">${escapeHtml(app.date || 'N/A')}</span></div>
+                            <div><span class="text-gray-500">ID:</span> <span class="text-gray-300">${app.id}</span></div>
+                        </div>
+                        <div class="bg-gray-900/50 p-2 rounded text-xs">
+                            <span class="text-gray-500 block mb-1">Reason:</span>
+                            <p class="text-gray-300 whitespace-pre-wrap">"${escapeHtml(app.reason || 'No reason provided')}"</p>
+                        </div>
+                        ${app.reviewedBy ? `<div class="text-xs text-gray-500 mt-2">Reviewed by: ${escapeHtml(app.reviewedBy)} on ${escapeHtml(app.reviewedAt)}</div>` : ''}
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function renderTickets() {
+            const tickets = currentData.tickets || [];
+            debug(`Rendering ${tickets.length} tickets`, 'info');
+            
+            const filteredTickets = getFilteredAndSortedTickets(tickets);
+            const container = document.getElementById('admin-tickets-list');
+            const expandedState = loadExpandedState();
+
+            if (filteredTickets.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-ticket-alt"></i>
+                        <p>No tickets found</p>
+                        <p class="text-xs mt-1">Tickets will appear here when submitted</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = filteredTickets.map(t => {
+                const isExpanded = !!expandedState[`ticket-${t.id}`];
+                const statusColor = t.status === 'Open' ? 'border-red-500' : t.status === 'Pending Staff' ? 'border-yellow-500' : 'border-gray-600';
+                
+                return `
+                <div class="bg-black/30 p-3 rounded border-l-2 ${statusColor} mb-2 hover:bg-black/50 transition-colors">
+                    <div class="flex justify-between items-start cursor-pointer" onclick="toggleExpand('ticket-${t.id}')">
+                        <div class="flex-1 min-w-0">
+                            <div class="text-white font-bold text-sm flex items-center gap-2 flex-wrap">
+                                <span class="truncate">${escapeHtml(t.subject || 'No Subject')}</span>
+                                <span class="text-[10px] text-gray-500 border border-gray-700 px-1 rounded whitespace-nowrap">${escapeHtml(t.id || 'N/A')}</span>
+                                <span class="text-xs px-2 py-0.5 rounded bg-gray-800 text-gray-300 whitespace-nowrap">${escapeHtml(t.status)}</span>
+                                <i id="ticket-${t.id}-icon" class="fas ${isExpanded ? 'fa-chevron-up' : 'fa-chevron-down'} text-gray-500 text-xs"></i>
+                            </div>
+                            <div class="text-gray-500 text-xs mt-1 truncate">By: ${escapeHtml(t.discord || 'Unknown')} | ${t.date ? new Date(t.date).toLocaleString() : 'Unknown Date'}</div>
+                        </div>
+                        <div class="flex gap-1 ml-2" onclick="event.stopPropagation()">
+                            ${t.status !== 'Closed' ? `
+                                <button onclick="closeTicket('${t.id}')" class="text-gray-400 hover:text-white text-xs bg-gray-800 px-2 py-1 rounded transition-colors" title="Close">
+                                    <i class="fas fa-lock"></i>
+                                </button>
+                            ` : `
+                                <button onclick="reopenTicket('${t.id}')" class="text-emerald-400 hover:text-white text-xs bg-emerald-900/30 px-2 py-1 rounded transition-colors" title="Reopen">
+                                    <i class="fas fa-lock-open"></i>
+                                </button>
+                            `}
+                        </div>
+                    </div>
+
+                    <div id="ticket-${t.id}" class="expand-content ${isExpanded ? 'open' : ''} mt-2 pt-2 border-t border-gray-700">
+                        <div class="text-gray-400 text-xs mb-3 bg-black/20 p-2 rounded whitespace-pre-wrap">
+                            ${escapeHtml(t.description || 'No description')}
+                        </div>
+                        
+                        <div class="space-y-2 mb-3 max-h-40 overflow-y-auto pr-1">
+                            ${t.responses && t.responses.length > 0 ? t.responses.map(r => `
+                                <div class="text-xs ${r.sender === 'User' ? 'text-left' : 'text-right'}">
+                                    <span class="text-gray-600 block mb-0.5">${escapeHtml(r.sender || 'Unknown')} • ${r.date ? new Date(r.date).toLocaleTimeString() : 'Unknown'}</span>
+                                    <span class="inline-block px-2 py-1 rounded ${r.sender === 'User' ? 'bg-gray-800 text-gray-300' : 'bg-emerald-900/40 text-emerald-200'}">${escapeHtml(r.text || '')}</span>
+                                </div>
+                            `).join('') : '<p class="text-gray-600 italic text-xs">No messages yet.</p>'}
+                        </div>
+
+                        <div class="flex gap-2 mt-2">
+                            <input type="text" id="admin-reply-${t.id}" placeholder="Type response..." 
+                                class="flex-1 bg-gray-900 border border-gray-700 rounded px-2 py-1 text-xs text-white focus:border-emerald-500 focus:outline-none">
+                            <button onclick="event.stopPropagation(); addAdminReply('${t.id}')" 
+                                class="bg-emerald-700 hover:bg-emerald-600 text-white px-3 py-1 rounded text-xs font-bold transition-colors">
+                                Reply
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // ==========================================
+        // ACTIONS
+        // ==========================================
+        
+        async function updateAppStatus(id, status) {
+            showConfirmModal(
+                `${status} Application`,
+                `Are you sure you want to ${status.toLowerCase()} this application?`,
+                async () => {
+                    const data = await getData();
+                    const app = data.apps.find(a => a.id === id);
+                    if (app) {
+                        app.status = status;
+                        app.reviewedBy = currentStaff?.name || 'Unknown';
+                        app.reviewedAt = new Date().toLocaleString();
+                        
+                        if (await saveData(data)) {
+                            showToast(`Application ${status.toLowerCase()}`, 'success');
+                            addActivity(`App ${status}`, `${app.discord} (${app.team})`);
+                            await renderAdminData();
+                        }
+                    }
+                }
+            );
+        }
+
+        async function addAdminReply(ticketId) {
+            const input = document.getElementById(`admin-reply-${ticketId}`);
+            const text = sanitizeInput(input.value.trim());
             if (!text) return;
             
             const data = await getData();
@@ -1489,25 +1601,118 @@
             
             if (ticket) {
                 if (!ticket.responses) ticket.responses = [];
-                ticket.responses.push({ text, sender: 'User', date: new Date() });
-                ticket.status = 'Pending Staff';
-                await saveData(data);
-                loadUserTickets();
+                ticket.responses.push({ 
+                    text: text, 
+                    sender: currentStaff?.name || 'Staff', 
+                    date: new Date().toISOString() 
+                });
+                ticket.status = 'Pending User';
+                
+                if (await saveData(data)) {
+                    input.value = '';
+                    showToast('Reply sent', 'success');
+                    addActivity('Ticket Reply', `${ticketId}: ${text.substring(0, 30)}...`);
+                    await renderAdminData();
+                }
             }
+        }
+
+        async function closeTicket(ticketId) {
+            showConfirmModal(
+                'Close Ticket',
+                'Are you sure you want to close this ticket?',
+                async () => {
+                    const data = await getData();
+                    const ticket = data.tickets.find(t => t.id === ticketId);
+                    if(ticket) {
+                        ticket.status = 'Closed';
+                        ticket.closedBy = currentStaff?.name || 'Unknown';
+                        ticket.closedAt = new Date().toLocaleString();
+                        
+                        if (await saveData(data)) {
+                            showToast('Ticket closed', 'success');
+                            addActivity('Ticket Closed', ticketId);
+                            await renderAdminData();
+                        }
+                    }
+                }
+            );
+        }
+
+        async function reopenTicket(ticketId) {
+            const data = await getData();
+            const ticket = data.tickets.find(t => t.id === ticketId);
+            if(ticket) {
+                ticket.status = 'Open';
+                if (await saveData(data)) {
+                    showToast('Ticket reopened', 'success');
+                    addActivity('Ticket Reopened', ticketId);
+                    await renderAdminData();
+                }
+            }
+        }
+
+        // ==========================================
+        // EXPORT
+        // ==========================================
+        
+        function exportToCSV() {
+            const apps = currentData.apps || [];
+            const tickets = currentData.tickets || [];
+            
+            let csv = 'Type,ID,Discord,Status,Date,Reviewed By\n';
+            
+            apps.forEach(app => {
+                csv += `App,${app.id || 'N/A'},${escapeCsv(app.discord)},${app.status || 'N/A'},${app.date || 'N/A'},${escapeCsv(app.reviewedBy)}\n`;
+            });
+            
+            tickets.forEach(ticket => {
+                csv += `Ticket,${ticket.id || 'N/A'},${escapeCsv(ticket.discord)},${ticket.status || 'N/A'},${ticket.date || 'N/A'},${escapeCsv(ticket.closedBy)}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `ea-league-data-${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showToast('Data exported', 'success');
+            addActivity('Export', 'Downloaded CSV');
+        }
+
+        function escapeCsv(text) {
+            if (!text) return 'N/A';
+            // Escape quotes and wrap in quotes if contains comma
+            const escaped = String(text).replace(/"/g, '""');
+            if (escaped.includes(',')) return `"${escaped}"`;
+            return escaped;
         }
 
         // ==========================================
         // INITIALIZATION
         // ==========================================
         
-        window.addEventListener('DOMContentLoaded', () => {
-            ['submitBtn', 'ticketSubmitBtn', 'searchBtn'].forEach(id => {
-                const btn = document.getElementById(id);
-                if (btn) btn.setAttribute('data-text', btn.innerText.trim());
-            });
+        window.addEventListener('DOMContentLoaded', async () => {
+            debug('Staff Portal initializing...', 'info');
+            debug(`Bin ID: ${CONFIG.BIN_ID}`, 'info');
             
-            initScrollReveal();
-            setTimeout(checkAnnouncements, 2000);
+            // Check for data migration
+            checkAndMigrateData();
+            
+            // Don't log full key for security
+            const keyPreview = CONFIG.MASTER_KEY.substring(0, 10) + '...' + CONFIG.MASTER_KEY.substring(CONFIG.MASTER_KEY.length - 5);
+            debug(`Master Key: ${keyPreview}`, 'info');
+            
+            await testDatabaseConnection();
+            renderActivityLog();
+        });
+
+        window.addEventListener('beforeunload', () => {
+            if (autoRefreshInterval) clearInterval(autoRefreshInterval);
         });
     </script>
 </body>
